@@ -26,8 +26,20 @@ module.exports = component 'TransfersList',
       when @state.error
         div(null, "ERROR: #{@state.error}")
       when @state.transfers
+        console.dir @state.transfers[0]
         transfers = @state.transfers.map (transfer, index) ->
-          div(null, transfer.name)
+          div
+            className: 'transfers'
+            div
+              className: 'name'
+              transfer.name
+            div
+              className: 'created at'
+              transfer.created_at
+            div
+              className: 'status'
+              transfer.status
+
         div(null, transfers)
       else
         div(null, 'Loading…')

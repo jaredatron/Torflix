@@ -16,3 +16,8 @@ React.render(App(), document.body)
 addEventListener "beforeunload", ->
   document.body.innerHTML = ''
   undefined
+
+
+addEventListener "error", (error) ->
+  # consider rendering a blue screen here
+  # alert("ERROR: #{error}")
