@@ -21,3 +21,8 @@ app = App()
 #     params:   Path.params
 
 React.render(app, document.body)
+
+
+addEventListener "beforeunload", ->
+  document.body.innerHTML = ''
+  undefined
