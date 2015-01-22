@@ -17,12 +17,15 @@ module.exports = (TOKEN) ->
   putio.post = (path, params) ->
     qwest.post(url(path), params)
 
+
+
+
   transfers = []
 
   putio.transfers = assign({}, EventEmitter.prototype)
 
   putio.transfers.toArray = ->
-    transfers
+    [].concat(transfers) # clone
 
   putio.transfers.load = ->
     putio.get('/transfers/list').then (response) =>
@@ -35,6 +38,34 @@ module.exports = (TOKEN) ->
       transfers.push response.transfer
       @emit('change')
       response
+
+
+  putio.transfers.delete = (id) ->
+    transfer = transfers.filter((transfer) -> transfer.id == id)[0]
+
+    delete_transfer_promise = putio.post('/transfers/cancel', transfer_ids: id).then (response) =>
+      transfers = transfers.filter((transfer) -> transfer.id != id)
+      @emit('change')
+      response
+
+    return delete_transfer_promise unless transfer? && transfer.file_id
+
+    delete_file_promise = putio.files.delete(transfer.file_id)
+    Promise.all([delete_transfer_promise,delete_file_promise])
+
+
+
+  # files = []
+
+  putio.files = assign({}, EventEmitter.prototype)
+
+  putio.files.delete = (id) ->
+    putio.post('/files/delete', file_ids: id).then (response) =>
+      @emit('change')
+      response
+
+
+
 
 
   return putio
