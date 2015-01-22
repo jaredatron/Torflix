@@ -1,7 +1,7 @@
 React     = require 'react'
 component = require '../component'
 
-{div} = React.DOM
+{div, table, thead, tbody, tr, td, th} = React.DOM
 
 
 module.exports = component 'TransfersList',
@@ -39,19 +39,19 @@ module.exports = component 'TransfersList',
 
 Table = component 'TransfersListTable',
   render: ->
-    rows = @props.transfers.map (transfer, index) ->
-      div
-        className: 'transfer'
-        div
-          className: 'name'
+    rows = @props.transfers.map (transfer) ->
+      tr {key: transfer.id, className: 'transfer'},
+        td {className: 'name'},
           transfer.name
-        div
-          className: 'created_at'
+        td {className: 'created_at'},
           transfer.created_at
-        div
-          className: 'status'
+        td {className: 'status'},
           transfer.status
 
-    div
-      className: 'transfers'
-      rows
+    table {className: 'transfers'},
+      thead {},
+        tr {},
+          th {}, 'Status'
+          th {}, 'Name'
+          th {}, 'Created At'
+      tbody {}, rows

@@ -335,16 +335,16 @@ td, th {
 .TransfersList {
   border: 1px solid green;
   padding: 1em; }
-  .TransfersList > .transfers > .transfer {
-    display: flex;
-    flex-direction: row; }
-    .TransfersList > .transfers > .transfer > * {
+  .TransfersList table.transfers {
+    width: 100%;
+    table-layout: auto; }
+    .TransfersList table.transfers th, .TransfersList table.transfers td {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis; }
-    .TransfersList > .transfers > .transfer > .name {
-      width: 100px; }
-    .TransfersList > .transfers > .transfer > .created_at {
-      width: 100px; }
-    .TransfersList > .transfers > .transfer > .status {
-      width: 100px; }
+    .TransfersList table.transfers tr.transfer th.name, .TransfersList table.transfers tr.transfer td.name {
+      width: auto; }
+    .TransfersList table.transfers tr.transfer th.created_at, .TransfersList table.transfers tr.transfer td.created_at {
+      width: 200px; }
+    .TransfersList table.transfers tr.transfer th.status, .TransfersList table.transfers tr.transfer td.status {
+      width: 200px; }

@@ -3,17 +3,20 @@
   padding: 1em
 
 
-  > .transfers
-    > .transfer
-      display: flex
-      flex-direction: row
-      > * // cell
-        white-space: nowrap
-        overflow: hidden
-        text-overflow: ellipsis
-      > .name
-        width: 100px
-      > .created_at
-        width: 100px
-      > .status
-        width: 100px
+  table.transfers
+    width: 100%
+    table-layout: auto
+
+    th, td
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+
+    tr.transfer
+      th, td
+        &.name
+          width: auto
+        &.created_at
+          width: 200px
+        &.status
+          width: 200px
