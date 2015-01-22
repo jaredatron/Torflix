@@ -1,0 +1,21 @@
+global.SERVER = false
+global.CLIENT = true
+
+
+React = require 'react'
+App   = require './app'
+
+# DEBUGGING
+global.require = require
+global.React = React
+
+app = App()
+#   pathname: Path.pathname
+#   params:   Path.params
+
+# Path.onChange ->
+#   app.setState
+#     pathname: Path.pathname
+#     params:   Path.params
+
+React.render(app, document.body)

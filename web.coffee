@@ -1,25 +1,38 @@
+path       = require 'path'
 express    = require 'express'
 react      = require 'react'
 browserify = require 'browserify'
 app        = require './app/server'
+
+# load .env file
+require('node-env-file')(__dirname + '/.env');
 
 web = express()
 web.set 'port', (process.env.PORT || 5000)
 
 web.use express.static(__dirname + '/public')
 
-web.get '/app.js', (req, res) ->
-  res.setHeader('content-type', 'application/javascript')
-  b = browserify(__dirname + '/app/client')
-  b._extensions.push('.coffee')
-  b = b.transform('coffeeify').bundle()
-  b.on('error', console.error)
-  b.pipe(res)
+web.get "/js/bundle.js", browserify(
+  entry: path.join(__dirname, "app/app.coffee")
+  debug: true
+  watch: true
+  transforms: ["coffee-reactify"]
+  extensions: [".cjsx", ".coffee", ".js", ".json"]
+)
+
+
+# web.get '/app.js', (req, res) ->
+#   res.setHeader('content-type', 'application/javascript')
+#   b = browserify(__dirname + '/app/client')
+#   b._extensions.push('.coffee')
+#   b = b.transform('coffeeify').bundle()
+#   b.on('error', console.error)
+#   b.pipe(res)
 
 
 # https://deadlyicon-putio.herokuapp.com/callback
 web.get '/callback', (req, res) ->
-  response.send
+  response.send('CALLBACKED')
 
 web.get '*', (request, response) ->
   D = react.DOM
@@ -30,7 +43,7 @@ web.get '*', (request, response) ->
         D.script(null)
       )
       D.body(null,
-        D.script(src: '/app.js')
+        D.script(src: '/js/bundle.js')
       )
     )
   )
