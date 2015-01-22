@@ -8,6 +8,7 @@
     "browserify": "^6.3.4",
     "coffee-script": "^1.8.0",
     "coffeeify": "^1.0.0",
+    "connect-browserify": "^3.2.1",
     "express": "^3.18.3",
     "node-env-file": "^0.1.4",
     "react": "^0.12.1"

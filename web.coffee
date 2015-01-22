@@ -1,7 +1,7 @@
 path       = require 'path'
 express    = require 'express'
 react      = require 'react'
-browserify = require 'browserify'
+browserify = require 'connect-browserify'
 app        = require './app/server'
 
 # load .env file
@@ -13,10 +13,10 @@ web.set 'port', (process.env.PORT || 5000)
 web.use express.static(__dirname + '/public')
 
 web.get "/js/bundle.js", browserify(
-  entry: path.join(__dirname, "app/app.coffee")
+  entry: path.join(__dirname, "app/client")
   debug: true
   watch: true
-  transforms: ["coffee-reactify"]
+  transforms: ["coffeeify"]
   extensions: [".cjsx", ".coffee", ".js", ".json"]
 )
 
