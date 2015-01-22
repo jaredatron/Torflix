@@ -1,0 +1,27 @@
+#!/usr/bin/env coffee
+
+fs   = require 'fs'
+path = require 'path'
+sass = require 'node-sass'
+
+APP_ROOT = path.resolve("#{__dirname}/..")
+
+render = (name) ->
+  sass_path = path.join(APP_ROOT, "style/#{name}.sass")
+  css_path = path.join(APP_ROOT, "public/#{name}.css")
+
+  sass.render
+    file: sass_path,
+
+    includePaths: [
+      path.join(APP_ROOT, 'style')
+      path.join(APP_ROOT, 'vendor/style')
+    ]
+    success: (results) ->
+      fs.writeFile css_path, results.css, (error) ->
+        if error
+          console.log(error)
+        else
+          console.log("style/#{name}.sass -> public/#{name}.css")
+
+render('app')
