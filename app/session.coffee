@@ -15,7 +15,7 @@ session = (key, value) ->
       session.emit('change')
     value
 
-assign session, EventEmitter.prototype
+assign(session, EventEmitter.prototype)
 
 module.exports = session
 

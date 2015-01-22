@@ -9,6 +9,8 @@ App   = require './app'
 global.require = require
 global.React = React
 
+App.getTokenFromHash()
+
 app = App()
 #   pathname: Path.pathname
 #   params:   Path.params
