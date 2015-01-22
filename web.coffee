@@ -32,6 +32,20 @@ web.get "/js/bundle.js", browserify(
 
 # https://deadlyicon-putio.herokuapp.com/callback
 web.get '/callback', (req, res) ->
+
+  # ?code=d734ce14a1d911e4a269001018321b64
+  response.param('code')
+
+  ###
+  Request this:
+  https://api.put.io/v2/oauth2/access_token
+    ?client_id=YOUR_CLIENT_ID
+    &client_secret=YOUR_CLIENT_SECRET
+    &grant_type=authorization_code
+    &redirect_uri=YOUR_REGISTERED_REDIRECT_URI
+    &code=CODE
+  ###
+
   response.send('CALLBACKED')
 
 web.get '*', (request, response) ->
