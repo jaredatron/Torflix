@@ -20,8 +20,14 @@ render = (name) ->
     success: (results) ->
       fs.writeFile css_path, results.css, (error) ->
         if error
-          console.log(error)
+          console.log("ERROR: #{error}")
         else
           console.log("style/#{name}.sass -> public/#{name}.css")
+    error: (error) ->
+      process.stderr.write("SASS ERROR: #{error.message}\n")
+      process.exit(1)
+      # console.log(error.code)
+      # console.log(error.line)
+      # console.log(error.column)
 
 render('app')

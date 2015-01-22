@@ -14,14 +14,20 @@ module.exports = component 'TransfersList',
     transfers: null
 
   componentDidMount: ->
-    @context.putio.transfers.list()
-      .then (response) =>
-        @setState transfers: response.transfers
-      .catch (error) =>
-        @setState error: error
+    'hello there people'
+    # @context.putio.transfers.list()
+    #   .then (response) =>
+    #     @setState transfers: response.transfers
+    #   .catch (error) =>
+    #     @setState error: error
 
   render: ->
     console.log('REDERING', @state)
+    div
+      className: 'TransfersList'
+      @renderContent()
+
+  renderContent: ->
     switch
       when @state.error
         div(null, "ERROR: #{@state.error}")

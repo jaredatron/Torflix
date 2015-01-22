@@ -10,7 +10,6 @@ APP_ROOT = path.join(__dirname, '..')
 run = (command, callback) ->
   exec path.join(APP_ROOT, "bin/#{command}"), (error, stdout, stderr) ->
     if error
-      console.log(error)
       sys.print(stdout)
       sys.print(stderr)
     else
@@ -24,6 +23,6 @@ watch.watchTree path.join(APP_ROOT, 'style'), ->
 
 watch.watchTree path.join(APP_ROOT, 'app'), ->
   console.log('compiling js…')
-  run 'compile-css', ->
+  run 'compile-js', ->
     console.log('done compiling js')
 
