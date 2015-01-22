@@ -7,7 +7,8 @@ TransfersList = require './TransfersList'
 
 module.exports = component 'Dashboard',
   render: ->
-    div(null,
+    div(
+      className: 'Dashboard',
       h1(null, "You're logged in"),
       LogoutButton(),
       TransfersList(),

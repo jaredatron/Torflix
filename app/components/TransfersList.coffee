@@ -14,12 +14,11 @@ module.exports = component 'TransfersList',
     transfers: null
 
   componentDidMount: ->
-    'hello there people'
-    # @context.putio.transfers.list()
-    #   .then (response) =>
-    #     @setState transfers: response.transfers
-    #   .catch (error) =>
-    #     @setState error: error
+    @context.putio.transfers.list()
+      .then (response) =>
+        @setState transfers: response.transfers
+      .catch (error) =>
+        @setState error: error
 
   render: ->
     console.log('REDERING', @state)
@@ -33,19 +32,26 @@ module.exports = component 'TransfersList',
         div(null, "ERROR: #{@state.error}")
       when @state.transfers
         console.dir @state.transfers[0]
-        transfers = @state.transfers.map (transfer, index) ->
-          div
-            className: 'transfers'
-            div
-              className: 'name'
-              transfer.name
-            div
-              className: 'created at'
-              transfer.created_at
-            div
-              className: 'status'
-              transfer.status
-
-        div(null, transfers)
+        Table(transfers: @state.transfers)
       else
         div(null, 'Loading…')
+
+
+Table = component 'TransfersListTable',
+  render: ->
+    rows = @props.transfers.map (transfer, index) ->
+      div
+        className: 'transfer'
+        div
+          className: 'name'
+          transfer.name
+        div
+          className: 'created_at'
+          transfer.created_at
+        div
+          className: 'status'
+          transfer.status
+
+    div
+      className: 'transfers'
+      rows
