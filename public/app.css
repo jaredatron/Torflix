@@ -332,19 +332,45 @@ td, th {
   .layer.layer-scroll, .layer.layer-scroll-y {
     overflow-y: auto; }
 
-.TransfersList {
-  border: 1px solid green;
-  padding: 1em; }
-  .TransfersList table.transfers {
-    width: 100%;
-    table-layout: auto; }
-    .TransfersList table.transfers th, .TransfersList table.transfers td {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis; }
-    .TransfersList table.transfers tr.transfer th.name, .TransfersList table.transfers tr.transfer td.name {
-      width: auto; }
-    .TransfersList table.transfers tr.transfer th.created_at, .TransfersList table.transfers tr.transfer td.created_at {
-      width: 200px; }
-    .TransfersList table.transfers tr.transfer th.status, .TransfersList table.transfers tr.transfer td.status {
-      width: 200px; }
+.TransfersList > .transfers > .transfer, .TransfersList > .transfers > .header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap; }
+  .TransfersList > .transfers > .transfer > *, .TransfersList > .transfers > .header > * {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 0;
+    flex-shrink: 0; }
+  .TransfersList > .transfers > .transfer > .name, .TransfersList > .transfers > .header > .name {
+    width: auto;
+    flex-grow: 1;
+    flex-shrink: 1; }
+  .TransfersList > .transfers > .transfer > .created_at, .TransfersList > .transfers > .header > .created_at {
+    flex-basis: 200px; }
+  .TransfersList > .transfers > .transfer > .status, .TransfersList > .transfers > .header > .status {
+    flex-basis: 100px; }
+.TransfersList > .transfers > .header > * {
+  position: relative;
+  overflow: visible;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 #FFF;
+  background-clip: padding-box;
+  background-image: linear-gradient(#F0F0F0, #DCDCDC);
+  color: #787878;
+  padding: 0.25em 0.5em; }
+  .TransfersList > .transfers > .header > *:before, .TransfersList > .transfers > .header > *:after {
+    position: absolute;
+    content: "";
+    width: 1px;
+    top: 0;
+    bottom: 1px; }
+  .TransfersList > .transfers > .header > *:before {
+    left: -1px;
+    background-color: #c8c8c8; }
+  .TransfersList > .transfers > .header > *:after {
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.8); }
+.TransfersList > .transfers > .transfer {
+  border-bottom: 1px solid grey; }
+  .TransfersList > .transfers > .transfer > * {
+    padding: 0.25em 0.5em; }

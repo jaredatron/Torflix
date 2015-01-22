@@ -39,19 +39,15 @@ module.exports = component 'TransfersList',
 
 Table = component 'TransfersListTable',
   render: ->
-    rows = @props.transfers.map (transfer) ->
-      tr {key: transfer.id, className: 'transfer'},
-        td {className: 'name'},
-          transfer.name
-        td {className: 'created_at'},
-          transfer.created_at
-        td {className: 'status'},
-          transfer.status
+    div className: 'transfers',
+      div className: 'header',
+        div className: 'status',     'Status'
+        div className: 'name',       'Name'
+        div className: 'created_at', 'Created At'
+      @props.transfers.map (transfer) ->
+        div key: transfer.id, className: 'transfer',
+          div className: 'status',     transfer.status
+          div className: 'name',       transfer.name
+          div className: 'created_at', transfer.created_at
 
-    table {className: 'transfers'},
-      thead {},
-        tr {},
-          th {}, 'Status'
-          th {}, 'Name'
-          th {}, 'Created At'
-      tbody {}, rows
+
