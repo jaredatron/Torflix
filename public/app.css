@@ -320,6 +320,9 @@ table {
 td, th {
   padding: 0; }
 
+form {
+  margin: 0; }
+
 .layer {
   position: fixed;
   top: 0;
@@ -374,3 +377,14 @@ td, th {
   border-bottom: 1px solid grey; }
   .TransfersList > .transfers > .transfer > * {
     padding: 0.25em 0.5em; }
+
+.NewTransfer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  padding: 0.5em; }
+  .NewTransfer input[type=text] {
+    flex-grow: 1;
+    flex-shrink: 1; }
+  .NewTransfer input[type=submit] {
+    margin: 0 0.5em; }

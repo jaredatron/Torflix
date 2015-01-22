@@ -4,6 +4,9 @@ component = require '../component'
 {div, table, thead, tbody, tr, td, th} = React.DOM
 
 
+
+
+
 module.exports = component 'TransfersList',
 
   contextTypes:
@@ -11,14 +14,18 @@ module.exports = component 'TransfersList',
 
   getInitialState: ->
     error: null
-    transfers: null
+    transfers: @context.putio.transfers.toArray()
+
+  transfersChanged: ->
+    console.log('transfersChanged')
+    @setState transfers: @context.putio.transfers.toArray()
 
   componentDidMount: ->
-    @context.putio.transfers.list()
-      .then (response) =>
-        @setState transfers: response.transfers
-      .catch (error) =>
-        @setState error: error
+    @context.putio.transfers.on('change', @transfersChanged)
+    @context.putio.transfers.load()
+
+  componentWillUnmount: ->
+    @context.putio.transfers.off('change', @transfersChanged)
 
   render: ->
     console.log('REDERING', @state)

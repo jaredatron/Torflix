@@ -1,5 +1,6 @@
-qwest = require 'qwest'
-
+EventEmitter = require('events').EventEmitter
+assign       = require('object-assign')
+qwest        = require('qwest')
 
 ENDPOINT = 'https://api.put.io/v2'
 
@@ -7,13 +8,34 @@ module.exports = (TOKEN) ->
 
   putio = {}
 
+  url = (path) ->
+    "#{ENDPOINT}#{path}?oauth_token=#{TOKEN}"
+
   putio.get = (path) ->
-    qwest.get("#{ENDPOINT}#{path}?oauth_token=#{TOKEN}")
+    qwest.get(url(path))
 
-  putio.transfers = {}
+  putio.post = (path, params) ->
+    qwest.post(url(path), params)
 
-  putio.transfers.list = ->
-    putio.get('/transfers/list')
+  transfers = []
+
+  putio.transfers = assign({}, EventEmitter.prototype)
+
+  putio.transfers.toArray = ->
+    transfers
+
+  putio.transfers.load = ->
+    putio.get('/transfers/list').then (response) =>
+      transfers = response.transfers
+      @emit('change')
+      response
+
+  putio.transfers.add = (url) ->
+    putio.post('/transfers/add', url: url).then (response) =>
+      transfers.push response.transfer
+      @emit('change')
+      response
+
 
   return putio
 

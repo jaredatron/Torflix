@@ -1,6 +1,7 @@
 React         = require 'react'
 component     = require '../component'
 TransfersList = require './TransfersList'
+NewTransfer   = require './NewTransfer'
 
 {div, h1, a} = React.DOM
 
@@ -11,6 +12,7 @@ module.exports = component 'Dashboard',
       className: 'Dashboard',
       h1(null, "You're logged in"),
       LogoutButton(),
+      NewTransfer(),
       TransfersList(),
     )
 

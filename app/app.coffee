@@ -12,7 +12,6 @@ path = Path(location, history)
 
 
 # TEMP DEBUG
-global.putio = putio
 global.path  = path
 
 getState = ->
@@ -24,7 +23,7 @@ module.exports = component 'App',
     putio: React.PropTypes.any
 
   putio: ->
-    if @state.put_io_access_token
+    global.putio = if @state.put_io_access_token
       putio(@state.put_io_access_token)
     else
       null
