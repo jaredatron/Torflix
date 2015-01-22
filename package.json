@@ -19,13 +19,21 @@
   },
   "devDependencies": {
     "node-pow": "0.0.2",
-    "sass-watch": "^0.1.0"
+    "sass-watch": "^0.1.0",
+    "watchify": "^2.2.1"
   },
   "engines": {
     "node": "0.10.x"
   },
   "scripts": {
     "web": "coffee web.coffee"
+  },
+  "browserify": {
+    "extensions": [".cjsx", ".coffee", ".js", ".json"],
+    "transform": [
+      "coffeeify",
+      "envify"
+    ]
   },
   "private": true
 }

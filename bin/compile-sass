@@ -4,7 +4,7 @@ fs   = require 'fs'
 path = require 'path'
 sass = require 'node-sass'
 
-APP_ROOT = path.resolve("#{__dirname}/..")
+APP_ROOT = path.join(__dirname, '..')
 
 render = (name) ->
   sass_path = path.join(APP_ROOT, "style/#{name}.sass")
