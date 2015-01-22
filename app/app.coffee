@@ -23,8 +23,14 @@ module.exports = component 'App',
   childContextTypes:
     putio: React.PropTypes.any
 
+  putio: ->
+    if @state.put_io_access_token
+      putio(@state.put_io_access_token)
+    else
+      null
+
   getChildContext: ->
-    putio: if @state.put_io_access_token then putio(@state.put_io_access_token) else null
+    putio: @putio()
 
   getInitialState: ->
     getState()

@@ -11,17 +11,7 @@ global.React = React
 
 App.getTokenFromHash()
 
-app = App()
-#   pathname: Path.pathname
-#   params:   Path.params
-
-# Path.onChange ->
-#   app.setState
-#     pathname: Path.pathname
-#     params:   Path.params
-
-React.render(app, document.body)
-
+React.render(App(), document.body)
 
 addEventListener "beforeunload", ->
   document.body.innerHTML = ''
