@@ -16,7 +16,7 @@ web.get "/js/bundle.js", browserify(
   entry: path.join(__dirname, "app/client")
   debug: true
   watch: true
-  transforms: ["coffeeify"]
+  transforms: ['coffeeify', 'envify']
   extensions: [".cjsx", ".coffee", ".js", ".json"]
 )
 
