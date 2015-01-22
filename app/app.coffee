@@ -1,5 +1,9 @@
 React     = require 'react'
 component = require './component'
+qwest = require 'qwest'
+
+
+global.qwest = qwest
 
 {div, span, a, h1} = require('react').DOM
 

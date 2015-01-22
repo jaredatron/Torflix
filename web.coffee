@@ -2,7 +2,6 @@ path       = require 'path'
 express    = require 'express'
 react      = require 'react'
 browserify = require 'connect-browserify'
-app        = require './app/server'
 
 # load .env file
 require('node-env-file')(__dirname + '/.env');
