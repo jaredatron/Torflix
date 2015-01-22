@@ -33,6 +33,23 @@ module.exports = (TOKEN) ->
       @emit('change')
       response
 
+  TRANSFER_POLL_DELAY = 1000
+  polling_transfers = false
+  putio.transfers.startPolling = ->
+    return this if polling_transfers
+    polling_transfers = true
+    load = ->
+      console.log('POLLING TRANSFERS')
+      putio.transfers.load().complete ->
+        return unless polling_transfers
+        setTimeout(load, TRANSFER_POLL_DELAY)
+    load()
+    this
+
+  putio.transfers.stopPolling = ->
+    polling_transfers = false
+    this
+
   putio.transfers.add = (url) ->
     putio.post('/transfers/add', url: url).then (response) =>
       transfers.push response.transfer

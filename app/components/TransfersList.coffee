@@ -23,8 +23,9 @@ module.exports = component 'TransfersList',
 
   componentDidMount: ->
     @context.putio.transfers.on('change', @transfersChanged)
-    @context.putio.transfers.load().catch (error) =>
-      @setState error: error
+    @context.putio.transfers.startPolling()
+    # .catch (error) =>
+    #   @setState error: error
 
   componentWillUnmount: ->
     @context.putio.transfers.off('change', @transfersChanged)
@@ -36,7 +37,6 @@ module.exports = component 'TransfersList',
         @setState error: error
 
   render: ->
-    console.log('REDERING', @state)
     div
       className: 'TransfersList'
       @renderContent()
@@ -46,7 +46,6 @@ module.exports = component 'TransfersList',
       when @state.error
         div(null, "ERROR: #{@state.error}")
       when @state.transfers
-        console.dir @state.transfers[0]
         Table(transfers: @state.transfers, deleteTranfer: @deleteTranfer)
       else
         div(null, 'Loading…')
