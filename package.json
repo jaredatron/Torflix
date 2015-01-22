@@ -1,0 +1,22 @@
+{
+  "author": "Jared Grippe",
+  "name": "deadlyicon-putio",
+  "description": "Put.io interface",
+  "version": "0.0.1",
+  "license": "Copyrighted / All Rights Reserved",
+  "dependencies": {
+    "browserify": "^6.3.4",
+    "coffee-script": "^1.8.0",
+    "coffeeify": "^1.0.0",
+    "express": "^3.18.3",
+    "react": "^0.12.1"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": "0.10.x"
+  },
+  "scripts": {
+    "web": "coffee web.coffee"
+  },
+  "private": true
+}
