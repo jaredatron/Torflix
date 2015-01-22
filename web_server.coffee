@@ -12,13 +12,13 @@ web.set 'port', (process.env.PORT || 5000)
 
 web.use express.static(__dirname + '/public')
 
-web.get "/js/bundle.js", browserify(
-  entry: path.join(__dirname, "app/client")
-  debug: true
-  watch: true
-  transforms: ['coffeeify', 'envify']
-  extensions: [".cjsx", ".coffee", ".js", ".json"]
-)
+# web.get "client.js", browserify(
+#   entry: path.join(__dirname, "app/client")
+#   debug: true
+#   watch: true
+#   transforms: ['coffeeify', 'envify']
+#   extensions: [".cjsx", ".coffee", ".js", ".json"]
+# )
 
 web.get '*', (request, response) ->
   D = react.DOM
@@ -26,10 +26,10 @@ web.get '*', (request, response) ->
     D.html(null,
       D.head(null,
         D.title(null, 'Progwiki')
-        D.script(null)
+        D.link(rel: 'stylesheet', href: 'app.css', type: 'text/css')
       )
       D.body(null,
-        D.script(src: '/js/bundle.js')
+        D.script(src: 'client.js')
       )
     )
   )

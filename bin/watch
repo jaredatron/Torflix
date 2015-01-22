@@ -1,0 +1,29 @@
+#!/usr/bin/env coffee
+
+path  = require 'path'
+watch = require 'watch'
+sys   = require 'sys'
+exec  = require('child_process').exec
+
+APP_ROOT = path.join(__dirname, '..')
+
+run = (command, callback) ->
+  exec path.join(APP_ROOT, "bin/#{command}"), (error, stdout, stderr) ->
+    if error
+      console.log(error)
+      sys.print(stdout)
+      sys.print(stderr)
+    else
+      callback(error, stdout, stderr)
+
+watch.watchTree path.join(APP_ROOT, 'style'), ->
+  console.log('compiling css…')
+  run 'compile-css', ->
+    console.log('done compiling css')
+
+
+watch.watchTree path.join(APP_ROOT, 'app'), ->
+  console.log('compiling js…')
+  run 'compile-css', ->
+    console.log('done compiling js')
+
