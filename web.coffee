@@ -7,6 +7,7 @@ browserify = require 'connect-browserify'
 require('node-env-file')(__dirname + '/.env');
 
 web = express()
+web.set 'title', 'putio'
 web.set 'port', (process.env.PORT || 5000)
 
 web.use express.static(__dirname + '/public')
@@ -18,34 +19,6 @@ web.get "/js/bundle.js", browserify(
   transforms: ['coffeeify', 'envify']
   extensions: [".cjsx", ".coffee", ".js", ".json"]
 )
-
-
-# web.get '/app.js', (req, res) ->
-#   res.setHeader('content-type', 'application/javascript')
-#   b = browserify(__dirname + '/app/client')
-#   b._extensions.push('.coffee')
-#   b = b.transform('coffeeify').bundle()
-#   b.on('error', console.error)
-#   b.pipe(res)
-
-
-# https://deadlyicon-putio.herokuapp.com/callback
-web.get '/callback', (req, res) ->
-
-  # ?code=d734ce14a1d911e4a269001018321b64
-  response.param('code')
-
-  ###
-  Request this:
-  https://api.put.io/v2/oauth2/access_token
-    ?client_id=YOUR_CLIENT_ID
-    &client_secret=YOUR_CLIENT_SECRET
-    &grant_type=authorization_code
-    &redirect_uri=YOUR_REGISTERED_REDIRECT_URI
-    &code=CODE
-  ###
-
-  response.send('CALLBACKED')
 
 web.get '*', (request, response) ->
   D = react.DOM
@@ -62,6 +35,9 @@ web.get '*', (request, response) ->
   )
 
   response.send(html)
+
+if 'development' == web.get('env')
+  require('node-pow')(web)
 
 web.listen web.get('port'), ->
   console.log("Node app is running at http://localhost:" + web.get('port'))

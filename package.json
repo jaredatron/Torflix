@@ -15,7 +15,9 @@
     "qwest": "^1.5.4",
     "react": "^0.12.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "node-pow": "0.0.2"
+  },
   "engines": {
     "node": "0.10.x"
   },
