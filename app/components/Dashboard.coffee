@@ -2,6 +2,7 @@ React         = require 'react'
 component     = require '../component'
 TransfersList = require './TransfersList'
 NewTransfer   = require './NewTransfer'
+Button        = require 'react-bootstrap/Button'
 
 {div, h1, a} = React.DOM
 
@@ -14,6 +15,7 @@ module.exports = component 'Dashboard',
       LogoutButton(),
       NewTransfer(),
       TransfersList(),
+      Button(bsStyle:"primary", 'Primary')
     )
 
 
