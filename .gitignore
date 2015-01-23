@@ -4,4 +4,4 @@ tmp
 public/application.js
 public/application.css
 ./.env
-./public/*
+public
