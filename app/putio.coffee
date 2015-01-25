@@ -33,7 +33,7 @@ module.exports = (TOKEN) ->
       @emit('change')
       response
 
-  TRANSFER_POLL_DELAY = 1000
+  TRANSFER_POLL_DELAY = 1000 * 30
   polling_transfers = false
   putio.transfers.startPolling = ->
     return this if polling_transfers
