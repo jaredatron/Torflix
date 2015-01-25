@@ -20,11 +20,11 @@ run = (command, callback) ->
 watch.watchTree path.join(APP_ROOT, 'style'), ->
   console.log('compiling css…')
   run 'compile-css', ->
-    console.log('done compiling css')
+    console.log("done compiling css\n\n")
 
 
 watch.watchTree path.join(APP_ROOT, 'app'), ->
   console.log('compiling js…')
   run 'compile-js', ->
-    console.log('done compiling js')
+    console.log("done compiling js\n\n")
 

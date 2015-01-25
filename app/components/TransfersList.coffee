@@ -1,10 +1,9 @@
-React     = require 'react'
-component = require '../component'
+React      = require 'react'
+component  = require '../component'
+ActionLink = require './ActionLink'
+Glyphicon  = require 'react-bootstrap/Glyphicon'
 
 {a, div, table, thead, tbody, tr, td, th} = React.DOM
-
-
-
 
 
 module.exports = component 'TransfersList',
@@ -30,12 +29,6 @@ module.exports = component 'TransfersList',
   componentWillUnmount: ->
     @context.putio.transfers.off('change', @transfersChanged)
 
-  deleteTranfer: (transfer_id) ->
-    (event) =>
-      event.preventDefault()
-      @context.putio.transfers.delete(transfer_id).catch (error) =>
-        @setState error: error
-
   render: ->
     div
       className: 'TransfersList'
@@ -46,26 +39,85 @@ module.exports = component 'TransfersList',
       when @state.error
         div(null, "ERROR: #{@state.error}")
       when @state.transfers
-        Table(transfers: @state.transfers, deleteTranfer: @deleteTranfer)
+        TransfersListTable(transfers: @state.transfers, deleteTranfer: @deleteTranfer)
       else
         div(null, 'Loading…')
 
 
-Table = component 'TransfersListTable',
+TransfersListTable = component 'TransfersListTable',
 
 
   render: ->
     div className: 'transfers',
-      div className: 'header',
+      div className: 'transfers-header',
         div className: 'delete',     ''
         div className: 'status',     'Status'
         div className: 'name',       'Name'
         div className: 'created_at', 'Created At'
       @props.transfers.map (transfer) =>
-        div key: transfer.id, className: 'transfer',
-          div className: 'delete',     a(href:'', onClick: @props.deleteTranfer(transfer.id), 'X')
-          div className: 'status',     transfer.status
-          div className: 'name',       transfer.name
-          div className: 'created_at', transfer.created_at
+        TransferRow
+          key:        transfer.id
+          id:         transfer.id
+          status:     transfer.status
+          name:       transfer.name
+          created_at: transfer.created_at
+          file_id:    transfer.file_id
+          delete:     @props.deleteTranfer
 
+
+
+TransferRow = component 'TransferRow',
+
+  contextTypes:
+    putio: React.PropTypes.any.isRequired
+
+  getInitialState: ->
+    showingFiles: false
+
+  toggleFiles: ->
+    @setState showingFiles: !@state.showingFiles
+
+
+  delete: (event) ->
+    event.preventDefault()
+    console.log("PRETENDING TO DELETE TRANSFER #{@props.id}")
+    # @context.putio.transfers.delete(@props.id).catch (error) =>
+    #   @setState error: error
+
+
+  toggleFilesLink: ->
+    icon = if @state.showingFiles
+      Glyphicon(glyph:'chevron-down')
+    else
+      Glyphicon(glyph:'chevron-right')
+
+    ActionLink(onClick: @toggleFiles, icon)
+
+  deleteLink: ->
+    ActionLink(onClick: @delete, 'X')
+
+  renderFiles: ->
+    return null unless @state.showingFiles
+    TransferFile file_id: @props.file_id
+
+  render: ->
+    div className: 'transfer',
+      div key: @props.id, className: 'transfer-row',
+        div className: 'toggle-files', @toggleFilesLink()
+        div className: 'status',       @props.status
+        div className: 'name',         @props.name
+        div className: 'created_at',   @props.created_at
+        div className: 'delete',       @deleteLink()
+      @renderFiles()
+
+
+
+
+
+
+
+TransferFile = component 'TransferFiles',
+  render: ->
+    div className: 'transfer-files',
+      div null, 'files herererere'
 

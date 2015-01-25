@@ -1,29 +1,33 @@
 .TransfersList
-  > .transfers
-    > .transfer, > .header
-      display: flex
-      flex-direction: row
-      flex-wrap: nowrap
 
-      > * // cell
-        white-space: nowrap
-        overflow: hidden
-        text-overflow: ellipsis
-        flex-grow: 0
-        flex-shrink: 0
+  .transfers-header, .transfer-row
+    display: flex
+    flex-direction: row
+    flex-wrap: nowrap
 
-      > .name
-        width: auto
-        flex-grow: 1
-        flex-shrink: 1
+    > * // cell
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+      flex-grow: 0
+      flex-shrink: 0
 
-      > .created_at
-        flex-basis: 200px
+    > .delete
+      flex-basis: 30px
 
-      > .status
-        flex-basis: 100px
+    > .name
+      width: auto
+      flex-grow: 1
+      flex-shrink: 1
 
-    > .header > *
+    > .created_at
+      flex-basis: 200px
+
+    > .status
+      flex-basis: 100px
+
+  .transfers-header
+    > *
       position: relative
       overflow: visible
       box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 #FFF
@@ -49,7 +53,8 @@
         left: 0
         background-color: rgba(255, 255, 255, 0.8)
 
-    > .transfer
-      border-bottom: 1px solid grey
-      > *
-        padding: 0.25em 0.5em
+  .transfer-row, .transfer-files
+    border-bottom: 1px solid grey
+
+  .transfer-row > *
+    padding: 0.25em 0.5em
