@@ -2,9 +2,7 @@ path       = require 'path'
 express    = require 'express'
 react      = require 'react'
 browserify = require 'connect-browserify'
-
-# load .env file
-require('node-env-file')(__dirname + '/.env');
+env        = require 'env'
 
 web = express()
 web.set 'title', 'putio'

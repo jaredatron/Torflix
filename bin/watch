@@ -7,6 +7,8 @@ exec  = require('child_process').exec
 
 APP_ROOT = path.join(__dirname, '..')
 
+require path.join(APP_ROOT, 'env')
+
 run = (command, callback) ->
   exec path.join(APP_ROOT, "bin/#{command}"), (error, stdout, stderr) ->
     if error
