@@ -39,12 +39,12 @@ module.exports = component 'TransfersList',
       when @state.error
         div(null, "ERROR: #{@state.error}")
       when @state.transfers
-        TransfersListTable(transfers: @state.transfers, deleteTranfer: @deleteTranfer)
+        Table(transfers: @state.transfers, deleteTranfer: @deleteTranfer)
       else
         div(null, 'Loading…')
 
 
-TransfersListTable = component 'TransfersListTable',
+Table = component 'TransfersListTable',
 
 
   render: ->
@@ -98,7 +98,7 @@ TransferRow = component 'TransferRow',
 
   renderFiles: ->
     return null unless @state.showingFiles
-    TransferFile file_id: @props.file_id
+    File file_id: @props.file_id
 
   render: ->
     div className: 'transfer',
@@ -116,8 +116,61 @@ TransferRow = component 'TransferRow',
 
 
 
-TransferFile = component 'TransferFiles',
-  render: ->
-    div className: 'transfer-files',
-      div null, 'files herererere'
+File = component 'TransferListFile',
 
+  contextTypes:
+    putio: React.PropTypes.any.isRequired
+
+  propTypes:
+    file_id: React.PropTypes.number.isRequired
+
+  getInitialState: ->
+    file:  @props.file
+    files: @props.files
+
+  isLoading: ->
+    !@state.file?
+
+  isDirectory: ->
+    @state.file.content_type == "application/x-directory"
+
+  loadFile: ->
+    if !@state.file?
+      @context.putio.files.get(@props.file_id).then (file) =>
+        @setState file: file
+        @loadFiles() if @isDirectory()
+        file
+    else if @isDirectory() && !@state.files?
+      # @loadFiles()
+      null
+
+  loadFiles: ->
+    @context.putio.transfers.list(@props.file_id).then (files) =>
+      @setState files: files
+      files
+
+  componentDidMount: ->
+    @loadFile()
+
+  render: ->
+    console.log('RENDERING', @props, @state)
+    div className: 'transfer-list-file', @renderContent()
+
+  renderContent: ->
+    if @state.files?
+      @state.files.map (file) ->
+        File
+          key:     file.id
+          file_id: file.id
+          file:    file
+
+    else if @state.file?
+      div(null,
+        if @isDirectory()
+          div(null, "DIR: #{@state.file.name}")
+        else
+          div(null, "FILE: #{@state.file.name}")
+      )
+
+    else
+      div null, "loading…"
