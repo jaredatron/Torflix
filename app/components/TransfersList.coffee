@@ -157,6 +157,9 @@ File = component 'TransferListFile',
     div className: 'transfer-list-file', @renderContent()
 
   renderContent: ->
+    if !@state.file?
+      return div null, "loading…"
+
     if @state.files?
       @state.files.map (file) ->
         File
@@ -173,4 +176,4 @@ File = component 'TransferListFile',
       )
 
     else
-      div null, "loading…"
+

@@ -72,19 +72,24 @@ module.exports = (TOKEN) ->
 
 
 
-  # files = []
+  files = {}
 
   putio.files = assign({}, EventEmitter.prototype)
 
   putio.files.get = (id) ->
+    return Promise.resolve(file) if file = files[id]
     putio.get("/files/#{id}").then (response) =>
-      response.file
+      file = response.file
+      files[file.id] = file
+      file
 
       # https://api.put.io/v2/files/list?parent_id=270984407&oauth_token=VXWAPF8R&__t=1422230397270
 
   putio.transfers.list = (parent_id) ->
     parent_id ||= 0
     putio.get('/files/list', parent_id: parent_id).then (response) =>
+      response.files.each (file) ->
+        files[file.id] = file
       response.files
 
   putio.files.delete = (id) ->
