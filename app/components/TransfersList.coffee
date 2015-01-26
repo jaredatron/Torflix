@@ -3,7 +3,7 @@ component  = require '../component'
 ActionLink = require './ActionLink'
 Glyphicon  = require 'react-bootstrap/Glyphicon'
 
-{a, div, table, thead, tbody, tr, td, th} = React.DOM
+{div, span, a} = React.DOM
 
 
 module.exports = component 'TransfersList',
@@ -23,11 +23,10 @@ module.exports = component 'TransfersList',
   componentDidMount: ->
     @context.putio.transfers.on('change', @transfersChanged)
     @context.putio.transfers.startPolling()
-    # .catch (error) =>
-    #   @setState error: error
 
   componentWillUnmount: ->
     @context.putio.transfers.off('change', @transfersChanged)
+    @context.putio.transfers.stopPolling()
 
   render: ->
     div
@@ -45,8 +44,6 @@ module.exports = component 'TransfersList',
 
 
 Table = component 'TransfersListTable',
-
-
   render: ->
     div className: 'transfers',
       div className: 'transfers-header',
@@ -134,7 +131,8 @@ FileList  = component 'TransferListTransferFile',
       if !@state.file?
         div(null, "loading…")
       else if isDirectory(@state.file)
-        DirectoryContents(directory_id: @props.file_id)
+        # DirectoryContents(directory_id: @props.file_id)
+        Directory(directory: @state.file)
       else
         File(file: @state.file)
 
@@ -157,9 +155,24 @@ Directory = component 'TransferListDirectory',
   propTypes:
     directory: React.PropTypes.object.isRequired
 
+  getInitialState: ->
+    expanded: @props.expanded
+
+  toggle: ->
+    @setState expanded: !@state.expanded
+
   render: ->
     div className: 'transfer-list-directory',
-      div className: 'transfer-list-directory-name', @props.directory.name
+      ActionLink onClick: @toggle,
+        if @state.expanded
+          Glyphicon(glyph:'chevron-down')
+        else
+          Glyphicon(glyph:'chevron-right')
+
+      span className: 'transfer-list-directory-name', @props.directory.name
+
+      if @state.expanded
+        DirectoryContents(directory_id: @props.directory.id)
 
 
 DirectoryContents = component 'TransferListFile',
