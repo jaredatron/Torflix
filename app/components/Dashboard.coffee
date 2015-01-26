@@ -2,6 +2,7 @@ React         = require 'react'
 component     = require '../component'
 TransfersList = require './TransfersList'
 NewTransfer   = require './NewTransfer'
+FileList      = require './FileList'
 Button        = require 'react-bootstrap/Button'
 Modal         = require 'react-bootstrap/Modal'
 ModalTrigger  = require 'react-bootstrap/ModalTrigger'
@@ -16,6 +17,7 @@ module.exports = component 'Dashboard',
       Navbar()
       NewTransfer(),
       TransfersList(),
+      FileList(file_id: 0),
       ModalTrigger
         modal: ExampleModal()
         Button(bsStyle:"primary", 'Primary')
