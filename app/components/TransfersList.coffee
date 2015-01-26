@@ -98,7 +98,7 @@ TransferRow = component 'TransferRow',
 
   renderFiles: ->
     return null unless @state.showingFiles
-    File file_id: @props.file_id
+    FileList file_id: @props.file_id
 
   render: ->
     div className: 'transfer',
@@ -112,11 +112,7 @@ TransferRow = component 'TransferRow',
 
 
 
-
-
-
-
-File = component 'TransferListFile',
+FileList  = component 'TransferListTransferFile',
 
   contextTypes:
     putio: React.PropTypes.any.isRequired
@@ -125,55 +121,75 @@ File = component 'TransferListFile',
     file_id: React.PropTypes.number.isRequired
 
   getInitialState: ->
-    file:  @props.file
-    files: @props.files
-
-  isLoading: ->
-    !@state.file?
-
-  isDirectory: ->
-    @state.file.content_type == "application/x-directory"
-
-  loadFile: ->
-    if !@state.file?
-      @context.putio.files.get(@props.file_id).then (file) =>
-        @setState file: file
-        @loadFiles() if @isDirectory()
-        file
-    else if @isDirectory() && !@state.files?
-      # @loadFiles()
-      null
-
-  loadFiles: ->
-    @context.putio.transfers.list(@props.file_id).then (files) =>
-      @setState files: files
-      files
+    loading: true
+    error: null
 
   componentDidMount: ->
-    @loadFile()
+    @context.putio.files.get(@props.file_id)
+      .then((file) => @setState(file: file))
+      .catch((message) => throw message)
 
   render: ->
-    console.log('RENDERING', @props, @state)
-    div className: 'transfer-list-file', @renderContent()
+    div className: 'FileList',
+      if !@state.file?
+        div(null, "loading…")
+      else if isDirectory(@state.file)
+        DirectoryContents(directory_id: @props.file_id)
+      else
+        File(file: @state.file)
 
-  renderContent: ->
-    if !@state.file?
-      return div null, "loading…"
 
-    if @state.files?
-      @state.files.map (file) ->
-        File
-          key:     file.id
-          file_id: file.id
-          file:    file
 
-    else if @state.file?
-      div(null,
-        if @isDirectory()
-          div(null, "DIR: #{@state.file.name}")
-        else
-          div(null, "FILE: #{@state.file.name}")
-      )
 
+
+
+File = component 'TransferListFile',
+
+  propTypes:
+    file: React.PropTypes.object.isRequired
+
+  render: ->
+    div className: 'transfer-list-file',
+      div className: 'transfer-list-file-name', @props.file.name
+
+Directory = component 'TransferListDirectory',
+
+  propTypes:
+    directory: React.PropTypes.object.isRequired
+
+  render: ->
+    div className: 'transfer-list-directory',
+      div className: 'transfer-list-directory-name', @props.directory.name
+
+
+DirectoryContents = component 'TransferListFile',
+
+  contextTypes:
+    putio: React.PropTypes.any.isRequired
+
+  propTypes:
+    directory_id: React.PropTypes.number.isRequired
+
+  getInitialState: ->
+    files: null
+
+  componentDidMount: ->
+    @context.putio.transfers.list(@props.directory_id)
+      .then (files) =>
+        @setState files: files
+        files
+      .catch((message) => throw message)
+
+  render: ->
+    if !@state.files?
+      div(null, "loading…")
     else
+      div className: 'transfer-list-directory-contents',
+        @state.files.map (file) ->
+          if isDirectory(file)
+            Directory(key: file.id, directory: file)
+          else
+            File(key: file.id, file: file)
 
+isDirectory = (file) ->
+  file.content_type == "application/x-directory"

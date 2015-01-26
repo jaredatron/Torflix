@@ -72,31 +72,40 @@ module.exports = (TOKEN) ->
 
 
 
-  files = {}
+  FILES_CACHE = {}
+  DIRECTORY_CONTENTS_CACHE = {}
 
-  putio.files = assign({}, EventEmitter.prototype)
+  putio.files = {}
 
   putio.files.get = (id) ->
-    return Promise.resolve(file) if file = files[id]
+    return Promise.resolve(file) if file = FILES_CACHE[id]
     putio.get("/files/#{id}").then (response) =>
       file = response.file
-      files[file.id] = file
+      FILES_CACHE[file.id] = file
       file
 
       # https://api.put.io/v2/files/list?parent_id=270984407&oauth_token=VXWAPF8R&__t=1422230397270
 
   putio.transfers.list = (parent_id) ->
     parent_id ||= 0
+    return Promise.resolve(files) if files = DIRECTORY_CONTENTS_CACHE[parent_id]
     putio.get('/files/list', parent_id: parent_id).then (response) =>
-      response.files.each (file) ->
-        files[file.id] = file
-      response.files
+      files = response.files
+      DIRECTORY_CONTENTS_CACHE[parent_id] = files
+      files.forEach (file) -> FILES_CACHE[file.id] = file
+      files
 
   putio.files.delete = (id) ->
     putio.post('/files/delete', file_ids: id).then (response) =>
-      @emit('change')
+      delete FILES_CACHE[id]
       response
 
+
+  # DEBUG
+  putio._cache =
+    transfers: transfers
+    FILES_CACHE: FILES_CACHE
+    DIRECTORY_CONTENTS_CACHE: DIRECTORY_CONTENTS_CACHE
 
 
 
