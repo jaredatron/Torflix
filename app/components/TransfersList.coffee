@@ -45,6 +45,13 @@ module.exports = component 'TransfersList',
 
 
 Table = component 'TransfersListTable',
+  transfers: ->
+    @props.transfers.sort (a, b) ->
+      a = Date.parse(a.created_at)
+      b = Date.parse(b.created_at)
+      return -1 if a > b
+      return  1 if a < b
+      return  0 if a == b
   render: ->
     div className: 'transfers',
       div className: 'transfers-header',
@@ -52,7 +59,7 @@ Table = component 'TransfersListTable',
         div className: 'status',     'Status'
         div className: 'name',       'Name'
         div className: 'created_at', 'Created At'
-      @props.transfers.map (transfer) =>
+      @transfers().map (transfer) =>
         TransferRow
           key:        transfer.id
           id:         transfer.id
