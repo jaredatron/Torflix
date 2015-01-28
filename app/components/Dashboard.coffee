@@ -11,6 +11,10 @@ ModalTrigger  = require 'react-bootstrap/ModalTrigger'
 
 
 module.exports = component 'Dashboard',
+
+  contextTypes:
+    path: React.PropTypes.object.isRequired
+
   render: ->
     div(
       className: 'Dashboard',
@@ -18,11 +22,18 @@ module.exports = component 'Dashboard',
       NewTransfer(),
       TransfersList(),
       FileList(file_id: 0),
-      ModalTrigger
-        modal: ExampleModal()
-        Button(bsStyle:"primary", 'Primary')
+      @VideoPlayerModal()
     )
 
+  VideoPlayerModal: ->
+    params = @context.path.params()
+    return unless params.v
+    VideoPlayerModal
+      file_id: params.v,
+      onRequestHide: @hideVideoPlauerModal
+
+  hideVideoPlauerModal: ->
+    @context.path.set @context.path.where(v: undefined)
 
 Navbar = component 'Navbar',
   render: ->
@@ -41,9 +52,9 @@ LogoutButton = component 'LogoutButton',
 
 
 
-ExampleModal = component 'ExampleModal',
+VideoPlayerModal = component 'VideoPlayerModal',
   render: ->
-    Modal(title: "WOOOT BALLLZ", animation: true,
+    Modal(title: "Video Player Modal", animation: true, backdrop: true,
       div( className: "modal-body",
         div(null, 'This is the modal')
       )

@@ -2,7 +2,7 @@ path       = require 'path'
 express    = require 'express'
 react      = require 'react'
 browserify = require 'connect-browserify'
-env        = require 'env'
+env        = require './env'
 
 web = express()
 web.set 'title', 'putio'
@@ -29,7 +29,8 @@ web.get '*', (request, response) ->
         D.link(rel: 'stylesheet', href: 'app.css', type: 'text/css')
       )
       D.body(null,
-        D.script(src: 'client.js')
+        D.script(type: 'text/javascript', src: 'client.js')
+        D.script(type: 'text/javascript', src: '//put.io/web/jwplayer/jwplayer.js')
       )
     )
   )

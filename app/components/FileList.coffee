@@ -1,7 +1,9 @@
-React      = require 'react'
-component  = require '../component'
-ActionLink = require './ActionLink'
-Glyphicon  = require 'react-bootstrap/Glyphicon'
+React       = require 'react'
+component   = require '../component'
+ActionLink  = require './ActionLink'
+Glyphicon   = require 'react-bootstrap/Glyphicon'
+
+LinkToVideoPlayerModal = require './LinkToVideoPlayerModal'
 
 {div, span, a} = React.DOM
 
@@ -39,9 +41,21 @@ File = component 'FileListFile',
   propTypes:
     file: React.PropTypes.object.isRequired
 
+  isVideo: ->
+    /\.(mkv|mp4)$/.test @props.file.name
+
   render: ->
+    name = span className: 'transfer-list-file-name', @props.file.name
+
     div className: 'transfer-list-file',
-      div className: 'transfer-list-file-name', @props.file.name
+      if @isVideo()
+        LinkToVideoPlayerModal
+          file_id: @props.file.id
+          Glyphicon(glyph:'play')
+          name
+      else
+        name
+
 
 
 Directory = component 'FileListDirectory',
@@ -110,3 +124,4 @@ DirectoryContents = component 'FileListDirectoryContents',
 
 isDirectory = (file) ->
   file.content_type == "application/x-directory"
+

@@ -4,17 +4,21 @@ assign    = require('object-assign')
 
 {a} = React.DOM
 
-
 module.exports = component 'ActionLink',
 
+  contextTypes:
+    path: React.PropTypes.object.isRequired
+
   onClick: (event) ->
-    event.preventDefault()
     @props.onClick(event) if @props.onClick?
+    # return if default is prevented
+    event.preventDefault()
+    if @props.href
+      console.log('PATH SET', @props.href)
+      @context.path.set(@props.href, !!@props.default)
 
   render: ->
-    props = assign({
-      href: ''
-    }, @props, {
-      onClick: @onClick
-    })
+    props = assign({}, @props)
+    props.href = @props.href || ''
+    props.onClick = @onClick
     a(props)

@@ -12,15 +12,18 @@ path = Path(location, history)
 
 
 # TEMP DEBUG
-global.path  = path
+global.DEBUG_PATH = path
 
 getState = ->
+  pathname: path.pathname()
+  params: path.params()
   put_io_access_token: session('put_io_access_token')
 
 module.exports = component 'App',
 
   childContextTypes:
-    putio: React.PropTypes.any
+    path:   React.PropTypes.object
+    putio:  React.PropTypes.any
 
   putio: ->
     global.putio = if @state.put_io_access_token
@@ -29,6 +32,7 @@ module.exports = component 'App',
       null
 
   getChildContext: ->
+    path:  path
     putio: @putio()
 
   getInitialState: ->
@@ -39,9 +43,11 @@ module.exports = component 'App',
 
   componentDidMount: ->
     session.on('change', @onChange)
+    path.on('change', @onChange)
 
   componentWillUnmount: ->
     session.off('change', @onChange)
+    path.off('change', @onChange)
 
   render: ->
     if @state.put_io_access_token

@@ -6,6 +6,9 @@ fromString = (string) ->
   querystring.parse(string)
 
 toString = (params) ->
+  params = assign({}, params)
+  for key, value of params
+    delete params[key] if typeof value == 'undefined'
   querystring.stringify(params)
 
 toSearch = (params) ->
