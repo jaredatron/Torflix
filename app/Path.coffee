@@ -34,7 +34,7 @@ module.exports = (location, history) ->
 
   path.search = (search, replace) ->
     if arguments.length == 0
-      location.search
+      location.search.replace(/^\?/,'')
     else
       params = fromString(search)
       path.set(path.for(path.pathname(), params), replace)
@@ -67,6 +67,9 @@ module.exports = (location, history) ->
     "#{pathname}#{toSearch(params)}"
 
   path.where = (pathname, params) ->
+    if arguments.length == 1 && typeof pathname == 'object'
+      params = pathname
+      pathname = null
     pathname ||= path.pathname()
     params = assign({}, path.params(), params)
     path.for(pathname, params)
