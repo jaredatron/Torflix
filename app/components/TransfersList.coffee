@@ -59,6 +59,7 @@ Table = component 'TransfersListTable',
         div className: 'status',     'Status'
         div className: 'name',       'Name'
         div className: 'created_at', 'Created At'
+        div className: 'delete',     ''
       @transfers().map (transfer) =>
         TransferRow
           key:        transfer.id
@@ -89,14 +90,14 @@ TransferRow = component 'TransferRow',
     # @context.putio.transfers.delete(@props.id).catch (error) =>
     #   @setState error: error
 
+  toggleFilesActionLink: (children...) ->
+    ActionLink(onClick: @toggleFiles, children...)
 
-  toggleFilesLink: ->
-    icon = if @state.showingFiles
+  stateIcon: ->
+    if @state.showingFiles
       Glyphicon(glyph:'chevron-down')
     else
       Glyphicon(glyph:'chevron-right')
-
-    ActionLink(onClick: @toggleFiles, icon)
 
   deleteLink: ->
     ActionLink(onClick: @delete, 'X')
@@ -108,10 +109,10 @@ TransferRow = component 'TransferRow',
   render: ->
     div className: 'transfer',
       div key: @props.id, className: 'transfer-row',
-        div className: 'toggle-files', @toggleFilesLink()
-        div className: 'status',       @props.status
-        div className: 'name',         @props.name
-        div className: 'created_at',   @props.created_at
+        div className: 'toggle-files', @toggleFilesActionLink @stateIcon()
+        div className: 'status',       @toggleFilesActionLink @props.status
+        div className: 'name',         @toggleFilesActionLink @props.name
+        div className: 'created_at',   @toggleFilesActionLink @props.created_at
         div className: 'delete',       @deleteLink()
       @renderFiles()
 
