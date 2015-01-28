@@ -57,9 +57,9 @@ Directory = component 'FileListDirectory',
 
   chevron: ->
     if @state.expanded
-      Glyphicon(glyph:'chevron-down')
+      Glyphicon(className:'transfer-list-directory-status-icon', glyph:'chevron-down')
     else
-      Glyphicon(glyph:'chevron-right')
+      Glyphicon(className:'transfer-list-directory-status-icon', glyph:'chevron-right')
 
   render: ->
     div className: 'transfer-list-directory',
@@ -94,7 +94,8 @@ DirectoryContents = component 'FileListDirectoryContents',
 
   render: ->
     if !@state.files?
-      div(null, "loading…")
+      div className: 'transfer-list-directory-contents',
+        div(null, "loading…")
     else
       div className: 'transfer-list-directory-contents',
         if @isEmpty()
