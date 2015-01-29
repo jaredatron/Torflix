@@ -42,7 +42,7 @@ File = component 'FileListFile',
     file: React.PropTypes.object.isRequired
 
   isVideo: ->
-    /\.(mkv|mp4)$/.test @props.file.name
+    /\.(mkv|mp4|avi)$/.test @props.file.name
 
   render: ->
     name = span className: 'transfer-list-file-name', @props.file.name

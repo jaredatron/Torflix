@@ -14,9 +14,16 @@ module.exports = component 'VideoPlayer',
   render: ->
     # div id: @state.htmlId, className: 'VideoPlayer'
 
-    iframe
-      className: 'VideoPlayer'
-      src: "https://s10.put.io/download/#{@props.file.id}"
+    file = @props.file
+    console.dir(file)
+
+    # type = file.name.match(/\.([^.]+)$/)[1];
+    if file.is_mp4_available
+      src = "https://put.io/v2/files/#{file.id}/mp4/stream"
+    else
+      src = "https://put.io/v2/files/#{file.id}/stream"
+
+    iframe className: 'VideoPlayer', src: src
 
 
     # video

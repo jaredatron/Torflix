@@ -85,9 +85,8 @@ TransferRow = component 'TransferRow',
 
   delete: (event) ->
     event.preventDefault()
-    console.log("PRETENDING TO DELETE TRANSFER #{@props.id}")
-    # @context.putio.transfers.delete(@props.id).catch (error) =>
-    #   @setState error: error
+    @context.putio.transfers.delete(@props.id).catch (error) =>
+      @setState error: error
 
   toggleFilesActionLink: (children...) ->
     ActionLink(onClick: @toggleFiles, children...)
