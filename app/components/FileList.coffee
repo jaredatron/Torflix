@@ -1,7 +1,8 @@
-React       = require 'react'
-component   = require '../component'
-ActionLink  = require './ActionLink'
-Glyphicon   = require 'react-bootstrap/Glyphicon'
+React        = require 'react'
+component    = require '../component'
+ActionLink   = require './ActionLink'
+DownloadLink = require './DownloadLink'
+Glyphicon    = require 'react-bootstrap/Glyphicon'
 
 LinkToVideoPlayerModal = require './LinkToVideoPlayerModal'
 
@@ -47,18 +48,23 @@ File = component 'FileListFile',
   render: ->
     name = span className: 'transfer-list-file-name', @props.file.name
 
-    div className: 'transfer-list-file',
-      if @isVideo()
-        LinkToVideoPlayerModal
-          file_id: @props.file.id
-          Glyphicon(glyph:'play')
-          name
-      else
+
+    if @isVideo()
+      LinkToVideoPlayerModal
+        className: 'FileListFile'
+        file_id: @props.file.id
+        Glyphicon(glyph:'facetime-video', className: 'FileListFile-icon')
+        name
+    else
+      DownloadLink
+        href: "https://put.io/v2/files/#{@props.file.id}/download"
+        className: 'FileListFile'
+        Glyphicon(glyph:'file', className: 'FileListFile-icon')
         name
 
 
 
-Directory = component 'FileListDirectory',
+Directory = component 'FileList-Directory',
 
   propTypes:
     directory: React.PropTypes.object.isRequired
@@ -71,21 +77,21 @@ Directory = component 'FileListDirectory',
 
   chevron: ->
     if @state.expanded
-      Glyphicon(className:'transfer-list-directory-status-icon', glyph:'chevron-down')
+      Glyphicon(className:'FileList-Directory-status-icon', glyph:'chevron-down')
     else
-      Glyphicon(className:'transfer-list-directory-status-icon', glyph:'chevron-right')
+      Glyphicon(className:'FileList-Directory-status-icon', glyph:'chevron-right')
 
   render: ->
-    div className: 'transfer-list-directory',
+    div className: 'FileList-Directory',
       ActionLink onClick: @toggle,
         @chevron(),
-        span className: 'transfer-list-directory-name', @props.directory.name
+        span className: 'FileList-Directory-name', @props.directory.name
 
       if @state.expanded
         DirectoryContents(directory_id: @props.directory.id)
 
 
-DirectoryContents = component 'FileListDirectoryContents',
+DirectoryContents = component 'FileList-DirectoryContents',
 
   contextTypes:
     putio: React.PropTypes.any.isRequired
@@ -108,10 +114,10 @@ DirectoryContents = component 'FileListDirectoryContents',
 
   render: ->
     if !@state.files?
-      div className: 'transfer-list-directory-contents',
+      div className: 'FileList-DirectoryContents',
         div(null, "loading…")
     else
-      div className: 'transfer-list-directory-contents',
+      div className: 'FileList-DirectoryContents',
         if @isEmpty()
           div(className: 'empty', 'empty')
         else
