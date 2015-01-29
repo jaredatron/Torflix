@@ -6,9 +6,9 @@ FileList      = require './FileList'
 ActionLink    = require './ActionLink'
 VideoPlayerModal = require './VideoPlayerModal'
 
-Button        = require 'react-bootstrap/Button'
-Modal         = require 'react-bootstrap/Modal'
-ModalTrigger  = require 'react-bootstrap/ModalTrigger'
+Button     = require 'react-bootstrap/Button'
+TabbedArea = require 'react-bootstrap/TabbedArea'
+TabPane    = require 'react-bootstrap/TabPane'
 
 {div, h1, a} = React.DOM
 
@@ -19,14 +19,26 @@ module.exports = component 'Dashboard',
     path: React.PropTypes.object.isRequired
 
   render: ->
-    div(
+    div
       className: 'Dashboard',
+
       Navbar()
+
       NewTransfer(),
-      TransfersList(),
-      FileList(file_id: 0),
+
+      TabbedArea
+        defaultActiveKey: 1
+        TabPane
+          eventKey: 1
+          tab: 'Transfers'
+          TransfersList()
+        TabPane
+          eventKey: 2
+          tab: 'Files'
+          FileList(file_id: 0)
+
       @VideoPlayerModal()
-    )
+
 
   VideoPlayerModal: ->
     params = @context.path.params()
