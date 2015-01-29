@@ -58,13 +58,12 @@ Transfer = component 'TransfersList-Transfer',
 
   render: ->
     transfer = @props.transfer
-    div
-      className: 'TransfersList-Transfer'
-      'data-status': transfer.status
+    div className: 'TransfersList-Transfer', 'data-status': transfer.status,
       @toggleLink(
         @statusIcon()
         span className: 'TransfersList-Transfer-name', transfer.name
       )
+      DeleteLink transfer_id: transfer.id
       @files()
 
   toggleLink: (children...) ->
@@ -79,8 +78,29 @@ Transfer = component 'TransfersList-Transfer',
       style: {width: "#{@props.transfer.percent_done}%"}
 
   statusIcon: ->
-    Glyphicon glyph: 'file', className: 'TransfersList-Transfer-statusIcon'
+    glyph = switch @props.transfer.status
+      when 'IN_QUEUE'    then 'pause'
+      when 'DOWNLOADING' then 'download-alt'
+      when 'COMPLETED'   then 'ok'
+
+    Glyphicon glyph: glyph, className: 'TransfersList-Transfer-statusIcon'
 
   files: ->
-    if @state.expanded
+    if @completed() && @state.expanded
       FileList file_id: @props.transfer.file_id
+
+
+DeleteLink = component 'TransfersList-DeleteLink',
+
+  contextTypes:
+    putio: React.PropTypes.any.isRequired
+
+  onClick: ->
+    @context.putio.transfers.delete(@props.transfer_id)
+
+  render: ->
+    ActionLink
+      onClick: @onClick
+      className: 'TransfersList-DeleteLink'
+      Glyphicon glyph: 'remove'
+
