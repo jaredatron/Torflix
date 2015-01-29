@@ -1,10 +1,10 @@
-React        = require 'react'
-component    = require '../component'
-ActionLink   = require './ActionLink'
+React = require 'react'
+component = require '../component'
+ActionLink = require './ActionLink'
 DownloadLink = require './DownloadLink'
-Glyphicon    = require 'react-bootstrap/Glyphicon'
-
+Glyphicon = require 'react-bootstrap/Glyphicon'
 LinkToVideoPlayerModal = require './LinkToVideoPlayerModal'
+PromiseStateMachine = require './PromiseStateMachine'
 
 {div, span, a} = React.DOM
 
@@ -53,7 +53,7 @@ DepthMixin =
     depth: React.PropTypes.number.isRequired
 
   getChildContext: ->
-    depth: @context.depth + 1
+    depth: (@context.depth||0) + 1
 
   depth: ->
     @context.depth
@@ -127,35 +127,39 @@ Directory = component 'FileList-Directory',
 
 DirectoryContents = component 'FileList-DirectoryContents',
 
+  mixins: [DepthMixin]
+
   contextTypes:
     putio: React.PropTypes.any.isRequired
 
   propTypes:
     directory_id: React.PropTypes.number.isRequired
 
-  getInitialState: ->
-    files: null
-
-  componentDidMount: ->
-    @context.putio.transfers.list(@props.directory_id)
-      .then (files) =>
-        @setState files: files
-        files
-      .catch((message) => throw message)
-
-  isEmpty: ->
-    @state.files.length == 0
+  childContextTypes:
+    depth: React.PropTypes.number.isRequired
 
   render: ->
-    if !@state.files?
-      div className: 'FileList-DirectoryContents'
+    PromiseStateMachine
+      promise: @context.putio.transfers.list(@props.directory_id)
+      loaded: @renderFiles
+
+  renderFiles: (files) ->
+    div className: 'FileList-DirectoryContents',
+      if files.length > 0
+        files.map @renderFile
+      else
+        div(className: 'empty', 'empty')
+
+  renderFile: (file) ->
+    if isDirectory(file)
+      Directory(key: file.id, directory: file)
     else
-      div className: 'FileList-DirectoryContents',
-        if @isEmpty()
-          div(className: 'empty', 'empty')
-        else
-          @state.files.map (file) ->
-            if isDirectory(file)
-              Directory(key: file.id, directory: file)
-            else
-              File(key: file.id, file: file)
+      File(key: file.id, file: file)
+
+
+
+module.exports.FileList = FileList
+module.exports.File = File
+module.exports.Directory = Directory
+module.exports.DirectoryContents = DirectoryContents
+

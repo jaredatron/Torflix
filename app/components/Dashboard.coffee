@@ -1,9 +1,9 @@
-React         = require 'react'
-component     = require '../component'
+React = require 'react'
+component = require '../component'
 TransfersList = require './TransfersList'
-NewTransfer   = require './NewTransfer'
-FileList      = require './FileList'
-ActionLink    = require './ActionLink'
+NewTransfer = require './NewTransfer'
+Files = require './Files'
+ActionLink = require './ActionLink'
 VideoPlayerModal = require './VideoPlayerModal'
 
 Button     = require 'react-bootstrap/Button'
@@ -35,7 +35,7 @@ module.exports = component 'Dashboard',
         TabPane
           eventKey: 2
           tab: 'Files'
-          FileList(file_id: 0)
+          Files()
 
       @VideoPlayerModal()
 
