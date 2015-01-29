@@ -29,6 +29,7 @@ module.exports = (TOKEN) ->
 
   putio.transfers.load = ->
     putio.get('/transfers/list').then (response) =>
+      console.log('TRANSFER UPDATE', transfers, response.transfers)
       transfers = response.transfers
       @emit('change')
       response

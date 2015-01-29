@@ -17,21 +17,23 @@ module.exports = component 'VideoPlayer',
   componentDidMount: ->
     console.log(@props.file.name)
     console.log(@props.file)
-    initializeJwplayer(@state.htmlId)
+    initializeJwplayer(@state.htmlId, @props.file)
 
 
 
 
 
-initializeJwplayer = (id) ->
+initializeJwplayer = (id, file) ->
 
-  if typeof jwplayer != 'function'
-    console.log('waiting for jwplayer')
-    return setTimeout((-> initializeJwplayer(id)), 100)
+  # if typeof jwplayer != 'function'
+  #   console.log('waiting for jwplayer')
+  #   return setTimeout((-> initializeJwplayer(id)), 100)
 
   console.log('initing video player')
 
   jwplayer.key = "0WD/covVP7M8mqlQePjQuXXbosftztFp4PIMAQ=="
+
+  debugger
 
   player = jwplayer(id).setup({
       file: "https://put.io/v2/files/271827519/stream?token=83ec7778fbd711e39c51001018321b64",

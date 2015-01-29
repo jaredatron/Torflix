@@ -44,6 +44,7 @@ module.exports = component 'App',
   componentDidMount: ->
     session.on('change', @onChange)
     path.on('change', @onChange)
+    path.init()
 
   componentWillUnmount: ->
     session.off('change', @onChange)
