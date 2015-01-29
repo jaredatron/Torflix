@@ -1,13 +1,21 @@
 .FileList
 
-  .FileListFile
+  .FileList-File
     display: block
+    // padding: 0.25em 0
 
-  .FileListFile-icon
+
+  .FileList-File-name
+    display: block
+    padding: 0.25em 0.5em
+    &:hover
+      background-color: lightgrey
+
+  .FileList-File-icon
     margin-right: 0.5em
 
   .FileList-DirectoryContents
-    margin: 0.5em 0 0.5em 2em
+    // padding: 0.5em 0 0.5em 2em
 
     > .empty
 

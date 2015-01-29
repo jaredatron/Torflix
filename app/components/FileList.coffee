@@ -8,6 +8,8 @@ LinkToVideoPlayerModal = require './LinkToVideoPlayerModal'
 
 {div, span, a} = React.DOM
 
+isDirectory = (file) ->
+  file.content_type == "application/x-directory"
 
 module.exports = component 'FileList',
 
@@ -16,6 +18,12 @@ module.exports = component 'FileList',
 
   propTypes:
     file_id: React.PropTypes.number.isRequired
+
+  childContextTypes:
+    depth: React.PropTypes.number.isRequired
+
+  getChildContext: ->
+    depth: 0
 
   getInitialState: ->
     loading: true
@@ -36,8 +44,25 @@ module.exports = component 'FileList',
       else
         File(file: @state.file)
 
+DepthMixin =
 
-File = component 'FileListFile',
+  contextTypes:
+    depth: React.PropTypes.number.isRequired
+
+  childContextTypes:
+    depth: React.PropTypes.number.isRequired
+
+  getChildContext: ->
+    depth: @context.depth + 1
+
+  depth: ->
+    @context.depth
+
+
+
+File = component 'FileList-File',
+
+  mixins: [DepthMixin]
 
   propTypes:
     file: React.PropTypes.object.isRequired
@@ -46,25 +71,30 @@ File = component 'FileListFile',
     /\.(mkv|mp4|avi)$/.test @props.file.name
 
   render: ->
-    name = span className: 'transfer-list-file-name', @props.file.name
+    name = span(null, @props.file.name)
 
-
-    if @isVideo()
-      LinkToVideoPlayerModal
-        className: 'FileListFile'
-        file_id: @props.file.id
-        Glyphicon(glyph:'facetime-video', className: 'FileListFile-icon')
-        name
-    else
-      DownloadLink
-        href: "https://put.io/v2/files/#{@props.file.id}/download"
-        className: 'FileListFile'
-        Glyphicon(glyph:'file', className: 'FileListFile-icon')
-        name
+    div
+      className: 'FileList-File',
+      if @isVideo()
+        LinkToVideoPlayerModal
+          style: { paddingLeft: "#{@depth()}em" }
+          className: 'FileList-File-name'
+          file_id: @props.file.id
+          Glyphicon(glyph:'facetime-video', className: 'FileList-File-icon')
+          name
+      else
+        DownloadLink
+          style: { paddingLeft: "#{@depth()}em" }
+          href: "https://put.io/v2/files/#{@props.file.id}/download"
+          className: 'FileList-File-name'
+          Glyphicon(glyph:'file', className: 'FileList-File-icon')
+          name
 
 
 
 Directory = component 'FileList-Directory',
+
+  mixins: [DepthMixin]
 
   propTypes:
     directory: React.PropTypes.object.isRequired
@@ -82,13 +112,17 @@ Directory = component 'FileList-Directory',
       Glyphicon(className:'FileList-Directory-status-icon', glyph:'chevron-right')
 
   render: ->
-    div className: 'FileList-Directory',
-      ActionLink onClick: @toggle,
+    div className: 'FileList-File FileList-Directory',
+      ActionLink
+        style: { paddingLeft: "#{@depth()}em" }
+        className: 'FileList-File-name'
+        onClick: @toggle,
         @chevron(),
-        span className: 'FileList-Directory-name', @props.directory.name
+        @props.directory.name
 
       if @state.expanded
         DirectoryContents(directory_id: @props.directory.id)
+
 
 
 DirectoryContents = component 'FileList-DirectoryContents',
@@ -114,8 +148,7 @@ DirectoryContents = component 'FileList-DirectoryContents',
 
   render: ->
     if !@state.files?
-      div className: 'FileList-DirectoryContents',
-        div(null, "loading…")
+      div className: 'FileList-DirectoryContents'
     else
       div className: 'FileList-DirectoryContents',
         if @isEmpty()
@@ -126,8 +159,3 @@ DirectoryContents = component 'FileList-DirectoryContents',
               Directory(key: file.id, directory: file)
             else
               File(key: file.id, file: file)
-
-
-isDirectory = (file) ->
-  file.content_type == "application/x-directory"
-
