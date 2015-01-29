@@ -29,8 +29,8 @@ web.get '*', (request, response) ->
         D.link(rel: 'stylesheet', href: 'app.css', type: 'text/css')
       )
       D.body(null,
-        D.script(type: 'text/javascript', src: 'client.js')
         D.script(type: 'text/javascript', src: '//put.io/web/jwplayer/jwplayer.js')
+        D.script(type: 'text/javascript', src: 'client.js')
       )
     )
   )

@@ -14,7 +14,6 @@ module.exports = component 'ActionLink',
     # return if default is prevented
     event.preventDefault()
     if @props.href
-      console.log('PATH SET', @props.href)
       @context.path.set(@props.href, !!@props.default)
 
   render: ->

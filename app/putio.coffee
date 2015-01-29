@@ -39,7 +39,6 @@ module.exports = (TOKEN) ->
     return this if polling_transfers
     polling_transfers = true
     load = ->
-      console.log('POLLING TRANSFERS')
       putio.transfers.load().complete ->
         return unless polling_transfers
         setTimeout(load, TRANSFER_POLL_DELAY)

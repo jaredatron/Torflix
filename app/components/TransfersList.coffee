@@ -17,7 +17,6 @@ module.exports = component 'TransfersList',
     transfers: @context.putio.transfers.toArray()
 
   transfersChanged: ->
-    console.log('transfersChanged')
     setTimeout =>
       @setState transfers: @context.putio.transfers.toArray()
 
