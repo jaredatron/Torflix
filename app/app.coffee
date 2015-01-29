@@ -26,7 +26,7 @@ module.exports = component 'App',
     putio:  React.PropTypes.any
 
   putio: ->
-    global.putio = if @state.put_io_access_token
+    global.DEBUG_PUTIO = if @state.put_io_access_token
       putio(@state.put_io_access_token)
     else
       null

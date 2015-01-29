@@ -24,7 +24,7 @@ web.get '*', (request, response) ->
   html = react.renderToStaticMarkup(
     D.html(null,
       D.head(null,
-        D.title(null, 'Progwiki')
+        D.title(null, 'put.io')
         D.link(rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css', type: 'text/css')
         D.link(rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css', type: 'text/css')
         D.link(rel: 'stylesheet', href: '/app.css', type: 'text/css')

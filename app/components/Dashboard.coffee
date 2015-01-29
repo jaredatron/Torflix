@@ -4,7 +4,7 @@ TransfersList = require './TransfersList'
 NewTransfer   = require './NewTransfer'
 FileList      = require './FileList'
 ActionLink    = require './ActionLink'
-VideoPlayer   = require './VideoPlayer'
+VideoPlayerModal = require './VideoPlayerModal'
 
 Button        = require 'react-bootstrap/Button'
 Modal         = require 'react-bootstrap/Modal'
@@ -57,17 +57,3 @@ LogoutButton = component 'LogoutButton',
 
 
 
-VideoPlayerModal = component 'VideoPlayerModal',
-
-  propTypes:
-    onClose: React.PropTypes.func.isRequired
-    fileId: React.PropTypes.number.isRequired
-
-  render: ->
-    div className: 'VideoPlayerModal',
-      div className: 'modal-backdrop fade in'
-      div className: 'modal fade in', tabIndex: -1, role: 'dialog', style: {display: 'block'},
-        div className: 'controls',
-          ActionLink onClick: @props.onClose, 'X'
-
-        VideoPlayer(file: {})
