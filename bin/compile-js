@@ -1,27 +1,11 @@
 #!/usr/bin/env coffee
 
-fs   = require 'fs'
+fs = require 'fs'
 path = require 'path'
-browserify = require 'browserify'
-
-APP_ROOT = path.join(__dirname, '..')
-
-render = (name) ->
-  source_path = path.join(APP_ROOT, "app/#{name}")
-  destination_path = path.join(APP_ROOT, "public/#{name}.js")
+assets = require('../assets')
 
 
-  b = browserify
-    basedir: APP_ROOT
-    debug: true
-    watch: true
-    transforms: ['coffeeify', 'envify']
-    extensions: [".cjsx", ".coffee", ".js", ".json"]
-
-  b.add "./app/#{name}"
-
-  b.bundle().pipe fs.createWriteStream(destination_path)
-  console.log("./app/#{name} -> public/#{name}.js")
-
-
-render('client')
+assets.javascript 'app', (error, asset) ->
+  throw error if error
+  destination_path = path.join(__dirname, '../public/app.js')
+  asset.pipe fs.createWriteStream(destination_path)
