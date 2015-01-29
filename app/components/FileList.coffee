@@ -19,38 +19,28 @@ module.exports = component 'FileList',
   propTypes:
     file_id: React.PropTypes.number.isRequired
 
-  childContextTypes:
-    depth: React.PropTypes.number.isRequired
-
-  getChildContext: ->
-    depth: 0
-
   getInitialState: ->
     loading: true
     error: null
 
-  componentDidMount: ->
-    @context.putio.files.get(@props.file_id)
-      .then((file) => @setState(file: file))
-      .catch((message) => throw message)
-
   render: ->
-    div className: 'FileList',
-      if !@state.file?
-        div(null, "loading…")
-      else if isDirectory(@state.file)
-        # DirectoryContents(directory_id: @props.file_id)
-        Directory(directory: @state.file)
-      else
-        File(file: @state.file)
+    PromiseStateMachine
+      promise: @context.putio.files.get(@props.file_id)
+      loaded: @renderFile
+
+  renderFile: (file) ->
+    if isDirectory(file)
+      DirectoryContents(directory_id: @props.file_id)
+    else
+      File(file: file)
 
 DepthMixin =
 
   contextTypes:
-    depth: React.PropTypes.number.isRequired
+    depth: React.PropTypes.number
 
   childContextTypes:
-    depth: React.PropTypes.number.isRequired
+    depth: React.PropTypes.number
 
   getChildContext: ->
     depth: (@context.depth||0) + 1
@@ -136,7 +126,7 @@ DirectoryContents = component 'FileList-DirectoryContents',
     directory_id: React.PropTypes.number.isRequired
 
   childContextTypes:
-    depth: React.PropTypes.number.isRequired
+    depth: React.PropTypes.number
 
   render: ->
     PromiseStateMachine

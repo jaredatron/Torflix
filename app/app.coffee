@@ -31,6 +31,7 @@ module.exports = component 'App',
     return null unless token?
     @_putio = null unless @_putio && @_putio.TOKEN == token
     @_putio ||= putio(token)
+    DEBUG_PUTIO = @_putio
 
   getChildContext: ->
     path:  path

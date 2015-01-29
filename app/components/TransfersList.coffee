@@ -6,6 +6,12 @@ Glyphicon  = require 'react-bootstrap/Glyphicon'
 
 {div, span, a} = React.DOM
 
+SORT = (a, b) ->
+  a = Date.parse(a.created_at)
+  b = Date.parse(b.created_at)
+  return -1 if a > b
+  return  1 if a < b
+  return  0 if a == b
 
 module.exports = component 'TransfersList',
 
@@ -13,16 +19,11 @@ module.exports = component 'TransfersList',
     putio: React.PropTypes.any.isRequired
 
   getInitialState: ->
-    error: null
     transfers: @context.putio.transfers.toArray()
 
   transfersChanged: ->
     setTimeout =>
-      try
-        @setState transfers: @context.putio.transfers.toArray()
-      catch e
-        debugger
-
+      @setState transfers: @context.putio.transfers.toArray()
 
   componentDidMount: ->
     @context.putio.transfers.on('change', @transfersChanged)
@@ -32,89 +33,54 @@ module.exports = component 'TransfersList',
     @context.putio.transfers.removeListener('change', @transfersChanged)
     @context.putio.transfers.stopPolling()
 
+  transfers: ->
+    @state.transfers.sort(SORT)
+
   render: ->
     div
       className: 'TransfersList'
-      @renderContent()
+      @transfers().map (transfer) ->
+        Transfer(key: transfer.id, transfer: transfer)
 
-  renderContent: ->
-    switch
-      when @state.error
-        div(null, "ERROR: #{@state.error}")
-      when @state.transfers
-        Table(transfers: @state.transfers, deleteTranfer: @deleteTranfer)
-      else
-        div(null, 'Loading…')
+Transfer = component 'TransfersList-Transfer',
 
-
-Table = component 'TransfersListTable',
-  transfers: ->
-    @props.transfers.sort (a, b) ->
-      a = Date.parse(a.created_at)
-      b = Date.parse(b.created_at)
-      return -1 if a > b
-      return  1 if a < b
-      return  0 if a == b
-  render: ->
-    div className: 'transfers',
-      div className: 'transfers-header',
-        div className: 'delete',     ''
-        div className: 'status',     'Status'
-        div className: 'name',       'Name'
-        div className: 'created_at', 'Created At'
-        div className: 'delete',     ''
-      @transfers().map (transfer) =>
-        TransferRow
-          key:        transfer.id
-          id:         transfer.id
-          status:     transfer.status
-          name:       transfer.name
-          created_at: transfer.created_at
-          file_id:    transfer.file_id
-          delete:     @props.deleteTranfer
-
-
-
-TransferRow = component 'TransferRow',
-
-  contextTypes:
-    putio: React.PropTypes.any.isRequired
+  PropTypes:
+    transfer: React.PropTypes.object.isRequired
 
   getInitialState: ->
-    showingFiles: false
+    expanded: false
 
-  toggleFiles: ->
-    @setState showingFiles: !@state.showingFiles
+  toggle: ->
+    @setState expanded: !@state.expanded
 
-
-  delete: (event) ->
-    event.preventDefault()
-    @context.putio.transfers.delete(@props.id).catch (error) =>
-      @setState error: error
-
-  toggleFilesActionLink: (children...) ->
-    ActionLink(onClick: @toggleFiles, children...)
-
-  stateIcon: ->
-    if @state.showingFiles
-      Glyphicon(glyph:'chevron-down')
-    else
-      Glyphicon(glyph:'chevron-right')
-
-  deleteLink: ->
-    ActionLink(onClick: @delete, 'X')
-
-  renderFiles: ->
-    return null unless @state.showingFiles
-    FileList file_id: @props.file_id
+  completed: ->
+    @props.transfer.status == "COMPLETED"
 
   render: ->
-    div className: 'transfer',
-      div key: @props.id, className: 'transfer-row',
-        div className: 'toggle-files', @toggleFilesActionLink @stateIcon()
-        div className: 'status',       @toggleFilesActionLink @props.status
-        div className: 'name',         @toggleFilesActionLink @props.name
-        div className: 'created_at',   @toggleFilesActionLink @props.created_at
-        div className: 'delete',       @deleteLink()
-      @renderFiles()
+    transfer = @props.transfer
+    div
+      className: 'TransfersList-Transfer'
+      'data-status': transfer.status
+      @toggleLink(
+        @statusIcon()
+        span className: 'TransfersList-Transfer-name', transfer.name
+      )
+      @files()
 
+  toggleLink: (children...) ->
+    if @completed()
+      ActionLink(onClick: @toggle, children...)
+    else
+      div(null, children...)
+
+  percentDone: ->
+    div
+      className: 'TransfersList-Transfer-percentDone'
+      style: {width: "#{@props.transfer.percent_done}%"}
+
+  statusIcon: ->
+    Glyphicon glyph: 'file', className: 'TransfersList-Transfer-statusIcon'
+
+  files: ->
+    if @state.expanded
+      FileList file_id: @props.transfer.file_id

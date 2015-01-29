@@ -1,65 +1,88 @@
 .TransfersList
 
-  .transfers-header, .transfer-row
-    display: flex
-    flex-direction: row
-    flex-wrap: nowrap
 
-    > * // cell
-      white-space: nowrap
-      overflow: hidden
-      text-overflow: ellipsis
-      flex-grow: 0
-      flex-shrink: 0
+.TransfersList-Transfer
+  position: relative
+  padding: 1em
+  border-bottom: 1px solid #C8C8C8
 
-    > .delete
-      flex-basis: 30px
+.TransfersList-Transfer-percentDone
+  position: absolute
+  top: 0
+  left: 0
+  height: 100%
+  background-color: lightgreen
 
-    > .name
-      width: auto
-      flex-grow: 1
-      flex-shrink: 1
+  // &[data-status="IN_QUEUE"]
+  //   background-color: lightgrey
 
-    > .created_at
-      flex-basis: 200px
+  // &[data-status="DOWNLOADING"]
+  //   background-color: lightblue
 
-    > .status
-      flex-basis: 100px
+  // &[data-status="COMPLETED"]
+  //   background-color: lightgreen
 
-  .transfers-header
-    > *
-      position: relative
-      overflow: visible
-      box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 #FFF
-      background-clip: padding-box
-      background-image: linear-gradient(#F0F0F0, #DCDCDC)
-      color: #787878
-      padding: 0.25em 0.5em
-      // border-left: 1px solid #C8C8C8
-      // border-right: 1px solid rgba(255, 255, 255, 0.8)
 
-      &:before, &:after
-        position: absolute
-        content: ""
-        width: 1px
-        top: 0
-        bottom: 1px
+  // .transfers-header, .transfer-row
+  //   display: flex
+  //   flex-direction: row
+  //   flex-wrap: nowrap
 
-      &:before
-        left: -1px
-        background-color: #c8c8c8
+  //   > * // cell
+  //     white-space: nowrap
+  //     overflow: hidden
+  //     text-overflow: ellipsis
+  //     flex-grow: 0
+  //     flex-shrink: 0
 
-      &:after
-        left: 0
-        background-color: rgba(255, 255, 255, 0.8)
+  //   > .delete
+  //     flex-basis: 30px
 
-  .transfer-row, .transfer-files
-    border-bottom: 1px solid grey
+  //   > .name
+  //     width: auto
+  //     flex-grow: 1
+  //     flex-shrink: 1
 
-  .transfer-row > *
-    padding: 0.25em 0.5em
+  //   > .created_at
+  //     flex-basis: 200px
 
-  .transfer
-    .FileList
-      margin: 1em
+  //   > .status
+  //     flex-basis: 100px
+
+  // .transfers-header
+  //   > *
+  //     position: relative
+  //     overflow: visible
+  //     box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 #FFF
+  //     background-clip: padding-box
+  //     background-image: linear-gradient(#F0F0F0, #DCDCDC)
+  //     color: #787878
+  //     padding: 0.25em 0.5em
+  //     // border-left: 1px solid #C8C8C8
+  //     // border-right: 1px solid rgba(255, 255, 255, 0.8)
+
+  //     &:before, &:after
+  //       position: absolute
+  //       content: ""
+  //       width: 1px
+  //       top: 0
+  //       bottom: 1px
+
+  //     &:before
+  //       left: -1px
+  //       background-color: #c8c8c8
+
+  //     &:after
+  //       left: 0
+  //       background-color: rgba(255, 255, 255, 0.8)
+
+  // .transfer-row, .transfer-files
+  //   border-bottom: 1px solid grey
+
+  // .transfer-row > *
+  //   padding: 0.25em 0.5em
+
+  // .transfer
+  //   .FileList
+  //     margin: 1em
 

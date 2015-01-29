@@ -13,7 +13,7 @@ module.exports = component 'PromiseStateMachine',
 
   getDefaultProps: ->
     loading: ->
-      span(null,'loading…')
+      span()
     failed: (error) ->
       span(null,"Error: #{error}")
 
