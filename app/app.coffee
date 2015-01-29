@@ -25,11 +25,12 @@ module.exports = component 'App',
     path:   React.PropTypes.object
     putio:  React.PropTypes.any
 
+  _putio: null
   putio: ->
-    global.DEBUG_PUTIO = if @state.put_io_access_token
-      putio(@state.put_io_access_token)
-    else
-      null
+    token = @state.put_io_access_token
+    return null unless token?
+    @_putio = null unless @_putio && @_putio.TOKEN == token
+    @_putio ||= putio(token)
 
   getChildContext: ->
     path:  path
@@ -47,8 +48,8 @@ module.exports = component 'App',
     path.init()
 
   componentWillUnmount: ->
-    session.off('change', @onChange)
-    path.off('change', @onChange)
+    session.removeListener('change', @onChange)
+    path.removeListener('change', @onChange)
 
   render: ->
     if @state.put_io_access_token

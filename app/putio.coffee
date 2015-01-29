@@ -6,7 +6,9 @@ ENDPOINT = 'https://api.put.io/v2'
 
 module.exports = (TOKEN) ->
 
-  putio = {}
+  console.warn('CREATING PUTIO')
+
+  putio = {TOKEN: TOKEN}
 
   url = (path) ->
     "#{ENDPOINT}#{path}?oauth_token=#{TOKEN}"
@@ -22,6 +24,9 @@ module.exports = (TOKEN) ->
 
   transfers = []
 
+  global.GET_TRANSFERS = ->
+    transfers
+
   putio.transfers = assign({}, EventEmitter.prototype)
 
   putio.transfers.toArray = ->
@@ -29,12 +34,11 @@ module.exports = (TOKEN) ->
 
   putio.transfers.load = ->
     putio.get('/transfers/list').then (response) =>
-      console.log('TRANSFER UPDATE', transfers, response.transfers)
       transfers = response.transfers
       @emit('change')
       response
 
-  TRANSFER_POLL_DELAY = 1000 * 30
+  TRANSFER_POLL_DELAY = 1000 * 3
   polling_transfers = false
   putio.transfers.startPolling = ->
     return this if polling_transfers
@@ -99,15 +103,6 @@ module.exports = (TOKEN) ->
     putio.post('/files/delete', file_ids: id).then (response) =>
       delete FILES_CACHE[id]
       response
-
-
-  # DEBUG
-  putio._cache =
-    transfers: transfers
-    FILES_CACHE: FILES_CACHE
-    DIRECTORY_CONTENTS_CACHE: DIRECTORY_CONTENTS_CACHE
-
-
 
 
   return putio

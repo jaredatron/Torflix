@@ -15,7 +15,6 @@ module.exports = component 'VideoPlayer',
     # div id: @state.htmlId, className: 'VideoPlayer'
 
     file = @props.file
-    console.dir(file)
 
     # type = file.name.match(/\.([^.]+)$/)[1];
     if file.is_mp4_available

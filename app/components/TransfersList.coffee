@@ -18,14 +18,18 @@ module.exports = component 'TransfersList',
 
   transfersChanged: ->
     setTimeout =>
-      @setState transfers: @context.putio.transfers.toArray()
+      try
+        @setState transfers: @context.putio.transfers.toArray()
+      catch e
+        debugger
+
 
   componentDidMount: ->
     @context.putio.transfers.on('change', @transfersChanged)
     @context.putio.transfers.startPolling()
 
   componentWillUnmount: ->
-    @context.putio.transfers.off('change', @transfersChanged)
+    @context.putio.transfers.removeListener('change', @transfersChanged)
     @context.putio.transfers.stopPolling()
 
   render: ->
