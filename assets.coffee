@@ -8,7 +8,7 @@ APP_ROOT = __dirname
 
 module.exports = assets = {}
 
-assets.javascript = (name, callback) ->
+assets.compile_javascript = (name, callback) ->
   try
     asset = browserify
       basedir: APP_ROOT
@@ -19,11 +19,13 @@ assets.javascript = (name, callback) ->
 
     asset.add "./app/#{name}"
 
+    x = asset.bundle()
+    console.log Object.keys(x)
     callback(null, asset.bundle())
   catch error
     callback(error)
 
-assets.stylesheet = (name, callback) ->
+assets.compile_stylesheet = (name, callback) ->
   sass_path = path.join(APP_ROOT, "style/#{name}.sass")
   css_path = path.join(APP_ROOT, "public/#{name}.css")
 
@@ -40,7 +42,7 @@ assets.stylesheet = (name, callback) ->
       callback(error)
 
 
-assets.html = (callback) ->
+assets.compile_html = (callback) ->
   {html, head, title, link, body, script} = React.DOM
   try
     asset = React.renderToStaticMarkup(
@@ -62,3 +64,18 @@ assets.html = (callback) ->
   catch error
     callback error
 
+
+write_to = (path) ->
+  (error, value) ->
+    throw error if error
+    if value.pipe?
+      value.pipe fs.createWriteStream(path)
+    else
+      fs.writeFile path, value, (error) ->
+        throw error if error
+
+
+assets.precompile = (callback) ->
+  assets.compile_stylesheet 'app', write_to('./public/app.css')
+  assets.compile_javascript 'client', write_to('./public/app.js')
+  assets.compile_html write_to('./public/app.html')

@@ -1,8 +1,8 @@
 require './env'
 NODE_ENV = process.env.NODE_ENV || 'development'
 
-fs         = require 'fs'
-express    = require 'express'
+fs = require 'fs'
+express = require 'express'
 
 web = express()
 web.set 'title', 'putio'
@@ -11,6 +11,8 @@ web.set 'port', (process.env.PORT || 5000)
 if NODE_ENV == 'development'
   require('node-pow')(web)
   require('./asset_routes')(web)
+else
+  require('./assets').precompile()
 
 web.use express.static(__dirname + '/public')
 

@@ -27,7 +27,7 @@
     "node": "0.10.x"
   },
   "scripts": {
-    "start": "coffee web_server.coffee"
+    "start": "coffee web_server.coffee",
   },
   "browserify": {
     "extensions": [
