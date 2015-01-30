@@ -16,5 +16,6 @@ module.exports = (web) ->
 
 
   web.get '*', (request, response) ->
-    assets.html (html) ->
+    assets.html (error, html) ->
+      throw error if error
       response.send(html)
