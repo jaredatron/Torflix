@@ -5,7 +5,7 @@ path = require 'path'
 assets = require('../assets')
 
 
-assets.javascript 'app', (error, asset) ->
+assets.javascript 'client', (error, asset) ->
   throw error if error
   destination_path = path.join(__dirname, '../public/app.js')
   asset.pipe fs.createWriteStream(destination_path)

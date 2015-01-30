@@ -1,20 +1,20 @@
-path       = require 'path'
-express    = require 'express'
-browserify = require 'connect-browserify'
-env        = require './env'
+require './env'
+NODE_ENV = process.env.NODE_ENV || 'development'
+
 fs         = require 'fs'
+express    = require 'express'
 
 web = express()
 web.set 'title', 'putio'
 web.set 'port', (process.env.PORT || 5000)
 
-if 'development' == web.get('env')
+if NODE_ENV == 'development'
   require('node-pow')(web)
   require('./asset_routes')(web)
 
 web.use express.static(__dirname + '/public')
 
-if 'development' != web.get('env')
+if NODE_ENV != 'development'
   web.get '*', (request, response) ->
     fs.createReadStream('./public/app.html').pipe(response)
 
