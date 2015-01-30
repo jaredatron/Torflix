@@ -13,6 +13,8 @@ isDirectory = (file) ->
 
 module.exports = component 'FileList',
 
+  mixins: [DepthMixin]
+
   contextTypes:
     putio: React.PropTypes.any.isRequired
 
@@ -29,10 +31,11 @@ module.exports = component 'FileList',
       loaded: @renderFile
 
   renderFile: (file) ->
-    if isDirectory(file)
-      DirectoryContents(directory_id: @props.file_id)
-    else
-      File(file: file)
+    div className: 'FileList',
+      if isDirectory(file)
+        DirectoryContents(directory_id: @props.file_id)
+      else
+        File(file: file)
 
 DepthMixin =
 
@@ -43,10 +46,10 @@ DepthMixin =
     depth: React.PropTypes.number
 
   getChildContext: ->
-    depth: (@context.depth||0) + 1
+    depth: @depth() + 1
 
   depth: ->
-    @context.depth
+    @context.depth || 0
 
 
 
@@ -82,24 +85,19 @@ File = component 'FileList-File',
 
   newIcon: ->
     if @isNew()
-      div className: 'FileList-File-newIcon', 'NEW!'
+      div className: 'FileList-File-newIcon', Glyphicon(glyph:'asterisk')
 
   size: ->
     div className: 'FileList-File-size', humanFileSize(@props.file.size)
 
-  deleteLink: ->
-    ActionLink
-      className: 'FileList-File-deleteLink'
-      Glyphicon glyph: 'remove'
-
   render: ->
-    console.log(@props.file)
 
     div className: 'FileList-File',
-      @name()
-      @newIcon()
-      @size()
-      @deleteLink()
+      div className: 'FileList-row',
+        @name()
+        @newIcon()
+        @size()
+        DeleteLink(id: @props.file.id)
 
 
 
@@ -124,13 +122,16 @@ Directory = component 'FileList-Directory',
       Glyphicon(className:'FileList-Directory-status-icon', glyph:'chevron-right')
 
   render: ->
-    div className: 'FileList-File FileList-Directory',
-      ActionLink
-        style: { paddingLeft: "#{@depth()}em" }
-        className: 'FileList-File-name'
-        onClick: @toggle,
-        @chevron(),
-        @props.directory.name
+    div className: 'FileList-Directory',
+      div className: 'FileList-row',
+        ActionLink
+          style: { paddingLeft: "#{@depth()}em" }
+          className: 'FileList-File-name'
+          onClick: @toggle,
+          @chevron(),
+          @props.directory.name
+
+        DeleteLink(id: @props.directory.id)
 
       if @state.expanded
         DirectoryContents(directory_id: @props.directory.id)
@@ -139,16 +140,11 @@ Directory = component 'FileList-Directory',
 
 DirectoryContents = component 'FileList-DirectoryContents',
 
-  mixins: [DepthMixin]
-
   contextTypes:
     putio: React.PropTypes.any.isRequired
 
   propTypes:
     directory_id: React.PropTypes.number.isRequired
-
-  childContextTypes:
-    depth: React.PropTypes.number
 
   render: ->
     PromiseStateMachine
@@ -169,6 +165,15 @@ DirectoryContents = component 'FileList-DirectoryContents',
       File(key: file.id, file: file)
 
 
+DeleteLink = component 'FileList-DeleteLink',
+  propTypes:
+    id: React.PropTypes.number.isRequired
+
+  render: ->
+    ActionLink
+      className: 'FileList-DeleteLink'
+      Glyphicon glyph: 'remove'
+
 
 module.exports.FileList = FileList
 module.exports.File = File
@@ -178,7 +183,9 @@ module.exports.DirectoryContents = DirectoryContents
 
 humanFileSize = (size) ->
   i = Math.floor( Math.log(size) / Math.log(1024) )
-  return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ['B', 'kB', 'MB', 'GB', 'TB'][i]
+  number = Math.round( ( size / Math.pow(1024, i) ).toFixed(2) * 1 )
+  unit = ['B', 'kB', 'MB', 'GB', 'TB'][i]
+  return "#{number} #{unit}"
 
 
 
