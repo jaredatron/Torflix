@@ -2,6 +2,7 @@ fs = require 'fs'
 path = require 'path'
 browserify = require 'browserify'
 sass = require 'node-sass'
+React = require 'react'
 
 APP_ROOT = __dirname
 
@@ -37,3 +38,21 @@ assets.stylesheet = (name, callback) ->
       callback(null, results.css)
     error: (error) ->
       callback(error)
+
+
+assets.html = (callback) ->
+  {html, head, title, link, body, script} = React.DOM
+  callback React.renderToStaticMarkup(
+    html(null,
+      head(null,
+        title(null, 'put.io')
+        link(rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css', type: 'text/css')
+        link(rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css', type: 'text/css')
+        link(rel: 'stylesheet', href: '/app.css', type: 'text/css')
+      )
+      body(null,
+        script(type: 'text/javascript', src: '//put.io/web/jwplayer/jwplayer.js')
+        script(type: 'text/javascript', src: '/app.js')
+      )
+    )
+  )

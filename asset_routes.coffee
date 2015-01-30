@@ -1,7 +1,7 @@
 assets = require('./assets')
 
-
 module.exports = (web) ->
+
   web.get "/app.js", (req, res) ->
     res.setHeader('content-type', 'application/javascript')
     assets.javascript 'client', (error, asset) ->
@@ -13,3 +13,8 @@ module.exports = (web) ->
     assets.stylesheet 'app', (error, css) ->
       throw error if error
       res.send(css)
+
+
+  web.get '*', (request, response) ->
+    assets.html (html) ->
+      response.send(html)
