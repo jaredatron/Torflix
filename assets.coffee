@@ -20,7 +20,6 @@ assets.compile_javascript = (name, callback) ->
     asset.add "./app/#{name}"
 
     x = asset.bundle()
-    console.log Object.keys(x)
     callback(null, asset.bundle())
   catch error
     callback(error)
