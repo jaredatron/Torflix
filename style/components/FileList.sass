@@ -1,15 +1,25 @@
 .FileList
 
 .FileList-File
-  display: block
-  // padding: 0.25em 0
+  display: flex
+  flex-direction: row
+  flex-wrap: nowrap
+  justify-content: flex-start
 
+.FileList-Directory
+  flex-direction: column
 
 .FileList-File-name
-  display: block
-  padding: 0.25em 0.5em
+  flex-grow: 1
+  flex-shrink: 1
+  // padding: 0.25em 0.5em
   &:hover
     background-color: lightgrey
+
+.FileList-File-size
+  width: 7em
+  padding: 0 1em
+  text-align: right
 
 .FileList-File-icon
   margin-right: 0.5em

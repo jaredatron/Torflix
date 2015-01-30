@@ -60,25 +60,47 @@ File = component 'FileList-File',
   isVideo: ->
     /\.(mkv|mp4|avi)$/.test @props.file.name
 
-  render: ->
-    name = span(null, @props.file.name)
+  isNew: ->
+    !@props.file.first_accessed_at?
 
-    div
-      className: 'FileList-File',
-      if @isVideo()
-        LinkToVideoPlayerModal
-          style: { paddingLeft: "#{@depth()}em" }
-          className: 'FileList-File-name'
-          file_id: @props.file.id
-          Glyphicon(glyph:'facetime-video', className: 'FileList-File-icon')
-          name
-      else
-        DownloadLink
-          style: { paddingLeft: "#{@depth()}em" }
-          href: "https://put.io/v2/files/#{@props.file.id}/download"
-          className: 'FileList-File-name'
-          Glyphicon(glyph:'file', className: 'FileList-File-icon')
-          name
+  name: ->
+    name = span(null, @props.file.name)
+    if @isVideo()
+      LinkToVideoPlayerModal
+        style: { paddingLeft: "#{@depth()}em" }
+        className: 'FileList-File-name'
+        file_id: @props.file.id
+        Glyphicon(glyph:'facetime-video', className: 'FileList-File-icon')
+        name
+    else
+      DownloadLink
+        style: { paddingLeft: "#{@depth()}em" }
+        href: "https://put.io/v2/files/#{@props.file.id}/download"
+        className: 'FileList-File-name'
+        Glyphicon(glyph:'file', className: 'FileList-File-icon')
+        name
+
+  newIcon: ->
+    if @isNew()
+      div className: 'FileList-File-newIcon', 'NEW!'
+
+  size: ->
+    div className: 'FileList-File-size', humanFileSize(@props.file.size)
+
+  deleteLink: ->
+    ActionLink
+      className: 'FileList-File-deleteLink'
+      Glyphicon glyph: 'remove'
+
+  render: ->
+    console.log(@props.file)
+
+    div className: 'FileList-File',
+      @name()
+      @newIcon()
+      @size()
+      @deleteLink()
+
 
 
 
@@ -152,4 +174,11 @@ module.exports.FileList = FileList
 module.exports.File = File
 module.exports.Directory = Directory
 module.exports.DirectoryContents = DirectoryContents
+
+
+humanFileSize = (size) ->
+  i = Math.floor( Math.log(size) / Math.log(1024) )
+  return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ['B', 'kB', 'MB', 'GB', 'TB'][i]
+
+
 
