@@ -1,8 +1,10 @@
-#!/usr/bin/env coffee
+#!/usr/bin/env bash
 
-exec = require('child_process').exec
+set -e # exit on any error
 
+SOURCE="${BASH_SOURCE[0]}"
+DIR="$( dirname "$SOURCE" )"
 
-exec './compile-css'
-exec './compile-js'
-exec './compile-html'
+$DIR/compile-css
+$DIR/compile-js
+$DIR/compile-html
