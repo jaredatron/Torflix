@@ -15,11 +15,12 @@
     "node-sass": "^2.0.0-beta",
     "object-assign": "^2.0.0",
     "qwest": "^1.5.4",
-    "react": "^0.12.1"
+    "react": "^0.12.2",
+    "react-bootstrap": "^0.13.3"
   },
   "devDependencies": {
     "node-pow": "0.0.2",
-    "watch": "^0.13.0",
+    "watch": "^0.13.0"
   },
   "engines": {
     "node": "0.10.x"
