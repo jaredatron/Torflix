@@ -5,8 +5,9 @@ DownloadLink = require './DownloadLink'
 Glyphicon = require 'react-bootstrap/Glyphicon'
 LinkToVideoPlayerModal = require './LinkToVideoPlayerModal'
 PromiseStateMachine = require './PromiseStateMachine'
+DeleteLink = require './DeleteLink'
 
-{div, span, a} = React.DOM
+{div, span, a, pre} = React.DOM
 
 isDirectory = (file) ->
   file.content_type == "application/x-directory"
@@ -97,7 +98,7 @@ File = component 'FileList-File',
         @name()
         @newIcon()
         @size()
-        DeleteLink(id: @props.file.id)
+        DeleteFileLink file: @props.file
 
 
 
@@ -131,7 +132,7 @@ Directory = component 'FileList-Directory',
           @chevron(),
           @props.directory.name
 
-        DeleteLink(id: @props.directory.id)
+        DeleteFileLink file: @props.directory
 
       if @state.expanded
         DirectoryContents(directory_id: @props.directory.id)
@@ -165,14 +166,23 @@ DirectoryContents = component 'FileList-DirectoryContents',
       File(key: file.id, file: file)
 
 
-DeleteLink = component 'FileList-DeleteLink',
+DeleteFileLink = component 'FileList-DeleteFileLink',
+
+  contextTypes:
+    putio: React.PropTypes.any.isRequired
+
   propTypes:
-    id: React.PropTypes.number.isRequired
+    file: React.PropTypes.object.isRequired
+
+  onDelete: ->
+    @context.putio.files.delete(@props.file.id)
 
   render: ->
-    ActionLink
-      className: 'FileList-DeleteLink'
-      Glyphicon glyph: 'remove'
+    DeleteLink
+      onDelete: @onDelete
+      question: =>
+        "Are you sure you want to delete #{@props.file.name}?"
+
 
 
 module.exports.FileList = FileList

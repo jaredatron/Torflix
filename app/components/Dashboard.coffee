@@ -6,17 +6,43 @@ Files = require './Files'
 ActionLink = require './ActionLink'
 VideoPlayerModal = require './VideoPlayerModal'
 
-Button     = require 'react-bootstrap/Button'
 TabbedArea = require 'react-bootstrap/TabbedArea'
 TabPane    = require 'react-bootstrap/TabPane'
 
 {div, h1, a} = React.DOM
 
 
+PromptMixin =
+
+  childContextTypes:
+    setPrompt: React.PropTypes.func.isRequired
+    clearPrompt: React.PropTypes.func.isRequired
+
+  getChildContext: ->
+    setPrompt: @setPrompt
+    clearPrompt: @clearPrompt
+
+  setPrompt: (prompt) ->
+    @setState prompt: prompt
+
+  clearPrompt: (prompt) ->
+    @setState prompt: null
+
+  renderPrompt: ->
+    @state.prompt() if @state.prompt?
+
+
 module.exports = component 'Dashboard',
+
+  mixins: [PromptMixin]
+
+  getInitialState: ->
+    prompt: null
 
   contextTypes:
     path: React.PropTypes.object.isRequired
+
+
 
   render: ->
     div
@@ -38,6 +64,7 @@ module.exports = component 'Dashboard',
           Files()
 
       @VideoPlayerModal()
+      @renderPrompt()
 
 
   VideoPlayerModal: ->

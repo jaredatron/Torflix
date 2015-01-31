@@ -16,6 +16,7 @@ assets.compile_javascript = (name, callback) ->
       watch: true
       transforms: ['coffeeify', 'envify']
       extensions: [".cjsx", ".coffee", ".js", ".json"]
+      # paths:      ['./', './node_modules']
 
     asset.add "./app/#{name}"
 

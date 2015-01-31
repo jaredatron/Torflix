@@ -3,6 +3,7 @@ component  = require '../component'
 ActionLink = require './ActionLink'
 FileList   = require './FileList'
 Glyphicon  = require 'react-bootstrap/Glyphicon'
+DeleteLink = require './DeleteLink'
 
 {div, span, a} = React.DOM
 
@@ -63,7 +64,7 @@ Transfer = component 'TransfersList-Transfer',
         @statusIcon()
         span className: 'TransfersList-Transfer-name', transfer.name
       )
-      DeleteLink transfer_id: transfer.id
+      DeleteTransferLink transfer: transfer
       @files()
 
   toggleLink: (children...) ->
@@ -90,17 +91,19 @@ Transfer = component 'TransfersList-Transfer',
       FileList file_id: @props.transfer.file_id
 
 
-DeleteLink = component 'TransfersList-DeleteLink',
+DeleteTransferLink = component 'TransfersList-DeleteTransferLink',
+
+  propTypes:
+    transfer: React.PropTypes.object.isRequired
 
   contextTypes:
     putio: React.PropTypes.any.isRequired
 
-  onClick: ->
-    @context.putio.transfers.delete(@props.transfer_id)
+  onDelete: ->
+    @context.putio.transfers.delete(@props.transfer.id)
 
   render: ->
-    ActionLink
-      onClick: @onClick
-      className: 'TransfersList-DeleteLink'
-      Glyphicon glyph: 'remove'
-
+    DeleteLink
+      onDelete: @onDelete
+      question: =>
+        "Are you sure you want to delete #{@props.transfer.name}?"
