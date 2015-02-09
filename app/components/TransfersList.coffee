@@ -57,16 +57,6 @@ Transfer = component 'TransfersList-Transfer',
   completed: ->
     @props.transfer.status == "COMPLETED"
 
-  render: ->
-    transfer = @props.transfer
-    div className: 'TransfersList-Transfer', 'data-status': transfer.status,
-      @toggleLink(
-        @statusIcon()
-        span className: 'TransfersList-Transfer-name', transfer.name
-      )
-      DeleteTransferLink transfer: transfer
-      @files()
-
   toggleLink: (children...) ->
     if @completed()
       ActionLink(onClick: @toggle, children...)
@@ -89,6 +79,17 @@ Transfer = component 'TransfersList-Transfer',
   files: ->
     if @completed() && @state.expanded
       FileList file_id: @props.transfer.file_id
+
+  render: ->
+    transfer = @props.transfer
+    div className: 'TransfersList-Transfer', 'data-status': transfer.status,
+      div className: 'row'
+        @toggleLink(
+          @statusIcon()
+          span className: 'TransfersList-Transfer-name', transfer.name
+        )
+        DeleteTransferLink transfer: transfer
+      @files()
 
 
 DeleteTransferLink = component 'TransfersList-DeleteTransferLink',

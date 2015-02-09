@@ -90,7 +90,12 @@ module.exports = (TOKEN) ->
 
       # https://api.put.io/v2/files/list?parent_id=270984407&oauth_token=VXWAPF8R&__t=1422230397270
 
-  putio.transfers.list = (parent_id) ->
+  putio.files.clearCache = (file_id) ->
+    delete FILES_CACHE[file_id]
+    delete DIRECTORY_CONTENTS_CACHE[file_id]
+    return this
+
+  putio.files.list = (parent_id) ->
     parent_id ||= 0
     return Promise.resolve(files) if files = DIRECTORY_CONTENTS_CACHE[parent_id]
     putio.get('/files/list', parent_id: parent_id).then (response) =>

@@ -30,7 +30,6 @@ module.exports = component 'PromiseStateMachine',
       .catch (error) =>
         @setState loaded: true, error: error
 
-
   render: ->
     switch
       when @state.error

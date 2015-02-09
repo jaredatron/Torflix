@@ -147,12 +147,27 @@ DirectoryContents = component 'FileList-DirectoryContents',
   propTypes:
     directory_id: React.PropTypes.number.isRequired
 
+  childContextTypes:
+    parentDirectory: React.PropTypes.object
+
+  getChildContext: ->
+    parentDirectory: this
+
   render: ->
+    console.log('RENDERING', @props.directory_id)
     PromiseStateMachine
-      promise: @context.putio.transfers.list(@props.directory_id)
+      promise: @context.putio.files.list(@props.directory_id)
       loaded: @renderFiles
 
+  reload: ->
+    console.log('RELOADING', @props.directory_id)
+    @context.putio.files.clearCache(@props.directory_id)
+    @forceUpdate()
+
   renderFiles: (files) ->
+    console.log('RENDERING FILES', @props.directory_id)
+    if @props.directory_id == 264982789
+      debugger
     div className: 'FileList-DirectoryContents',
       if files.length > 0
         files.map @renderFile
@@ -170,12 +185,15 @@ DeleteFileLink = component 'FileList-DeleteFileLink',
 
   contextTypes:
     putio: React.PropTypes.any.isRequired
+    parentDirectory: React.PropTypes.object
 
   propTypes:
     file: React.PropTypes.object.isRequired
 
   onDelete: ->
-    @context.putio.files.delete(@props.file.id)
+    @context.putio.files.delete(@props.file.id).then =>
+      if @context.parentDirectory
+        @context.parentDirectory.reload()
 
   render: ->
     DeleteLink
