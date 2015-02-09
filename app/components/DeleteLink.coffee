@@ -3,6 +3,7 @@ component = require '../component'
 ActionLink = require './ActionLink'
 ConfirmationPrompt = require './ConfirmationPrompt'
 Glyphicon = require 'react-bootstrap/Glyphicon'
+Classnames = require '../Classnames'
 
 module.exports = component 'DeleteLink',
 
@@ -35,5 +36,5 @@ module.exports = component 'DeleteLink',
   render: ->
     ActionLink
       onClick: @onClick
-      className: 'DeleteLink'
+      className: Classnames('DeleteLink', @props.className)
       Glyphicon glyph: 'remove'

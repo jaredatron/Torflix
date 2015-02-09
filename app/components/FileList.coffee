@@ -6,6 +6,7 @@ Glyphicon = require 'react-bootstrap/Glyphicon'
 LinkToVideoPlayerModal = require './LinkToVideoPlayerModal'
 PromiseStateMachine = require './PromiseStateMachine'
 DeleteLink = require './DeleteLink'
+FileSize = require './FileSize'
 
 {div, span, a, pre} = React.DOM
 
@@ -89,7 +90,7 @@ File = component 'FileList-File',
       div className: 'FileList-File-newIcon', Glyphicon(glyph:'asterisk')
 
   size: ->
-    div className: 'FileList-File-size', humanFileSize(@props.file.size)
+    div className: 'FileList-File-size', FileSize(size: @props.file.size)
 
   render: ->
 
@@ -207,13 +208,3 @@ module.exports.FileList = FileList
 module.exports.File = File
 module.exports.Directory = Directory
 module.exports.DirectoryContents = DirectoryContents
-
-
-humanFileSize = (size) ->
-  i = Math.floor( Math.log(size) / Math.log(1024) )
-  number = Math.round( ( size / Math.pow(1024, i) ).toFixed(2) * 1 )
-  unit = ['B', 'kB', 'MB', 'GB', 'TB'][i]
-  return "#{number} #{unit}"
-
-
-

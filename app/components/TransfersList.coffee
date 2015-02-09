@@ -4,6 +4,7 @@ ActionLink = require './ActionLink'
 FileList   = require './FileList'
 Glyphicon  = require 'react-bootstrap/Glyphicon'
 DeleteLink = require './DeleteLink'
+FileSize   = require './FileSize'
 
 {div, span, a} = React.DOM
 
@@ -57,11 +58,12 @@ Transfer = component 'TransfersList-Transfer',
   completed: ->
     @props.transfer.status == "COMPLETED"
 
-  toggleLink: (children...) ->
+  toggleLink: (props, children...) ->
     if @completed()
-      ActionLink(onClick: @toggle, children...)
+      props.onClick = @toggle
+      ActionLink(props, children...)
     else
-      div(null, children...)
+      div(props, children...)
 
   percentDone: ->
     div
@@ -83,11 +85,12 @@ Transfer = component 'TransfersList-Transfer',
   render: ->
     transfer = @props.transfer
     div className: 'TransfersList-Transfer', 'data-status': transfer.status,
-      div className: 'row',
-        @toggleLink(
-          @statusIcon()
-          span className: 'TransfersList-Transfer-name', transfer.name
-        )
+      div className: 'flex-row',
+        @statusIcon()
+        @toggleLink(className: 'TransfersList-Transfer-name', transfer.name),
+        div(className: 'TransfersList-Transfer-status', transfer.status_message),
+        div(className: 'flex-spacer'),
+        FileSize(size: transfer.size),
         DeleteTransferLink transfer: transfer
       @files()
 
@@ -105,6 +108,7 @@ DeleteTransferLink = component 'TransfersList-DeleteTransferLink',
 
   render: ->
     DeleteLink
+      className: 'TransfersList-DeleteTransferLink'
       onDelete: @onDelete
       question: =>
         "Are you sure you want to delete #{@props.transfer.name}?"
