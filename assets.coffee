@@ -9,7 +9,6 @@ APP_ROOT = __dirname
 module.exports = assets = {}
 
 assets.compile_javascript = (name, callback) ->
-  console.log('A')
   try
     asset = browserify
       basedir: APP_ROOT
@@ -21,12 +20,8 @@ assets.compile_javascript = (name, callback) ->
 
     asset.add "./app/#{name}"
     bundle = asset.bundle()
-    console.log('B')
-    debugger
   catch error
-    console.log('ERROR EHEERERE', error)
 
-  console.log('C')
   callback(error, bundle)
 
 assets.compile_stylesheet = (name, callback) ->

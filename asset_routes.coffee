@@ -5,18 +5,12 @@ module.exports = (web) ->
   web.get "/app.js", (req, res) ->
     res.setHeader('content-type', 'application/javascript')
     assets.compile_javascript 'client', (error, asset) ->
-      # console.log('D')
-      # if error
-      #   console.log('E')
-      #   sendError(res, error)
-      # else
-      #   try
-      #     console.log('F')
-      #     asset.pipe(res)
-      #     console.log('G')
-      #   catch error
-      #     console.log('H')
-      #     sendError(res, error)
+      if error
+        sendError(res, error)
+      else
+        asset.on 'error', (error) ->
+          sendError(res, error)
+        asset.pipe(res)
 
 
 
