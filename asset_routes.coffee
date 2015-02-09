@@ -6,7 +6,7 @@ module.exports = (web) ->
     res.setHeader('content-type', 'application/javascript')
     assets.compile_javascript 'client', (error, javascript) ->
       if error
-        res.send("alert(#{errorToString(error, 'JS ERROR: ')})")
+        res.send("document.write(#{errorToString(error, 'JS ERROR: ')})")
       else
         res.send(javascript)
 
