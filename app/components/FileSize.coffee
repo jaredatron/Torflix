@@ -4,7 +4,7 @@ component  = require '../component'
 
 module.exports = component 'FileSize',
 
-  contextTypes:
+  propTypes:
     size: React.PropTypes.number.isRequired
 
   render: ->

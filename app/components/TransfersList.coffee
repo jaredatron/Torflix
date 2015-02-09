@@ -88,7 +88,7 @@ Transfer = component 'TransfersList-Transfer',
       div className: 'flex-row',
         @statusIcon()
         @toggleLink(className: 'TransfersList-Transfer-name', transfer.name),
-        div(className: 'TransfersList-Transfer-status', transfer.status_message),
+        div(className: 'subtle-text', transfer.status_message),
         div(className: 'flex-spacer'),
         FileSize(size: transfer.size),
         DeleteTransferLink transfer: transfer

@@ -7,6 +7,7 @@ LinkToVideoPlayerModal = require './LinkToVideoPlayerModal'
 PromiseStateMachine = require './PromiseStateMachine'
 DeleteLink = require './DeleteLink'
 FileSize = require './FileSize'
+assign = require('object-assign')
 
 {div, span, a, pre} = React.DOM
 
@@ -53,6 +54,9 @@ DepthMixin =
   depth: ->
     @context.depth || 0
 
+  depthStyle: ->
+    { paddingLeft: "#{@depth()}em" }
+
 
 
 File = component 'FileList-File',
@@ -68,22 +72,7 @@ File = component 'FileList-File',
   isNew: ->
     !@props.file.first_accessed_at?
 
-  name: ->
-    name = span(null, @props.file.name)
-    if @isVideo()
-      LinkToVideoPlayerModal
-        style: { paddingLeft: "#{@depth()}em" }
-        className: 'FileList-File-name'
-        file_id: @props.file.id
-        Glyphicon(glyph:'facetime-video', className: 'FileList-File-icon')
-        name
-    else
-      DownloadLink
-        style: { paddingLeft: "#{@depth()}em" }
-        href: "https://put.io/v2/files/#{@props.file.id}/download"
-        className: 'FileList-File-name'
-        Glyphicon(glyph:'file', className: 'FileList-File-icon')
-        name
+  LinkToVideoPlayerModal: ->
 
   newIcon: ->
     if @isNew()
@@ -92,16 +81,51 @@ File = component 'FileList-File',
   size: ->
     div className: 'FileList-File-size', FileSize(size: @props.file.size)
 
+  name: ->
+    if @isVideo()
+      PlayVideoLink(
+        className: 'flex-spacer'
+        file: @props.file
+      )
+    else
+      div(className: 'flex-spacer',
+        Glyphicon(glyph:'file', className: 'FileList-File-icon'),
+        span(null, @props.file.name),
+      )
+
   render: ->
 
     div className: 'FileList-File',
-      div className: 'FileList-row',
+      div className: 'FileList-row flex-row',
+        div(style: @depthStyle())
         @name()
         @newIcon()
+        FileDownloadLink(file_id: @props.file.id, div(className: 'subtle-text', 'download'))
         @size()
         DeleteFileLink file: @props.file
 
 
+
+FileDownloadLink = component 'FileList-FileDownloadLink',
+  propTypes:
+    file_id: React.PropTypes.number.isRequired
+  render: ->
+    props = assign({}, @props)
+    props.href = "https://put.io/v2/files/#{@props.file_id}/download"
+    DownloadLink(props)
+
+
+
+PlayVideoLink = component 'FileList-PlayVideoLink',
+  propTypes:
+    file: React.PropTypes.object.isRequired
+  render: ->
+    LinkToVideoPlayerModal(
+      className: @props.className,
+      file_id: @props.file.id,
+      Glyphicon(glyph:'facetime-video', className: 'FileList-File-icon'),
+      @props.file.name,
+    )
 
 
 Directory = component 'FileList-Directory',
@@ -125,9 +149,9 @@ Directory = component 'FileList-Directory',
 
   render: ->
     div className: 'FileList-Directory',
-      div className: 'FileList-row',
+      div className: 'FileList-row flex-row',
         ActionLink
-          style: { paddingLeft: "#{@depth()}em" }
+          style: @depthStyle()
           className: 'FileList-File-name'
           onClick: @toggle,
           @chevron(),
@@ -155,18 +179,15 @@ DirectoryContents = component 'FileList-DirectoryContents',
     parentDirectory: this
 
   render: ->
-    console.log('RENDERING', @props.directory_id)
     PromiseStateMachine
       promise: @context.putio.files.list(@props.directory_id)
       loaded: @renderFiles
 
   reload: ->
-    console.log('RELOADING', @props.directory_id)
     @context.putio.files.clearCache(@props.directory_id)
     @forceUpdate()
 
   renderFiles: (files) ->
-    console.log('RENDERING FILES', @props.directory_id)
     if @props.directory_id == 264982789
       debugger
     div className: 'FileList-DirectoryContents',
