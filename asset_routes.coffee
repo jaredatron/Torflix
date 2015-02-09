@@ -4,13 +4,14 @@ module.exports = (web) ->
 
   web.get "/app.js", (req, res) ->
     res.setHeader('content-type', 'application/javascript')
-    assets.compile_javascript 'client', (error, asset) ->
+    assets.compile_javascript 'client', (error, javascript) ->
       if error
-        sendError(res, error)
+        res.send("alert(#{JSON.stringify(errorToString(error))})")
       else
-        asset.on 'error', (error) ->
-          sendError(res, error)
-        asset.pipe(res)
+        res.send(javascript)
+        # asset.on 'error', (error) ->
+        #   sendError(res, error)
+        # asset.pipe(res)
 
 
 
@@ -18,8 +19,10 @@ module.exports = (web) ->
   web.get "/app.css", (req, res) ->
     res.setHeader('content-type', 'text/css')
     assets.compile_stylesheet 'app', (error, css) ->
-      throw error if error
-      res.send(css)
+      if error
+        throw error
+      else
+        res.send(css)
 
 
   web.get '*', (request, response) ->
@@ -28,6 +31,6 @@ module.exports = (web) ->
       response.send(html)
 
 
-sendError = (res, error) ->
-  errorMessage = JSON.stringify("SERVER ERROR: #{error.message}")
-  res.send("alert(#{errorMessage})")
+errorToString = (error) ->
+  "SERVER ERROR: #{error.message}"
+

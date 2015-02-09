@@ -83,7 +83,7 @@ Transfer = component 'TransfersList-Transfer',
   render: ->
     transfer = @props.transfer
     div className: 'TransfersList-Transfer', 'data-status': transfer.status,
-      div className: 'row'
+      div className: 'row',
         @toggleLink(
           @statusIcon()
           span className: 'TransfersList-Transfer-name', transfer.name

@@ -20,9 +20,20 @@ assets.compile_javascript = (name, callback) ->
 
     asset.add "./app/#{name}"
     bundle = asset.bundle()
-  catch error
 
-  callback(error, bundle)
+    javascipt = ''
+
+    bundle.on 'data', (data) ->
+      javascipt = javascipt + data;
+
+    bundle.on 'end', ->
+      callback(null, javascipt)
+
+    bundle.on 'error', (error) ->
+      callback(error, null)
+
+  catch error
+    callback(error, null)
 
 assets.compile_stylesheet = (name, callback) ->
   sass_path = path.join(APP_ROOT, "style/#{name}.sass")
