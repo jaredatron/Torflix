@@ -75,6 +75,9 @@ Transfer = component 'TransfersList-Transfer',
       when 'IN_QUEUE'    then 'pause'
       when 'DOWNLOADING' then 'download-alt'
       when 'COMPLETED'   then 'ok'
+      else
+        console.log('UNKNOWN transfer status', @props.transfer.status)
+        'question-sign'
 
     Glyphicon glyph: glyph, className: 'TransfersList-Transfer-statusIcon'
 

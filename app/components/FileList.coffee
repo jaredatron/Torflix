@@ -157,10 +157,19 @@ Directory = component 'FileList-Directory',
           @chevron(),
           @props.directory.name
 
+        div className: 'FileList-File-size', FileSize(size: @props.directory.size)
+
         DeleteFileLink file: @props.directory
 
       if @state.expanded
         DirectoryContents(directory_id: @props.directory.id)
+
+
+
+SORT_BY_CREATED_AT = (a, b) ->
+  a = Date.parse(a.created_at)
+  b = Date.parse(b.created_at)
+  if a < b then 1 else if a > b then -1 else 0
 
 
 
@@ -175,6 +184,9 @@ DirectoryContents = component 'FileList-DirectoryContents',
   childContextTypes:
     parentDirectory: React.PropTypes.object
 
+  getDefaultProps: ->
+    sortBy: SORT_BY_CREATED_AT
+
   getChildContext: ->
     parentDirectory: this
 
@@ -188,11 +200,9 @@ DirectoryContents = component 'FileList-DirectoryContents',
     @forceUpdate()
 
   renderFiles: (files) ->
-    if @props.directory_id == 264982789
-      debugger
     div className: 'FileList-DirectoryContents',
       if files.length > 0
-        files.map @renderFile
+        files.sort(@props.sortBy).map(@renderFile)
       else
         div(className: 'empty', 'empty')
 
