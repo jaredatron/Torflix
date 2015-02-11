@@ -177,6 +177,11 @@ SORTERS =
     b = b.name.toLowerCase()
     if a < b then -1 else if a > b then 1 else 0
 
+  size: (a, b) ->
+    a = a.size
+    b = b.size
+    if a < b then 1 else if a > b then -1 else 0
+
 
 
 DirectoryContents = component 'FileList-DirectoryContents',
@@ -186,13 +191,13 @@ DirectoryContents = component 'FileList-DirectoryContents',
 
   propTypes:
     directory_id: React.PropTypes.number.isRequired
-    sort_by:      React.PropTypes.any
+    sortBy:       React.PropTypes.any
 
   childContextTypes:
     parentDirectory: React.PropTypes.object
 
   getDefaultProps: ->
-    sort_by: 'name'
+    sortBy: 'name'
 
   getChildContext: ->
     parentDirectory: this
@@ -207,7 +212,7 @@ DirectoryContents = component 'FileList-DirectoryContents',
     @forceUpdate()
 
   renderFiles: (files) ->
-    sorter = @props.sort_by
+    sorter = @props.sortBy
     sorter = SORTERS[sorter] if typeof sorter == 'string'
 
     div className: 'FileList-DirectoryContents',
