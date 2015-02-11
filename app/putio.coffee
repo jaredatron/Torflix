@@ -122,6 +122,7 @@ module.exports = (TOKEN) ->
       files
 
   putio.files.delete = (id) ->
+    throw new Error("File ID required: #{id}") unless id
     putio.post('/files/delete', file_ids: id).then (response) =>
       delete FILES_CACHE[id]
       putio.account.info.get()
