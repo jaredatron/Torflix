@@ -3,6 +3,7 @@ component = require '../component'
 TransfersList = require './TransfersList'
 NewTransfer = require './NewTransfer'
 Files = require './Files'
+Videos = require './Videos'
 ActionLink = require './ActionLink'
 VideoPlayerModal = require './VideoPlayerModal'
 
@@ -58,10 +59,17 @@ module.exports = component 'Dashboard',
           eventKey: 1
           tab: 'Transfers'
           TransfersList()
+
         TabPane
           eventKey: 2
           tab: 'Files'
           Files()
+
+        TabPane
+          eventKey: 3
+          tab: 'Videos'
+          Videos()
+
 
       @VideoPlayerModal()
       @renderPrompt()

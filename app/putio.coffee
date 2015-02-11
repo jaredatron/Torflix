@@ -109,6 +109,9 @@ module.exports = (TOKEN) ->
       delete FILES_CACHE[id]
       response
 
+  putio.files.search = (query) ->
+    putio.get("/files/search/#{encodeURIComponent(query)}")
+
 
   return putio
 

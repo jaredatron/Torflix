@@ -1,6 +1,5 @@
 React = require 'react'
 component = require '../component'
-PromiseStateMachine = require './PromiseStateMachine'
 {DirectoryContents} = require './FileList'
 
 module.exports = component 'Files',
