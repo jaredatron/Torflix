@@ -1,14 +1,13 @@
-React = require 'react'
-component = require '../component'
-TransfersList = require './TransfersList'
-NewTransfer = require './NewTransfer'
-FilesTab = require './FilesTab'
-Videos = require './Videos'
-ActionLink = require './ActionLink'
-VideoPlayerModal = require './VideoPlayerModal'
-
-TabbedArea = require 'react-bootstrap/TabbedArea'
-TabPane    = require 'react-bootstrap/TabPane'
+React             = require 'react'
+component         = require '../component'
+TransfersList     = require './TransfersList'
+DashboardControls = require './DashboardControls'
+NewTransfer       = require './NewTransfer'
+FilesTab          = require './FilesTab'
+Videos            = require './Videos'
+VideoPlayerModal  = require './VideoPlayerModal'
+TabbedArea        = require 'react-bootstrap/TabbedArea'
+TabPane           = require 'react-bootstrap/TabPane'
 
 {div, h1, a} = React.DOM
 
@@ -43,13 +42,11 @@ module.exports = component 'Dashboard',
   contextTypes:
     path: React.PropTypes.object.isRequired
 
-
-
   render: ->
     div
       className: 'Dashboard',
 
-      Navbar()
+      DashboardControls()
 
       NewTransfer(),
 
@@ -82,25 +79,5 @@ module.exports = component 'Dashboard',
 
   closeVideoPlayerModal: ->
     @context.path.set @context.path.where(v: undefined)
-
-
-Navbar = component 'Navbar',
-
-  render: ->
-    div(
-      className: 'Navbar',
-      LogoutButton(),
-    )
-
-
-LogoutButton = component 'LogoutButton',
-
-  logout: (event) ->
-    event.preventDefault()
-    session('put_io_access_token', null)
-
-  render: ->
-    ActionLink onClick: @logout, 'Logout'
-
 
 

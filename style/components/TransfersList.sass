@@ -1,10 +1,18 @@
 .TransfersList
 
 
+
 .TransfersList-Transfer
   position: relative
   padding: 1em
   border-bottom: 1px solid #C8C8C8
+
+  > .flex-row
+    white-space: nowrap
+    text-overflow: ellipsis
+    > *
+      overflow: hidden
+
   > .FileList
     margin-left: 1em
 

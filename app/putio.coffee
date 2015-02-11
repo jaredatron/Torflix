@@ -21,9 +21,23 @@ module.exports = (TOKEN) ->
 
 
 
+  putio.account = {}
+
+  putio.account.info = assign({}, EventEmitter.prototype)
+
+  putio.account.info.get = ->
+    putio.get('/account/info').then (response) =>
+      assign(this, response.info)
+      @emit('change')
+      response.info
+
+
+
+
 
   transfers = []
 
+  # FOR DEBUGGING
   global.GET_TRANSFERS = ->
     transfers
 
@@ -57,6 +71,7 @@ module.exports = (TOKEN) ->
   putio.transfers.add = (url) ->
     putio.post('/transfers/add', url: url).then (response) =>
       transfers.push response.transfer
+      putio.account.info.get()
       @emit('change')
       response
 
@@ -68,6 +83,8 @@ module.exports = (TOKEN) ->
       transfers = transfers.filter((transfer) -> transfer.id != id)
       @emit('change')
       response
+
+    putio.account.info.get()
 
     return delete_transfer_promise unless transfer? && transfer.file_id
 
@@ -107,6 +124,7 @@ module.exports = (TOKEN) ->
   putio.files.delete = (id) ->
     putio.post('/files/delete', file_ids: id).then (response) =>
       delete FILES_CACHE[id]
+      putio.account.info.get()
       response
 
   putio.files.search = (query) ->
