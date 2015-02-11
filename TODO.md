@@ -1,11 +1,11 @@
-when deleting a file returns a 404 qwest tries the request over and over forever
+# TODO
 
-use the http://www.videojs.com/ player
+## FEATURES
 
+- use the http://www.videojs.com/ player
+- add some style indicated new transfers based on date and played status
+- add selecting of files and transfers for batch actions
 
-add date and size to transfers list
+## BUGS
 
-add some style indicated new transfers based on date and played status
-
-
-should we load files when we load transfers?
+- directories are not reloaded / re-rendered when a file is deleted
