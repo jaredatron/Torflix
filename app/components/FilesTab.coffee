@@ -1,11 +1,16 @@
 React = require 'react'
 component = require '../component'
 {DirectoryContents} = require './FileList'
+{div} = React.DOM
 
-module.exports = component 'Files',
+module.exports = component 'FilesTab',
 
   contextTypes:
     putio: React.PropTypes.any.isRequired
 
   render: ->
-    DirectoryContents(directory_id: 0)
+    div
+      className: 'FilesTab'
+      DirectoryContents
+        directory_id: 0
+        sort_by: 'created_at'

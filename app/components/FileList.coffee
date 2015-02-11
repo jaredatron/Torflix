@@ -165,11 +165,17 @@ Directory = component 'FileList-Directory',
         DirectoryContents(directory_id: @props.directory.id)
 
 
+SORTERS =
 
-SORT_BY_CREATED_AT = (a, b) ->
-  a = Date.parse(a.created_at)
-  b = Date.parse(b.created_at)
-  if a < b then 1 else if a > b then -1 else 0
+  created_at: (a, b) ->
+    a = Date.parse(a.created_at)
+    b = Date.parse(b.created_at)
+    if a < b then 1 else if a > b then -1 else 0
+
+  name: (a, b) ->
+    a = a.name.toLowerCase()
+    b = b.name.toLowerCase()
+    if a < b then -1 else if a > b then 1 else 0
 
 
 
@@ -180,12 +186,13 @@ DirectoryContents = component 'FileList-DirectoryContents',
 
   propTypes:
     directory_id: React.PropTypes.number.isRequired
+    sort_by:      React.PropTypes.any
 
   childContextTypes:
     parentDirectory: React.PropTypes.object
 
   getDefaultProps: ->
-    sortBy: SORT_BY_CREATED_AT
+    sort_by: 'name'
 
   getChildContext: ->
     parentDirectory: this
@@ -200,9 +207,12 @@ DirectoryContents = component 'FileList-DirectoryContents',
     @forceUpdate()
 
   renderFiles: (files) ->
+    sorter = @props.sort_by
+    sorter = SORTERS[sorter] if typeof sorter == 'string'
+
     div className: 'FileList-DirectoryContents',
       if files.length > 0
-        files.sort(@props.sortBy).map(@renderFile)
+        files.sort(sorter).map(@renderFile)
       else
         div(className: 'empty', 'empty')
 

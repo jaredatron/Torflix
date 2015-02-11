@@ -2,7 +2,7 @@ React = require 'react'
 component = require '../component'
 TransfersList = require './TransfersList'
 NewTransfer = require './NewTransfer'
-Files = require './Files'
+FilesTab = require './FilesTab'
 Videos = require './Videos'
 ActionLink = require './ActionLink'
 VideoPlayerModal = require './VideoPlayerModal'
@@ -63,7 +63,7 @@ module.exports = component 'Dashboard',
         TabPane
           eventKey: 2
           tab: 'Files'
-          Files()
+          FilesTab()
 
         TabPane
           eventKey: 3
