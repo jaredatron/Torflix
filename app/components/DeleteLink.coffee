@@ -19,11 +19,12 @@ module.exports = component 'DeleteLink',
   onClick: ->
     @context.setPrompt =>
       ConfirmationPrompt
-        abort:   'dont delete'
-        confirm: 'delete'
+        abort:   'Don\'t Delete'
+        confirm: 'Delete'
         onAbort:   @onAbort
         onConfirm: @onConfirm
         @props.question()
+        autofocus: true
 
   onAbort: ->
     @context.clearPrompt()
