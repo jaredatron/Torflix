@@ -2,6 +2,8 @@ EventEmitter = require('events').EventEmitter
 assign       = require('object-assign')
 qwest        = require('qwest')
 
+global.DEBUG_QWEST = qwest
+
 ENDPOINT = 'https://api.put.io/v2'
 
 module.exports = (TOKEN) ->
