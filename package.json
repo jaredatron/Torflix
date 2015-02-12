@@ -6,6 +6,7 @@
   "license": "Copyrighted / All Rights Reserved",
   "dependencies": {
     "browserify": "^6.3.4",
+    "cheerio": "^0.18.0",
     "coffee-script": "^1.8.0",
     "coffeeify": "^1.0.0",
     "connect-browserify": "^3.2.1",
@@ -16,7 +17,8 @@
     "object-assign": "^2.0.0",
     "qwest": "^1.5.4",
     "react": "^0.12.2",
-    "react-bootstrap": "^0.13.3"
+    "react-bootstrap": "^0.13.3",
+    "request": "^2.53.0"
   },
   "devDependencies": {
     "node-pow": "0.0.2",
