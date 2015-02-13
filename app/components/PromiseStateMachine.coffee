@@ -17,7 +17,6 @@ module.exports = component 'PromiseStateMachine',
     failed: (error) ->
       span(null,"Error: #{error}")
 
-
   getInitialState: ->
     loaded: false
     error: null

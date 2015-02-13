@@ -5,7 +5,7 @@ PromiseStateMachine = require './PromiseStateMachine'
 ActionLink = require './ActionLink'
 Table = require 'react-bootstrap/Table'
 
-{div, form, input, button, table, thead, tbody, tr, th, td} = React.DOM
+{div, span, form, input, button, table, thead, tbody, tr, th, td} = React.DOM
 
 module.exports = component 'AddTorrentForm',
 
@@ -73,16 +73,20 @@ module.exports = component 'AddTorrentForm',
     addTorrent: React.PropTypes.func  .isRequired
 
   getInitialState: ->
+    console.log('getInitialState')
     promise: torrentz.search(@props.query)
 
   componentWillReceiveProps: (props) ->
+    console.log('componentWillReceiveProps', props, @props)
     if @props.query != props.query
       @setState promise: torrentz.search(props.query)
 
   render: ->
     if @props.query.length > 0
       results = PromiseStateMachine
+        key: @props.query
         promise: @state.promise
+        loading: -> div(null, 'Loading…')
         loaded: @renderSearchResults
 
     div className: 'AddTorrentForm-SearchResults', results
@@ -119,14 +123,14 @@ module.exports = component 'AddTorrentForm',
 SearchResult = component 'AddTorrentForm-SearchResult',
 
   propTypes:
-    id:         React.PropTypes.string.isRequired # "bf937884bdb76d2b9b16b73e95dad5541db1f4ec"
-    date:       React.PropTypes.string.isRequired # "11 hours"
-    leachers:   React.PropTypes.number.isRequired #  null
-    rating:     React.PropTypes.number.isRequired #  1
-    seeders:    React.PropTypes.number.isRequired #  null
-    size:       React.PropTypes.string.isRequired # "159 MB"
-    title:      React.PropTypes.string.isRequired # "Drake If You're Reading This It's Too Late 2015 album MP3 320 kpbs CTRC"
-    addTorrent: React.PropTypes.func  .isRequired
+    id:         React.PropTypes.string.isRequired
+    title:      React.PropTypes.string.isRequired
+    date:       React.PropTypes.string.isRequired
+    size:       React.PropTypes.string.isRequired
+    rating:     React.PropTypes.any
+    leachers:   React.PropTypes.any
+    seeders:    React.PropTypes.any
+    addTorrent: React.PropTypes.func.isRequired
 
   render: ->
     tr null,
