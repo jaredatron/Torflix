@@ -7,6 +7,7 @@ Table = require 'react-bootstrap/Table'
 
 {div, span, form, input, button, table, thead, tbody, tr, th, td} = React.DOM
 
+SEARCH_DELAY = 1000
 module.exports = component 'AddTorrentForm',
 
   contextTypes:
@@ -14,9 +15,12 @@ module.exports = component 'AddTorrentForm',
 
   getInitialState: ->
     value: ''
+    searchTimeout: null
+    searchResultsPromise: null
 
   onChange: (event) ->
     @setState value: event.target.value
+    setTimeout @scheduleSearch
 
   valueIsBlank: ->
     @state.value.match(/^\s*$/)
@@ -34,6 +38,22 @@ module.exports = component 'AddTorrentForm',
   addTorrent: (magnetLink) ->
     @context.putio.transfers.add magnetLink
     @clear()
+
+  scheduleSearch: ->
+    console.log('clearing search', @state.value)
+    clearTimeout(@state.searchTimeout)
+    if @valueIsBlank() || @valueIsMagnetLink()
+      @setState
+        searchResultsPromise: null
+        searchTimeout: null
+    else
+      console.log('scheduling search for', @state.value)
+      @setState
+        searchResultsPromise: null
+        searchTimeout: setTimeout(@performSeach, SEARCH_DELAY)
+
+  performSeach: ->
+    @setState searchResultsPromise: torrentz.search(@state.value)
 
   render: ->
     div
@@ -60,48 +80,26 @@ module.exports = component 'AddTorrentForm',
 
 
   renderSearchResults: ->
-    return null if @valueIsBlank() || @valueIsMagnetLink()
-    SearchResults
-      query: @state.value
-      addTorrent: @addTorrent
+    if @state.searchResultsPromise
+      SearchResults
+        key: @state.value
+        promise: @state.searchResultsPromise
+        addTorrent: @addTorrent
 
 
-DELAY = 1000
 SearchResults = component 'AddTorrentForm-SearchResults',
 
   propTypes:
-    query:      React.PropTypes.string.isRequired
+    promise:    React.PropTypes.string.isRequired
     addTorrent: React.PropTypes.func  .isRequired
 
-  getInitialState: ->
-    promise: null
-    timeout: null
-
-  componentDidMount: ->
-    @scheduleSearch()
-
-  scheduleSearch: ->
-    console.log('scheduling search for', @props.query)
-    clearTimeout(@state.timeout)
-    @setState
-      promise: null
-      timeout: setTimeout(@performSeach, DELAY)
-
-  performSeach: ->
-    @setState promise: torrentz.search(@props.query)
-
-  componentWillReceiveProps: (props) ->
-    @scheduleSearch() if @props.query != props.query
-
   render: ->
-    if @state.promise?
-      results = PromiseStateMachine
-        key: @props.query
-        promise: @state.promise
+    div
+      className: 'AddTorrentForm-SearchResults',
+      PromiseStateMachine
+        promise: @props.promise
         loading: -> div(null, 'Loading…')
         loaded: @renderSearchResults
-
-    div className: 'AddTorrentForm-SearchResults', results
 
   renderSearchResults: (results) ->
     Table
