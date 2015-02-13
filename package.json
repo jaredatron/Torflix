@@ -28,7 +28,8 @@
     "node": "0.10.x"
   },
   "scripts": {
-    "start": "coffee web_server.coffee"
+    "start": "coffee web_server.coffee",
+    "postinstall": "./bin/compile-assets"
   },
   "browserify": {
     "extensions": [

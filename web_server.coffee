@@ -13,8 +13,6 @@ require('./torrentz_routes')(web)
 if NODE_ENV == 'development'
   require('node-pow')(web)
   require('./asset_routes')(web)
-else
-  require('./assets').precompile()
 
 web.use express.static(__dirname + '/public')
 
