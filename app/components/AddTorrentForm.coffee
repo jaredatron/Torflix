@@ -66,23 +66,35 @@ module.exports = component 'AddTorrentForm',
       addTorrent: @addTorrent
 
 
- SearchResults = component 'AddTorrentForm-SearchResults',
+DELAY = 1000
+SearchResults = component 'AddTorrentForm-SearchResults',
 
   propTypes:
     query:      React.PropTypes.string.isRequired
     addTorrent: React.PropTypes.func  .isRequired
 
   getInitialState: ->
-    console.log('getInitialState')
-    promise: torrentz.search(@props.query)
+    promise: null
+    timeout: null
+
+  componentDidMount: ->
+    @scheduleSearch()
+
+  scheduleSearch: ->
+    console.log('scheduling search for', @props.query)
+    clearTimeout(@state.timeout)
+    @setState
+      promise: null
+      timeout: setTimeout(@performSeach, DELAY)
+
+  performSeach: ->
+    @setState promise: torrentz.search(@props.query)
 
   componentWillReceiveProps: (props) ->
-    console.log('componentWillReceiveProps', props, @props)
-    if @props.query != props.query
-      @setState promise: torrentz.search(props.query)
+    @scheduleSearch() if @props.query != props.query
 
   render: ->
-    if @props.query.length > 0
+    if @state.promise?
       results = PromiseStateMachine
         key: @props.query
         promise: @state.promise
