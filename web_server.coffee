@@ -1,12 +1,7 @@
 require './env'
 NODE_ENV = process.env.NODE_ENV || 'development'
 
-http        = require 'http'
-fs          = require 'fs'
-express     = require 'express'
-cheerio     = require 'cheerio'
-Request     = require 'request'
-querystring = require('querystring')
+express = require 'express'
 
 web = express()
 web.set 'title', 'putio'
