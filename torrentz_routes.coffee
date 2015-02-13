@@ -2,7 +2,7 @@ torrentz = require('./torrentz')
 
 module.exports = (web) ->
 
-  web.get '/search', (request, response) ->
+  web.get '/torrentz/search', (request, response) ->
     response.setHeader('content-type', 'application/json')
 
     torrentz.search request.query.q, (error, results) ->
@@ -14,7 +14,7 @@ module.exports = (web) ->
           results: results,
         })
 
-  web.get '/providers/:id', (request, response) ->
+  web.get '/torrentz/providers/:id', (request, response) ->
     response.setHeader('content-type', 'application/json')
 
     torrentz.getProviders request.params.id, (error, results) ->
@@ -26,7 +26,7 @@ module.exports = (web) ->
           results: results,
         })
 
-  web.get '/magnet-link/:id', (request, response) ->
+  web.get '/torrentz/magnet-link/:id', (request, response) ->
     response.setHeader('content-type', 'application/json')
 
     torrentz.getMagnetLink request.params.id, (error, magnetLink) ->

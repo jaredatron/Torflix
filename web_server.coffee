@@ -12,7 +12,7 @@ web = express()
 web.set 'title', 'putio'
 web.set 'port', (process.env.PORT || 5000)
 
-require('./search_routes')(web)
+require('./torrentz_routes')(web)
 
 if NODE_ENV == 'development'
   require('node-pow')(web)
