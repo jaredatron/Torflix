@@ -1,6 +1,7 @@
 require './env'
 NODE_ENV = process.env.NODE_ENV || 'development'
 
+fs      = require 'fs'
 express = require 'express'
 
 web = express()
