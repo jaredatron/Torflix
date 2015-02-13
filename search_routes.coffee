@@ -14,5 +14,25 @@ module.exports = (web) ->
           results: results,
         })
 
-  web.get '/magnet/:id', (request, response) ->
-    response.send ''
+  web.get '/providers/:id', (request, response) ->
+    response.setHeader('content-type', 'application/json')
+
+    torrentz.getProviders request.params.id, (error, results) ->
+      if error
+        response.status(500).send error: error.message
+      else
+        response.status(200).send JSON.stringify({
+          length: results.length,
+          results: results,
+        })
+
+  web.get '/magnet-link/:id', (request, response) ->
+    response.setHeader('content-type', 'application/json')
+
+    torrentz.getMagnetLink request.params.id, (error, magnetLink) ->
+      if error
+        response.status(500).send error: error.message
+      else
+        response.status(200).send JSON.stringify({
+          magnetLink: magnetLink,
+        })
