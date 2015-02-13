@@ -18,22 +18,21 @@ module.exports = component 'AddTorrentForm',
   onChange: (event) ->
     @setState value: event.target.value
 
+  valueIsBlank: ->
+    @state.value.match(/^\s*$/)
+
+  valueIsMagnetLink: ->
+    @state.value.match(/^magnet:/)
+
   onSubmit: (event) ->
     event.preventDefault()
-    @context.putio.transfers.add @state.value
-    @setState value: ''
-
-  buttonValue: ->
-    'Add'
-
-  buttonDisabled: ->
-    @state.value.length == 0
+    @addTorrent(@state.value) if @valueIsMagnetLink()
 
   clear: ->
     @setState value: ''
 
-  addTorrent: (torrentId) ->
-    debugger
+  addTorrent: (magnetLink) ->
+    @context.putio.transfers.add magnetLink
     @clear()
 
   render: ->
@@ -41,20 +40,30 @@ module.exports = component 'AddTorrentForm',
       className: 'AddTorrentForm'
       form
         onSubmit: @onSubmit
-        input
-          type: 'text'
-          placeholder: 'search or paste magnet link'
-          value: @state.value
-          onChange: @onChange
-        input
-          type: 'submit'
-          value: @buttonValue()
-          disabled: @buttonDisabled()
+        @renderInput()
+        @renderAddTorrentButton()
 
-      SearchResults
-        query: @state.value
-        addTorrent: @addTorrent
+      @renderSearchResults()
 
+  renderInput: ->
+    input
+      type: 'text'
+      placeholder: 'search or paste magnet link'
+      value: @state.value
+      onChange: @onChange
+
+  renderAddTorrentButton: ->
+    if @valueIsMagnetLink()
+      input
+        type: 'submit'
+        value: 'Add Torrent'
+
+
+  renderSearchResults: ->
+    return null if @valueIsBlank() || @valueIsMagnetLink()
+    SearchResults
+      query: @state.value
+      addTorrent: @addTorrent
 
 
  SearchResults = component 'AddTorrentForm-SearchResults',
@@ -69,7 +78,6 @@ module.exports = component 'AddTorrentForm',
   componentWillReceiveProps: (props) ->
     if @props.query != props.query
       @setState promise: torrentz.search(props.query)
-
 
   render: ->
     if @props.query.length > 0
@@ -137,14 +145,7 @@ SearchResult = component 'AddTorrentForm-SearchResult',
       td null,
         @props.leachers
 
-    # ActionLink
-    #   className: 'AddTorrentForm-SearchResult flex-row',
-    #   onClick: @addTorrent
-    #   div(className: 'AddTorrentForm-SearchResult-title',  @props.title)
-    #   div(className: 'flex-spacer')
-    #   div(className: 'AddTorrentForm-SearchResult-rating', @props.rating)
-    #   div(className: 'AddTorrentForm-SearchResult-size',   @props.size)
-
   addTorrent: ->
-    @props.addTorrent(@props.id)
+    torrentz.getMagnetLink(@props.id).then (magnetLink) =>
+      @props.addTorrent(magnetLink)
 
