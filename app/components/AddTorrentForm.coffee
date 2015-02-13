@@ -30,7 +30,11 @@ module.exports = component 'AddTorrentForm',
 
   onSubmit: (event) ->
     event.preventDefault()
-    @addTorrent(@state.value) if @valueIsMagnetLink()
+    return if @valueIsBlank()
+    if @valueIsMagnetLink()
+      @addTorrent(@state.value)
+    else
+      @performSeach()
 
   clear: ->
     @setState value: ''
@@ -40,14 +44,12 @@ module.exports = component 'AddTorrentForm',
     @clear()
 
   scheduleSearch: ->
-    console.log('clearing search', @state.value)
     clearTimeout(@state.searchTimeout)
     if @valueIsBlank() || @valueIsMagnetLink()
       @setState
         searchResultsPromise: null
         searchTimeout: null
     else
-      console.log('scheduling search for', @state.value)
       @setState
         searchResultsPromise: null
         searchTimeout: setTimeout(@performSeach, SEARCH_DELAY)
@@ -90,7 +92,7 @@ module.exports = component 'AddTorrentForm',
 SearchResults = component 'AddTorrentForm-SearchResults',
 
   propTypes:
-    promise:    React.PropTypes.string.isRequired
+    promise:    React.PropTypes.object.isRequired
     addTorrent: React.PropTypes.func  .isRequired
 
   render: ->
@@ -102,6 +104,18 @@ SearchResults = component 'AddTorrentForm-SearchResults',
         loaded: @renderSearchResults
 
   renderSearchResults: (results) ->
+    results = results.map (result) =>
+      SearchResult
+        key:        result.id,
+        id:         result.id,
+        title:      result.title,
+        date:       result.date,
+        leachers:   result.leachers,
+        rating:     result.rating,
+        seeders:    result.seeders,
+        size:       result.size,
+        addTorrent: @props.addTorrent
+
     Table
       responsive: true
       striped: true
@@ -117,17 +131,11 @@ SearchResults = component 'AddTorrentForm-SearchResults',
           th null, 'Seeders'
           th null, 'Leachers'
       tbody null,
-        results.map (result) =>
-          SearchResult
-            key:        result.id,
-            id:         result.id,
-            title:      result.title,
-            date:       result.date,
-            leachers:   result.leachers,
-            rating:     result.rating,
-            seeders:    result.seeders,
-            size:       result.size,
-            addTorrent: @props.addTorrent
+      if results.length == 0
+        tr(null, td(colSpan: 6, 'No results found :/'))
+      else
+        results
+
 
 
 SearchResult = component 'AddTorrentForm-SearchResult',
