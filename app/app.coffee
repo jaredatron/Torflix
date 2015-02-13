@@ -13,6 +13,7 @@ path = Path(location, history)
 
 # TEMP DEBUG
 global.DEBUG_PATH = path
+global.DEBUG_TORRENTZ = require('./torrentz')
 
 getState = ->
   pathname: path.pathname()
