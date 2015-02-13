@@ -2,7 +2,7 @@ React             = require 'react'
 component         = require '../component'
 TransfersList     = require './TransfersList'
 DashboardControls = require './DashboardControls'
-NewTransfer       = require './NewTransfer'
+AddTorrentForm    = require './AddTorrentForm'
 FilesTab          = require './FilesTab'
 Videos            = require './Videos'
 VideoPlayerModal  = require './VideoPlayerModal'
@@ -48,7 +48,7 @@ module.exports = component 'Dashboard',
 
       DashboardControls()
 
-      NewTransfer(),
+      AddTorrentForm(),
 
       TabbedArea
         defaultActiveKey: 1
