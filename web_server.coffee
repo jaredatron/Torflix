@@ -13,11 +13,6 @@ web.use express.static(__dirname + '/public')
 
 require('./torrentz_routes')(web)
 
-web.get '/wtf', (request, response) ->
-  response.send('wtf!?')
-
-
-
 if NODE_ENV == 'development'
   require('./development_asset_routes')(web)
 else
@@ -28,4 +23,4 @@ web.listen web.get('port'), ->
   console.log("Node app is running at http://localhost:" + web.get('port'))
 
 
-require('node-pow')(web) if true # NODE_ENV == 'development'
+require('node-pow')(web) if NODE_ENV == 'development'

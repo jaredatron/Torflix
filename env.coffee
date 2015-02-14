@@ -1,8 +1,7 @@
 NODE_ENV = process.env.NODE_ENV || 'development'
 
-if true # NODE_ENV == 'development'
-  # load .env file
-  require('node-env-file')(__dirname + '/.env');
+if NODE_ENV == 'development'
+  require('node-env-file')(__dirname + '/.env')
 
 verify_env_variable = (name) ->
   return if process.env[name]?
