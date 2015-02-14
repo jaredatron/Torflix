@@ -30,14 +30,19 @@ module.exports = component 'AddTorrentForm',
 
   onSubmit: (event) ->
     event.preventDefault()
-    return if @valueIsBlank()
+    # Not doing this allows you to search for the most popular torrents
+    # return if @valueIsBlank()
     if @valueIsMagnetLink()
       @addTorrent(@state.value)
     else
       @performSeach()
 
   clear: ->
-    @setState value: ''
+    clearTimeout(@state.searchTimeout)
+    @setState
+      value: ''
+      searchTimeout: null
+      searchResultsPromise: null
 
   addTorrent: (magnetLink) ->
     @context.putio.transfers.add magnetLink
