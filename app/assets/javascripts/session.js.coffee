@@ -1,6 +1,10 @@
-PREFIX = "PUTIO/"
+#= require 'eventemitter3'
+#= require 'Object.assign'
 
-session = (key, value) ->
+PREFIX = "TORFLIX/"
+
+@session = (key, value) ->
+  throw new Error('key cannot be blank') if !key?
   if arguments.length == 1
     value = localStorage["#{PREFIX}#{key}"]
     return if value? then JSON.parse(value) else null
@@ -12,8 +16,4 @@ session = (key, value) ->
       session.emit('change')
     value
 
-assign(session, EventEmitter.prototype)
-
-module.exports = session
-
-global.session = session
+Object.assign(session, EventEmitter.prototype)

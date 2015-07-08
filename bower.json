@@ -1,0 +1,8 @@
+{
+  "vendor": {
+    "name": "bower-rails generated vendor assets",
+    "dependencies": {
+      "eventemitter3": "git://github.com/primus/eventemitter3.git"
+    }
+  }
+}
