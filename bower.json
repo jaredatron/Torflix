@@ -2,7 +2,8 @@
   "vendor": {
     "name": "bower-rails generated vendor assets",
     "dependencies": {
-      "eventemitter3": "git://github.com/primus/eventemitter3.git"
+      "eventemitter3": "git://github.com/primus/eventemitter3.git",
+      "youarei": "git@github.com:purge/youarei.js.git"
     }
   }
 }

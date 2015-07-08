@@ -1,7 +1,5 @@
 getState = ->
-  foo: 'bar'
-
-{div} = DOM
+  put_io_access_token: session('put_io_access_token')
 
 component 'App',
   
@@ -37,7 +35,10 @@ component 'App',
 
   render: ->
     window.DEBUG_APP_STATE = @state
+
+    {div, Login} = DOM
+
     if @state.put_io_access_token
       div(null, 'LOGGED IN')
     else
-      div(null, 'NOT LOGGED IN')
+      Login()

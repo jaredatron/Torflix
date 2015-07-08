@@ -16,6 +16,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'pry-rails'
   gem 'pry-byebug'
-  gem 'web-console', '~> 2.0'
+  # gem 'web-console', '~> 2.0'
+  gem 'dotenv-rails'
 end
 
