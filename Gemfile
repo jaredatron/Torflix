@@ -10,6 +10,7 @@ gem 'haml'
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'jquery-rails'
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'pry-rails'
