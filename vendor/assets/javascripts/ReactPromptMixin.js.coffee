@@ -1,4 +1,4 @@
-ReactPromptMixin =
+@ReactPromptMixin =
 
   childContextTypes:
     setPrompt: React.PropTypes.func.isRequired

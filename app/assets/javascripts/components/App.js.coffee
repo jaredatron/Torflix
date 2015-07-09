@@ -42,8 +42,8 @@ component 'App',
 
     return Login() if !@state.loggedIn
       
-    Page = router(@state.path, @state.params)
-    Layout({}, Page())
+    page = router(@state.path, @state.params)
+    Layout({}, page)
 
     
 
