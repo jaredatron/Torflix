@@ -1,5 +1,3 @@
-#= require 'ReactPromptMixin'
-
 component 'TransfersPage',
 
   contextTypes:
@@ -7,6 +5,4 @@ component 'TransfersPage',
     params: React.PropTypes.object.isRequired
   
   render: ->
-    {div, span} = DOM
-    # @context.putio.transfers
-    div(null, 'Transfers page')
+    DOM.TransfersList()

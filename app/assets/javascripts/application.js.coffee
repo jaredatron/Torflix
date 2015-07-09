@@ -1,5 +1,6 @@
 #= require jquery
 #= require react
+#= require Classnames
 #= require components
 #= require_self
 
