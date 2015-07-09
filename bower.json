@@ -3,7 +3,8 @@
     "name": "bower-rails generated vendor assets",
     "dependencies": {
       "eventemitter3": "git://github.com/primus/eventemitter3.git",
-      "youarei": "git@github.com:purge/youarei.js.git"
+      "youarei": "git@github.com:purge/youarei.js.git",
+      "qwest": "git@github.com:pyrsmk/qwest.git"
     }
   }
 }

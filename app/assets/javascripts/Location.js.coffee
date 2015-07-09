@@ -22,7 +22,7 @@ Location.set = (value, replace) ->
     history.replaceState({}, document.title, value)
   else
     history.pushState({}, document.title, value)
-  this
+  Location
 
 Location.setPath = (path, replace) ->
   @set(@for(path), replace)
