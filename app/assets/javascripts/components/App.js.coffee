@@ -32,12 +32,9 @@ component 'App',
   render: ->
     console.log('APP RENDER', @state)
 
-    {div, Login} = DOM
+    {div, Login, Dashboard} = DOM
 
     if @state.putio?
-      div(null, 
-        div(null, "path: #{@state.path}")
-        div(null, "params: #{JSON.stringify(@state.params)}")
-      )
+      Dashboard()
     else
       Login()
