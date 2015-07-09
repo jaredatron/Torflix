@@ -41,11 +41,12 @@ component 'Navbar',
       div className: 'Navbar-username', username
       img(src: avatar_url, className: 'Navbar-avatar')
 
-      div
-        className: 'Navbar-usage'
-        FileSize(size: disk.avail)
-        span(null, '/')
-        FileSize(size: disk.size)
+      if disk? && disk.avail?
+        div
+          className: 'Navbar-usage'
+          FileSize(size: disk.avail)
+          span(null, '/')
+          FileSize(size: disk.size)
 
       LogoutButton(),
     )

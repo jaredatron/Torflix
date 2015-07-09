@@ -1,8 +1,8 @@
 @router = (path, params) ->
   switch path
-    when '/'          then DOM.div(null, 'Welcome :D')
+    when '/'          then -> DOM.RedirectTo(href: '/shows')
     when '/shows'     then DOM.ShowsPage
     when '/transfers' then DOM.TransfersPage
-    else
-      DOM.div(null, 'Page not found')
+    else DOM.PageNotFound
+      
     
