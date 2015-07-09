@@ -1,4 +1,6 @@
 getState = ->
+  path: Location.path
+  params: Location.params
   put_io_access_token: session('put_io_access_token')
 
 component 'App',
@@ -25,20 +27,23 @@ component 'App',
   onChange: ->
     @setState getState()
 
-  # componentDidMount: ->
-  #   session.on('change', @onChange)
-  #   path.on('change', @onChange)
+  componentDidMount: ->
+    Location.on('change', @onChange)
+    session.on('change', @onChange)
 
-  # componentWillUnmount: ->
-  #   session.removeListener('change', @onChange)
-  #   path.removeListener('change', @onChange)
+  componentWillUnmount: ->
+    session.removeListener('change', @onChange)
+    Location.removeListener('change', @onChange)
 
   render: ->
-    window.DEBUG_APP_STATE = @state
+    console.log('APP RENDER', @state)
 
     {div, Login} = DOM
 
     if @state.put_io_access_token
-      div(null, 'LOGGED IN')
+      div(null, 
+        div(null, "path: #{@state.path}")
+        div(null, "params: #{JSON.stringify(@state.params)}")
+      )
     else
       Login()
