@@ -5,9 +5,10 @@
 
 getState = ->
   path:     Location.path
-  params:   Location.params
+  params:   router.pageFor(Location.path, Location.params)
   loggedIn: !!session('put_io_access_token')
   putio:    Putio(session('put_io_access_token'))
+
 
 component 'App',
   
@@ -42,10 +43,9 @@ component 'App',
 
     return Login() if !@state.loggedIn
       
-    page = router.pageFor(@state.path, @state.params)
-    Layout({}, page)
 
-    
+    Page = DOM[@state.params.component] || (=>
+      DOM.div(null, "ERROR: routed component not found: #{@state.params.component}")
+    )
 
-
-
+    Layout(null, Page())

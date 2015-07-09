@@ -8,6 +8,7 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'react-rails'
 gem 'haml'
 gem 'bower-rails'
+gem 'therubyracer'
 
 group :development, :test do
   gem 'rspec-rails'
