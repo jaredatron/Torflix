@@ -3,11 +3,11 @@
 component 'RedirectTo',
 
   propTypes:
-    href: React.PropTypes.string.isRequired
+    path: React.PropTypes.string.isRequired
 
   componentDidMount: ->
-    href = @props.href
-    setTimeout -> Location.set(href)
+    path = @props.path
+    setTimeout -> Location.set(path)
 
   render: ->
-    DOM.div(null, "Redirecting to #{@props.href}")
+    DOM.div(null, "Redirecting to #{@props.path}")

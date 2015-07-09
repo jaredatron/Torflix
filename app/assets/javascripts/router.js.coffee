@@ -1,9 +1,11 @@
-@router = (path, params) ->
-  switch path
-    when '/'               then DOM.RedirectTo(href: '/shows')
-    when '/shows'          then DOM.ShowsPage()
-    when '/transfers'      then DOM.TransfersPage()
-    when '/video/:file_id' then DOM.VideoPage()
-    else DOM.PageNotFound
-      
-    
+#= require 'router'
+
+@router = new Router ->
+  redirectTo = (path) ->
+    DOM.RedirectTo(href: path)
+
+  @match '/',              redirectTo('/shows')
+  @match '/shows',         DOM.ShowsPage
+  @match '/transfers'      DOM.TransfersPage()
+  @match '/video/:file_id' DOM.VideoPage()
+  @match '*',              DOM.PageNotFound

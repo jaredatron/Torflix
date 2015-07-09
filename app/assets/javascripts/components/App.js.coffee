@@ -42,7 +42,7 @@ component 'App',
 
     return Login() if !@state.loggedIn
       
-    page = router(@state.path, @state.params)
+    page = router.pageFor(@state.path, @state.params)
     Layout({}, page)
 
     
