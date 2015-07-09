@@ -1,0 +1,43 @@
+.FileList
+
+
+.FileList-row
+  padding: 0.25em 0.5em 0.25em 0
+  &:hover
+    background-color: #F2F2F2
+    .FileList-DeleteLink
+      visibility: visible
+
+.FileList-Directory
+  flex-direction: column
+
+.FileList-File-name
+  flex-grow: 1
+  flex-shrink: 1
+
+
+.FileList-File-size
+  width: 7em
+  padding: 0 1em
+  text-align: right
+
+.FileList-File-icon
+  margin-right: 0.5em
+
+.FileList-DirectoryContents
+  // padding: 0.5em 0 0.5em 2em
+
+  > .empty
+
+.FileList-Directory-status-icon
+  margin-right: 0.5em
+
+
+.FileList-DeleteLink
+  visibility: hidden
+
+.FileList-File-newIcon
+  color: red
+
+.FileList-PutioLink
+  padding: 0 1em

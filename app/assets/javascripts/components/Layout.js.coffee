@@ -3,9 +3,9 @@
 component 'Layout',
 
   render: ->
-    {div, span} = DOM
+    {div, span, Navbar} = DOM
     # @context.putio.transfers
     div
       className: 'layout'
-      'Layout:'
+      Navbar()
       @props.children
