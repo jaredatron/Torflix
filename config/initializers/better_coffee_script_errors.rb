@@ -4,7 +4,6 @@ class << Sprockets::CoffeeScriptProcessor
   def call_with_better_errors(input)
     call_without_better_errors(input)
   rescue ExecJS::RuntimeError => error
-    # binding.pry
     raise error unless error.message.match(SYNTAX_ERROR_MESSAGE)
     line, col = $1, $2
     message = "SyntaxError: #{input[:filename]}:#{line}:#{col}"
@@ -24,4 +23,5 @@ class << Sprockets::CoffeeScriptProcessor
       "#{index+1}: #{line}"
     end.join("\n")
   end
+  
 end

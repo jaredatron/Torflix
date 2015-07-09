@@ -153,13 +153,6 @@ Directory = component
 
     div className: 'FileList-Directory',
       div className: 'FileList-row flex-row',
-        # ActionLink
-        #   style: @depthStyle()
-        #   className: 'FileList-File-name'
-        #   onClick: @toggle,
-        #   @chevron(),
-        #   @props.directory.name
-
         div 
           className: 'FileList-File-size'
           FileSize(size: @props.directory.size)
@@ -211,6 +204,7 @@ DirectoryContents = component
   render: ->
     PromiseStateMachine
       promise: @context.putio.files.list(@props.directory_id)
+      loading: -> DOM.div(null, 'loading...')
       loaded: @renderFiles
 
   reload: ->
