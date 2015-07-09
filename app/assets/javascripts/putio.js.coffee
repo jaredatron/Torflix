@@ -7,8 +7,6 @@ ENDPOINT = 'https://api.put.io/v2'
 Putio = @Putio = (TOKEN) ->
   return null unless TOKEN?
 
-  console.warn('CREATING PUTIO')
-
   putio = {TOKEN: TOKEN}
 
   url = (path) ->

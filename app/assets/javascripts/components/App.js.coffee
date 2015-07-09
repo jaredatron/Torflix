@@ -1,19 +1,25 @@
+#= require 'session'
+#= require 'putio'
+#= require 'Location'
+#= require 'router'
+
 getState = ->
-  path:   Location.path
-  params: Location.params
-  putio:  Putio(session('put_io_access_token'))
+  path:     Location.path
+  params:   Location.params
+  loggedIn: !!session('put_io_access_token')
+  putio:    Putio(session('put_io_access_token'))
 
 component 'App',
   
   childContextTypes:
-    path:   React.PropTypes.string.isRequired
-    params: React.PropTypes.object.isRequired
-    putio:  React.PropTypes.object
+    path:     React.PropTypes.string.isRequired
+    params:   React.PropTypes.object.isRequired
+    putio:    React.PropTypes.object
 
   getChildContext: ->
-    path:   @state.path
-    params: @state.params
-    putio:  @state.putio
+    path:     @state.path
+    params:   @state.params
+    putio:    @state.putio
 
   getInitialState: ->
     getState()
@@ -32,9 +38,14 @@ component 'App',
   render: ->
     console.log('APP RENDER', @state)
 
-    {div, Login, Dashboard} = DOM
+    {div, Login, Layout} = DOM
 
-    if @state.putio?
-      Dashboard()
-    else
-      Login()
+    return Login() if !@state.loggedIn
+      
+    Page = router(@state.path, @state.params)
+    Layout({}, Page())
+
+    
+
+
+

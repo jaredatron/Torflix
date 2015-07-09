@@ -1,8 +1,6 @@
 #= require jquery
 #= require react
 #= require components
-#= require Location-params
-#= require_tree .
 #= require_self
 
 getTokenFromHash = ->
