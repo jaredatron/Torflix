@@ -22,6 +22,7 @@ Location.set = (value, replace) ->
     history.replaceState({}, document.title, value)
   else
     history.pushState({}, document.title, value)
+  update()
   Location
 
 Location.setPath = (path, replace) ->

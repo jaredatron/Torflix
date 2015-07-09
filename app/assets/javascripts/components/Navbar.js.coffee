@@ -31,6 +31,9 @@ component 'Navbar',
       ExternalLink
         href: '//put.io'
         img src: '//put.io/images/tinylogo.png'
+
+      ActionLink(href: '/shows',     'Shows')
+      ActionLink(href: '/transfers', 'Transfers')
       
 
       div className: 'flex-spacer'
