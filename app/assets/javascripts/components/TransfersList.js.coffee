@@ -1,13 +1,3 @@
-# React      = require 'react'
-# component  = require '../component'
-# ActionLink = require './ActionLink'
-# FileList   = require './FileList'
-# Glyphicon  = require 'react-bootstrap/Glyphicon'
-# DeleteLink = require './DeleteLink'
-# FileSize   = require './FileSize'
-
-# {div, span, a} = React.DOM
-
 SORT = (a, b) ->
   a = Date.parse(a.created_at)
   b = Date.parse(b.created_at)
@@ -18,7 +8,7 @@ SORT = (a, b) ->
 component 'TransfersList',
 
   contextTypes:
-    putio: React.PropTypes.object.isRequired
+    putio: React.PropTypes.object.isReq uired
 
   getInitialState: ->
     transfers: @context.putio.transfers.toArray()

@@ -6,6 +6,6 @@ component 'Layout',
     {div, span, Navbar} = DOM
     # @context.putio.transfers
     div
-      className: 'layout'
+      className: 'Layout layer flex-column'
       Navbar()
       @props.children

@@ -3,9 +3,18 @@
 component 'VideoPage',
 
   contextTypes:
-    path:   React.PropTypes.string.isRequired
     params: React.PropTypes.object.isRequired
-
+    putio:  React.PropTypes.object.isRequired
 
   render: ->
-    DOM.div(null, "Video: #{@context.params.file_id}")
+    DOM.div
+      className: 'VideoPage'
+
+      PromiseStateMachine
+        promise: @context.putio.files.get(@context.params.file_id)
+        loading: =>
+          DOM.div(null, 'loading...')
+        loaded: (file) => 
+          DOM.VideoPlayer(file: file)
+        
+
