@@ -7,7 +7,6 @@ getState = ->
   path:     Location.path
   params:   router.pageFor(Location.path, Location.params)
   loggedIn: !!session('put_io_access_token')
-  putio:    Putio(session('put_io_access_token'))
 
 
 component 'App',
@@ -15,12 +14,10 @@ component 'App',
   childContextTypes:
     path:     React.PropTypes.string.isRequired
     params:   React.PropTypes.object.isRequired
-    putio:    React.PropTypes.object
 
   getChildContext: ->
     path:     @state.path
     params:   @state.params
-    putio:    @state.putio
 
   getInitialState: ->
     getState()

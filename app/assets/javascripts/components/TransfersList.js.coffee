@@ -7,23 +7,20 @@ SORT = (a, b) ->
 
 component 'TransfersList',
 
-  contextTypes:
-    putio: React.PropTypes.object.isRequired
-
   getInitialState: ->
-    transfers: @context.putio.transfers.toArray()
+    transfers: Putio.transfers.toArray()
 
   transfersChanged: ->
     setTimeout =>
-      @setState transfers: @context.putio.transfers.toArray()
+      @setState transfers: Putio.transfers.toArray()
 
   componentDidMount: ->
-    @context.putio.transfers.on('change', @transfersChanged)
-    @context.putio.transfers.startPolling()
+    Putio.transfers.on('change', @transfersChanged)
+    Putio.transfers.startPolling()
 
   componentWillUnmount: ->
-    @context.putio.transfers.removeListener('change', @transfersChanged)
-    @context.putio.transfers.stopPolling()
+    Putio.transfers.removeListener('change', @transfersChanged)
+    Putio.transfers.stopPolling()
 
   renderTransfers: ->
     if @state.transfers.length > 0
@@ -123,11 +120,8 @@ DeleteTransferLink = component
   propTypes:
     transfer: React.PropTypes.object.isRequired
 
-  contextTypes:
-    putio: React.PropTypes.any.isRequired
-
   onDelete: ->
-    @context.putio.transfers.delete(@props.transfer.id)
+    Putio.transfers.delete(@props.transfer.id)
 
   render: ->
     DOM.DeleteLink

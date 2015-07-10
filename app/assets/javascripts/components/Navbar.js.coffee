@@ -2,9 +2,6 @@
 
 component 'Navbar',
 
-  contextTypes:
-    putio: React.PropTypes.any.isRequired
-
   getInitialState: ->
     accountInfo: {
       disk: {}
@@ -12,14 +9,14 @@ component 'Navbar',
 
   accountInfoChanged: ->
     setTimeout =>
-      @setState accountInfo: @context.putio.account.info
+      @setState accountInfo: Putio.account.info
 
   componentDidMount: ->
-    @context.putio.account.info.on('change', @accountInfoChanged)
-    @context.putio.account.info.get()
+    Putio.account.info.on('change', @accountInfoChanged)
+    Putio.account.info.get()
 
   componentWillUnmount: ->
-    @context.putio.account.info.removeListener('change', @accountInfoChanged)
+    Putio.account.info.removeListener('change', @accountInfoChanged)
 
   render: ->
     {div, span, img, ActionLink, LogoutButton, FileSize, ExternalLink} = DOM

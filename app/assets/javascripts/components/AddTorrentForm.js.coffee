@@ -5,9 +5,6 @@ SEARCH_DELAY = 1000
 
 component 'AddTorrentForm',
 
-  contextTypes:
-    putio: React.PropTypes.any.isRequired
-
   getInitialState: ->
     value: ''
     searchTimeout: null
@@ -40,7 +37,7 @@ component 'AddTorrentForm',
       searchResultsPromise: null
 
   addTorrent: (magnetLink) ->
-    @context.putio.transfers.add magnetLink
+    Putio.transfers.add magnetLink
     @clear()
 
   scheduleSearch: ->

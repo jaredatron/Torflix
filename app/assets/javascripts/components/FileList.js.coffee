@@ -5,11 +5,6 @@ isDirectory = (file) ->
 
 component 'FileList',
 
-  # mixins: [DepthMixin]
-
-  contextTypes:
-    putio: React.PropTypes.any.isRequired
-
   propTypes:
     file_id: React.PropTypes.number.isRequired
 
@@ -19,7 +14,7 @@ component 'FileList',
 
   render: ->
     PromiseStateMachine
-      promise: @context.putio.files.get(@props.file_id)
+      promise: Putio.files.get(@props.file_id)
       loaded: @renderFile
 
   renderFile: (file) ->
@@ -185,9 +180,6 @@ SORTERS =
 DirectoryContents = component
   displayName: 'FileList-DirectoryContents',
 
-  contextTypes:
-    putio: React.PropTypes.any.isRequired
-
   propTypes:
     directory_id: React.PropTypes.number.isRequired
     sortBy:       React.PropTypes.any
@@ -203,12 +195,12 @@ DirectoryContents = component
 
   render: ->
     PromiseStateMachine
-      promise: @context.putio.files.list(@props.directory_id)
+      promise: Putio.files.list(@props.directory_id)
       loading: -> DOM.div(null, 'loading...')
       loaded: @renderFiles
 
   reload: ->
-    @context.putio.files.clearCache(@props.directory_id)
+    Putio.files.clearCache(@props.directory_id)
     @forceUpdate()
 
   renderFiles: (files) ->
@@ -233,14 +225,13 @@ DeleteFileLink = component
   displayName: 'FileList-DeleteFileLink',
 
   contextTypes:
-    putio: React.PropTypes.any.isRequired
     parentDirectory: React.PropTypes.object
 
   propTypes:
     file: React.PropTypes.object.isRequired
 
   onDelete: ->
-    @context.putio.files.delete(@props.file.id).then =>
+    Putio.files.delete(@props.file.id).then =>
       if @context.parentDirectory
         @context.parentDirectory.reload()
 
