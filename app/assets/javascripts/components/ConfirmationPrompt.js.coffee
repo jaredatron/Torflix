@@ -19,8 +19,6 @@ component 'ConfirmationPrompt',
 
     {Prompt, div, Button} = DOM
 
-    debugger
-
     Prompt
       className: 'ConfirmationPrompt'
       onRequestHide: @props.onAbort
@@ -31,11 +29,10 @@ component 'ConfirmationPrompt',
       div className: 'modal-footer',
         Button
           ref: 'abortButton'
-          bsStyle: 'default'
           onClick: @props.onAbort
           abortText
         Button
           ref: 'confirmButton'
-          bsStyle: 'danger'
+          type: 'danger'
           onClick: @props.onConfirm
           confirmText

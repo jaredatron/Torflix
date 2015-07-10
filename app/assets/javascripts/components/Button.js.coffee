@@ -1,6 +1,12 @@
 component 'Button',
 
+  propTypes:
+    type: React.PropTypes.string
+
+  getDefaultProps: ->
+    type: 'default'
+
   render: ->
     props = Object.assign({}, @props)
-    props.className = Classnames('DeleteLink', @props.className)
+    props.className = Classnames("btn btn-#{@props.type}", @props.className)
     DOM.div(props)
