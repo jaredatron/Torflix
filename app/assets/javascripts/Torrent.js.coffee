@@ -12,3 +12,6 @@
 
   @search = (query) ->
     qwest.get(@url('/search'), q: query)
+  
+  @get = (id) ->
+    qwest.get(@url("/#{id}"))

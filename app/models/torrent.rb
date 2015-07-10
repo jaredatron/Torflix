@@ -1,29 +1,27 @@
 class Torrent
 
-  ENDPOINT = 'http://torrentz.eu/search'.freeze
-
   def self.search(query)
-    url = URI.parse(ENDPOINT)
-    url.query = {q: query}.to_query
-    response = HTTParty.get(url)
-    # raise response.inspect unless response.code == 200
-    html = Nokogiri::HTML(response.parsed_response)
+    html = Torrentz.get('/search', q: query)
     
     entries = []
     html.css('.results > dl').each do |item|
       next unless item.text.include? '»'
       entries.push(
         id:       item.css('a').first.attr('href').slice(1),
-        title:    item.css('a').first.text,
-        rating:   item.css('.v').first.text,
-        date:     item.css('.a').first.text,
-        size:     item.css('.s').first.text,
-        seeders:  item.css('.u').first.text,
-        leachers: item.css('.d').first.text,
+        title:    item.css('a').first.try(:text),
+        rating:   item.css('.v').first.try(:text),
+        date:     item.css('.a').first.try(:text),
+        size:     item.css('.s').first.try(:text),
+        seeders:  item.css('.u').first.try(:text),
+        leachers: item.css('.d').first.try(:text),
       )
     end
 
     entries
+  end
+
+  def self.find(id)
+    Torrentz.find_magnet_link(id)
   end
 
 end

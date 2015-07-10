@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
-  namespace :torrents do
-    get :search
+  resources :torrents, only: [:show] do
+    get :search, on: :collection
   end
 
   get '*path' => 'app#show'

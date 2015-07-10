@@ -107,9 +107,9 @@ SearchResults = component 'AddTorrentForm-SearchResults',
         loaded: @renderSearchResults
 
   renderSearchResults: (results) ->
-    results = results.map (result) =>
+    results = results.map (result, index) =>
       SearchResult
-        key:        result.id,
+        key:        index,
         id:         result.id,
         title:      result.title,
         date:       result.date,
@@ -118,24 +118,27 @@ SearchResults = component 'AddTorrentForm-SearchResults',
         seeders:    result.seeders,
         size:       result.size,
         addTorrent: @props.addTorrent
+    # results = results.slice(0, 1)
 
     {div, table, thead, tr, th, tbody, td} = DOM
 
-
-    table
-      thead null,
-        tr null,
-          th null, 'Title'
-          th null, 'Rating'
-          th null, 'Age'
-          th null, 'Size'
-          th null, 'Seeders'
-          th null, 'Leachers'
-      tbody null,
-      if results.length == 0
-        tr(null, td(colSpan: 6, 'No results found :/'))
-      else
-        results
+    div 
+      className: 'table-responsive'
+      table 
+        className: 'table-striped table-bordered table-condensed'
+        thead null,
+          tr null,
+            th null, 'Title'
+            th null, 'Rating'
+            th null, 'Age'
+            th null, 'Size'
+            th null, 'Seeders'
+            th null, 'Leachers'
+        tbody null,
+        if results.length == 0
+          tr(null, td(colSpan: 6, 'No results found :/'))
+        else
+          results
 
 
 
@@ -152,6 +155,7 @@ SearchResult = component 'AddTorrentForm-SearchResult',
     addTorrent: React.PropTypes.func.isRequired
 
   render: ->
+    {tr, td, ActionLink} = DOM
     tr null,
       td null,
         ActionLink
@@ -169,6 +173,6 @@ SearchResult = component 'AddTorrentForm-SearchResult',
         @props.leachers
 
   addTorrent: ->
-    torrentz.getMagnetLink(@props.id).then (magnetLink) =>
-      @props.addTorrent(magnetLink)
+    Torrent.get(@props.id).then (torrent) =>
+      # @props.addTorrent(torrent.magnet_link)
 

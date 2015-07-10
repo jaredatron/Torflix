@@ -1,8 +1,11 @@
 class TorrentsController < ApplicationController
 
   def search
-    query = params[:q]
-    render json: Torrent.search(query)
+    render json: Torrent.search(params[:q])
+  end
+
+  def show
+    render json: Torrent.find(params[:id])
   end
 
 end

@@ -19,7 +19,7 @@ component 'TransfersList',
 
   componentDidMount: ->
     @context.putio.transfers.on('change', @transfersChanged)
-    # @context.putio.transfers.startPolling()
+    @context.putio.transfers.startPolling()
 
   componentWillUnmount: ->
     @context.putio.transfers.removeListener('change', @transfersChanged)
