@@ -14,11 +14,11 @@ Putio = @Putio =
     "#{@ENDPOINT}#{path}?oauth_token=#{@TOKEN}"
   
   get: (path, params) ->
-    console.info('PUTIO GET', path, params)
+    # console.info('PUTIO GET', path, params)
     qwest.get(Putio.url(path), params)
 
   post: (path, params) ->
-    console.info('PUTIO POST', path, params)
+    # console.info('PUTIO POST', path, params)
     qwest.post(Putio.url(path), params)
 
 Putio.cache = {}
@@ -27,7 +27,7 @@ Putio.account = {}
 
 Putio.account.info = Object.assign({}, EventEmitter.prototype)
 
-Putio.account.info.get = ->
+Putio.account.info.load = ->
   Putio.get('/account/info').then (response) =>
     Object.assign(this, response.info)
     @emit('change')
@@ -66,7 +66,7 @@ Putio.transfers.stopPolling = ->
 Putio.transfers.add = (url) ->
   Putio.post('/transfers/add', url: url).then (response) =>
     transfers.push response.transfer
-    Putio.account.info.get()
+    Putio.account.info.load()
     @emit('change')
     response
 
@@ -79,7 +79,7 @@ Putio.transfers.delete = (id) ->
     @emit('change')
     response
 
-  Putio.account.info.get()
+  Putio.account.info.load()
 
   return delete_transfer_promise unless transfer? && transfer.file_id
 
@@ -90,7 +90,7 @@ Putio.transfers.delete = (id) ->
 
 Putio.cache.files = {}
 Putio.cache.directory_contents = {}
-Putio.files = {}
+Putio.files = Object.assign({}, EventEmitter.prototype)
 
 Putio.files.get = (id) ->
   return Promise.resolve(file) if file = Putio.cache.files[id]
@@ -117,9 +117,10 @@ Putio.files.list = (parent_id) ->
 
 Putio.files.delete = (id) ->
   throw new Error("File ID required: #{id}") unless id
-  Putio.post('/files/delete', file_ids: id).then (response) =>
+  Putio.post('/files/delete', file_ids: id).then (response) ->
     delete Putio.cache.files[id]
-    Putio.account.info.get()
+    Putio.account.info.load()
+    Putio.files.emit("change:#{id}")
     response
 
 Putio.files.search = (query) ->

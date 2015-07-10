@@ -13,7 +13,7 @@ component 'Navbar',
 
   componentDidMount: ->
     Putio.account.info.on('change', @accountInfoChanged)
-    Putio.account.info.get()
+    Putio.account.info.load()
 
   componentWillUnmount: ->
     Putio.account.info.removeListener('change', @accountInfoChanged)

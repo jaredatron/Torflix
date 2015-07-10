@@ -132,6 +132,13 @@ Directory = component
   propTypes:
     directory: React.PropTypes.object.isRequired
 
+
+  componentDidMount: ->
+    Putio.files.on("change:#{@props.directory.id}", @forceUpdate)
+
+  componentWillUnmount: ->
+    Putio.files.removeListener("change:#{@props.directory.id}", @forceUpdate)
+
   getInitialState: ->
     expanded: @props.expanded
 
@@ -204,7 +211,6 @@ DirectoryContents = component
     @forceUpdate()
 
   renderFiles: (files) ->
-    console.log('rendering files for directory', @props.directory_id, files)
     sorter = @props.sortBy
     sorter = SORTERS[sorter] if typeof sorter == 'string'
 
