@@ -98,7 +98,8 @@ SearchResults = component 'AddTorrentForm-SearchResults',
     addTorrent: React.PropTypes.func  .isRequired
 
   render: ->
-    DOM.div
+    {div} = DOM
+    div
       className: 'AddTorrentForm-SearchResults',
       PromiseStateMachine
         promise: @props.promise
@@ -118,12 +119,10 @@ SearchResults = component 'AddTorrentForm-SearchResults',
         size:       result.size,
         addTorrent: @props.addTorrent
 
-    Table
-      responsive: true
-      striped: true
-      bordered: true
-      condensed: true
-      hover: true
+    {div, table, thead, tr, th, tbody, td} = DOM
+
+
+    table
       thead null,
         tr null,
           th null, 'Title'
