@@ -28,14 +28,17 @@ class << Sprockets::CoffeeScriptProcessor
     end
 
     range = [line - SNIPPIT_PADDING / 2, SNIPPIT_PADDING]
-    if range[0] < 0
-      range = [0,SNIPPIT_PADDING]
-    end
     if range[1] >= lines.length
       range = [lines.length - SNIPPIT_PADDING, SNIPPIT_PADDING]
     end
+    if range[0] < 0
+      range = [0,SNIPPIT_PADDING]
+    end
 
     lines.slice(*range).join("\n")
+  rescue
+    binding.pry
+    raise
   end
   
 end

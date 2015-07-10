@@ -11,7 +11,7 @@ component 'DeleteLink',
 
   onClick: ->
     @context.setPrompt =>
-      ConfirmationPrompt
+      DOM.ConfirmationPrompt
         abort:   'Don\'t Delete'
         confirm: 'Delete'
         onAbort:   @onAbort
