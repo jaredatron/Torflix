@@ -13,9 +13,11 @@ Putio = @Putio = (TOKEN) ->
     "#{ENDPOINT}#{path}?oauth_token=#{TOKEN}"
 
   putio.get = (path, params) ->
+    console.info('PUTIO GET', path, params)
     qwest.get(url(path), params)
 
   putio.post = (path, params) ->
+    console.info('PUTIO POST', path, params)
     qwest.post(url(path), params)
 
 

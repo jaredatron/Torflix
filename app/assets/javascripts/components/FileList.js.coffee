@@ -212,6 +212,7 @@ DirectoryContents = component
     @forceUpdate()
 
   renderFiles: (files) ->
+    console.log('rendering files for directory', @props.directory_id, files)
     sorter = @props.sortBy
     sorter = SORTERS[sorter] if typeof sorter == 'string'
 

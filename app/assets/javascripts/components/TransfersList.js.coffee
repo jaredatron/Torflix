@@ -112,7 +112,7 @@ TRANSPARENT = 'rgba(0, 0, 0, 0)'
 percentDoneGradientSyle = (percent_done) ->
   if percent_done < 100
     {
-      background: "linear-gradient(to right, #{GREEN} 0%, #{GREEN} #{percent_done}%, #{TRANSPARENT} #{percent_done}%, #{TRANSPARENT} 100%);"
+      background: "linear-gradient(to right, #{GREEN} 0%, #{GREEN} #{percent_done}%, #{TRANSPARENT} #{percent_done}%, #{TRANSPARENT} 100%)"
     }
   else
     {}
