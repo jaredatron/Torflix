@@ -9,4 +9,7 @@ component 'TransfersPage',
     params: React.PropTypes.object.isRequired
   
   render: ->
-    DOM.TransfersList()
+    DOM.div
+      className: 'TransfersPage'
+      DOM.AddTorrentForm()
+      DOM.TransfersList()

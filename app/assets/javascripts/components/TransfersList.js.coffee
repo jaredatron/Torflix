@@ -8,7 +8,7 @@ SORT = (a, b) ->
 component 'TransfersList',
 
   contextTypes:
-    putio: React.PropTypes.object.isReq uired
+    putio: React.PropTypes.object.isRequired
 
   getInitialState: ->
     transfers: @context.putio.transfers.toArray()
@@ -25,14 +25,19 @@ component 'TransfersList',
     @context.putio.transfers.removeListener('change', @transfersChanged)
     @context.putio.transfers.stopPolling()
 
-  transfers: ->
-    @state.transfers.sort(SORT)
+  renderTransfers: ->
+    if @state.transfers.length > 0
+      @state.transfers.sort(SORT).map (transfer) ->
+        Transfer(key: transfer.id, transfer: transfer)
+    else
+      DOM.div(null, 'loading...')
+    
 
   render: ->
     DOM.div
       className: 'TransfersList'
-      @transfers().map (transfer) ->
-        Transfer(key: transfer.id, transfer: transfer)
+      @renderTransfers()
+      
 
 Transfer = component
   displayName: 'TransfersList-Transfer',
