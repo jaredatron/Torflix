@@ -10,6 +10,7 @@ gem 'haml'
 gem 'bower-rails'
 gem 'therubyracer'
 gem 'httparty'
+gem 'puma'
 
 group :development, :test do
   gem 'rspec-rails'

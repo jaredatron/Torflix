@@ -174,5 +174,6 @@ SearchResult = component 'AddTorrentForm-SearchResult',
 
   addTorrent: ->
     Torrent.get(@props.id).then (torrent) =>
-      # @props.addTorrent(torrent.magnet_link)
+      @props.addTorrent(torrent.magnet_link)
+    
 
