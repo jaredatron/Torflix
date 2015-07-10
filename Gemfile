@@ -9,6 +9,7 @@ gem 'react-rails'
 gem 'haml'
 gem 'bower-rails'
 gem 'therubyracer'
+gem 'httparty'
 
 group :development, :test do
   gem 'rspec-rails'
