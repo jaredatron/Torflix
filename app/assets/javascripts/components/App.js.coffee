@@ -1,5 +1,5 @@
 #= require 'session'
-#= require 'putio'
+#= require 'Putio'
 #= require 'Location'
 #= require 'router'
 

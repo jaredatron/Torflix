@@ -14,7 +14,7 @@ component 'FileList',
 
   render: ->
     PromiseStateMachine
-      promise: Putio.files.get(@props.file_id)
+      promise: putio.files.get(@props.file_id)
       loaded: @renderFile
 
   renderFile: (file) ->
@@ -134,10 +134,10 @@ Directory = component
 
 
   componentDidMount: ->
-    Putio.files.on("change:#{@props.directory.id}", @forceUpdate)
+    putio.files.on("change:#{@props.directory.id}", @forceUpdate)
 
   componentWillUnmount: ->
-    Putio.files.removeListener("change:#{@props.directory.id}", @forceUpdate)
+    putio.files.removeListener("change:#{@props.directory.id}", @forceUpdate)
 
   getInitialState: ->
     expanded: @props.expanded
@@ -202,12 +202,12 @@ DirectoryContents = component
 
   render: ->
     PromiseStateMachine
-      promise: Putio.files.list(@props.directory_id)
+      promise: putio.files.list(@props.directory_id)
       loading: -> DOM.div(null, 'loading...')
       loaded: @renderFiles
 
   reload: ->
-    Putio.files.clearCache(@props.directory_id)
+    putio.files.clearCache(@props.directory_id)
     @forceUpdate()
 
   renderFiles: (files) ->
@@ -237,7 +237,7 @@ DeleteFileLink = component
     file: React.PropTypes.object.isRequired
 
   onDelete: ->
-    Putio.files.delete(@props.file.id).then =>
+    putio.files.delete(@props.file.id).then =>
       if @context.parentDirectory
         @context.parentDirectory.reload()
 

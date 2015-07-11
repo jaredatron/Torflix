@@ -37,7 +37,7 @@ component 'AddTorrentForm',
       searchResultsPromise: null
 
   addTorrent: (magnetLink) ->
-    Putio.transfers.add magnetLink
+    putio.transfers.add magnetLink
     @clear()
 
   scheduleSearch: ->
