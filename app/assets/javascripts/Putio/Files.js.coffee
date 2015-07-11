@@ -23,8 +23,8 @@ Putio.Files = class Files extends EventEmitter
     return Promise.resolve(files) if files
     @putio.get('/files/list', parent_id: parent_id).then (response) =>
       files = response.files
-      @directory_contents[parent_id] = files
-      files.forEach (file) -> @files_cache[file.id] = file
+      @directory_contents_cache[parent_id] = files
+      files.forEach (file) => @files_cache[file.id] = file
       files
 
   delete: (id) ->
