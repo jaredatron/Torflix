@@ -16,7 +16,8 @@ component 'TransfersList',
 
   componentDidMount: ->
     putio.transfers.on('change', @transfersChanged)
-    putio.transfers.startPolling()
+    # putio.transfers.startPolling()
+    putio.transfers.load()
 
   componentWillUnmount: ->
     putio.transfers.removeListener('change', @transfersChanged)

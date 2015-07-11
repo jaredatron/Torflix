@@ -13,8 +13,8 @@ Putio.Files = class Files extends EventEmitter
       @files_cache[file.id] = file
 
   uncache: (file_id) ->
-    delete @files_cahce[file_id]
-    delete @directory_contents_cahce[file_id]
+    delete @files_cache[file_id]
+    delete @directory_contents_cache[file_id]
     return this
 
   list: (parent_id) ->

@@ -207,10 +207,11 @@ DirectoryContents = component
       loaded: @renderFiles
 
   reload: ->
-    putio.files.clearCache(@props.directory_id)
+    putio.files.uncache(@props.directory_id)
     @forceUpdate()
 
   renderFiles: (files) ->
+    console.log('renderFiles:', files)
     sorter = @props.sortBy
     sorter = SORTERS[sorter] if typeof sorter == 'string'
 
@@ -237,7 +238,7 @@ DeleteFileLink = component
     file: React.PropTypes.object.isRequired
 
   onDelete: ->
-    putio.files.delete(@props.file.id).then =>
+    putio.files.delete(@props.file.id).complete =>
       if @context.parentDirectory
         @context.parentDirectory.reload()
 
