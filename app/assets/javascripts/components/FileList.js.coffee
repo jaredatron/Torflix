@@ -90,14 +90,25 @@ File = component
         FileDownloadLink(file_id: @props.file.id, div(className: 'subtle-text', 'download'))
         @size()
         PutioLink(file: @props.file)
-        DeleteFileLink(file: @props.file)
+        ChromecastLink(file_id: @props.file.id)
+        DeleteFileLink(file_id: @props.file.id)
+
+ChromecastLink = component
+  displayName: 'FileList-PutioLink',
+  render: ->
+    DOM.ExternalLink
+      href: "https://put.io/file/#{@props.file_id}/chromecast?subtitle=off"
+      className: 'FileList-PutioLink',
+      title: 'chromecast',
+      DOM.Glyphicon glyph: 'new-window'
 
 PutioLink = component
   displayName: 'FileList-PutioLink',
   render: ->
     DOM.ExternalLink 
-      href: "https://put.io/file/#{@props.file.id}"
+      href: "https://put.io/file/#{@props.file_id}"
       className: 'FileList-PutioLink',
+      title: 'put.io',
       DOM.Glyphicon glyph: 'new-window'
 
 FileDownloadLink = component

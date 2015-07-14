@@ -20,3 +20,4 @@ a user can instruct the app to automatically move shows to offline storage
 4. get tv RSS feed data
 5. find artwork for tv rss feed data
 6. build netflix like interface for tv shows
+7. impliment http://www.videojs.com/ player
