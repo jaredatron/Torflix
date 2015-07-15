@@ -19,7 +19,7 @@ component 'Navbar',
     putio.account.info.removeListener('change', @accountInfoChanged)
 
   render: ->
-    {div, span, img, ActionLink, LogoutButton, FileSize, ExternalLink} = DOM
+    {div, span, img, ActionLink, LogoutButton, FileSize, ExternalLink, TorrentSearchForm} = DOM
     {username, disk, avatar_url} = @state.accountInfo
 
     div(
@@ -31,7 +31,8 @@ component 'Navbar',
 
       ActionLink(href: '/shows',     'Shows')
       ActionLink(href: '/transfers', 'Transfers')
-      
+
+      TorrentSearchForm()
 
       div className: 'flex-spacer'
 
