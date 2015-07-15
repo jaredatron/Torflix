@@ -1,3 +1,15 @@
+class Tilt::CoffeeScriptTemplate
+
+  def evaluate_with_better_errors(scope, locals, &block)
+    evaluate_without_better_errors(scope, locals, &block)
+  rescue Exception => error
+    binding.pry
+  end
+
+  alias_method_chain :evaluate, :better_errors
+
+end
+
 # class << Sprockets::CoffeeScriptProcessor
 
 #   SYNTAX_ERROR_MESSAGE = /SyntaxError: \[stdin\]:(\d+):(\d+)/
