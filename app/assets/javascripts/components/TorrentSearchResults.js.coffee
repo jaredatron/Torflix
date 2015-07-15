@@ -7,9 +7,13 @@ component 'TorrentSearchResults',
     DOM.div
       className: 'TorrentSearchResults'
       PromiseStateMachine
+        key: "query-#{@props.query}"
         promise: Torrent.search(@props.query)
+        loadinf: ->
+          DOM.div(null, 'loading...')
         loaded: (results) =>
-          DOM.div
+          DOM.div 
+            className: ''
             results.map (result, index) ->
               DOM.div
                 key: index
