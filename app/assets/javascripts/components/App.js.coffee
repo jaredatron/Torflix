@@ -34,15 +34,23 @@ component 'App',
     Location.removeListener('change', @onChange)
 
   render: ->
-    console.log('APP RENDER', @state)
+    console.info('APP RENDER', @state)
 
     {div, Login, Layout} = DOM
 
     return Login() if !@state.loggedIn
       
-
-    Page = DOM[@state.params.component] || (=>
-      DOM.div(null, "ERROR: routed component not found: #{@state.params.component}")
-    )
+    Page = if @state.params.redirectTo?
+      setTimeout -> Location.setPath(@state.params.redirectTo)
+      DOM.div(null, "redirecting to #{@state.params.redirectTo}")
+    else
+      DOM[@state.params.component] || (=>
+        DOM.div(null, "ERROR: routed component not found: #{@state.params.component}")
+      )
 
     Layout(null, Page())
+
+
+
+
+

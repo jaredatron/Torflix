@@ -25,8 +25,8 @@ component 'Navbar',
     div(
       className: 'Navbar flex-row',
 
-      ExternalLink
-        href: '//put.io'
+      ActionLink
+        href: '/'
         img src: '//put.io/images/tinylogo.png'
 
       ActionLink(href: '/shows',     'Shows')
