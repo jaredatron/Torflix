@@ -25,11 +25,10 @@ component 'TorrentSearchForm',
   
   render: ->
     {div, Form} = DOM
-    Form(
+    Form
       className: 'TorrentSearchForm'
       onSubmit: @onSubmit
       DOM.input
         ref: 'input'
         value: @state.value
         onChange: @onChange
-    )
