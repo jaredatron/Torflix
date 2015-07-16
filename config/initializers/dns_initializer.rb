@@ -9,3 +9,5 @@ Resolv::DefaultResolver.replace_resolvers([
   Resolv::Hosts.new,
   Resolv::DNS.new(nameserver: ['8.8.8.8','208.201.224.33','208.201.224.11'])
 ])
+
+require 'resolv-replace'
