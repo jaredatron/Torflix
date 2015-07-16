@@ -12,6 +12,7 @@ gem 'bower-rails'
 gem 'therubyracer'
 gem 'httparty'
 gem 'puma'
+gem 'uglifier'
 
 group :development, :test do
   gem 'rspec-rails'
