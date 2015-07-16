@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails'
 gem 'pg'
+gem 'jquery-rails'
 gem 'sass-rails'
 gem 'coffee-rails'
 gem 'react-rails'
@@ -14,7 +15,6 @@ gem 'puma'
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'jquery-rails'
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'pry-rails'
