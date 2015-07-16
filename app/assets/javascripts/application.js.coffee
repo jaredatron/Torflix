@@ -14,3 +14,6 @@ getPutioTokenFromHash()
 
 $ -> 
   React.render(DOM.App(), document.body)
+
+$(window).on 'unload', (event) ->
+  document.body.innerHTML = ''

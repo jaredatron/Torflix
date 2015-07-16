@@ -104,6 +104,8 @@ SearchResults = component 'AddTorrentForm-SearchResults',
         loaded: @renderSearchResults
 
   renderSearchResults: (results) ->
+    {div, table, thead, tr, th, tbody, td} = DOM
+    
     results = results.map (result, index) =>
       SearchResult
         key:        index,
@@ -115,9 +117,6 @@ SearchResults = component 'AddTorrentForm-SearchResults',
         seeders:    result.seeders,
         size:       result.size,
         addTorrent: @props.addTorrent
-    # results = results.slice(0, 1)
-
-    {div, table, thead, tr, th, tbody, td} = DOM
 
     div 
       className: 'table-responsive'

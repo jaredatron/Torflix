@@ -157,17 +157,22 @@ Directory = component
     @setState expanded: !@state.expanded
 
   chevron: ->
-    Glyphicon
+    DOM.Glyphicon
       className: 'FileList-Directory-status-icon', 
       glyph: if @state.expanded then 'chevron-down'else 'chevron-right'
 
   render: ->
-    {div, ActionLink, DeleteFileLink, FileSize} = DOM
+    {div, ActionLink, FileSize} = DOM
 
     div className: 'FileList-Directory',
       div className: 'FileList-row flex-row',
+        @chevron()
+        ActionLink
+          className: 'FileList-Directory-name'
+          onClick: @toggle
+          @props.directory.name
         div 
-          className: 'FileList-File-size'
+          className: 'FileList-Directory-size'
           FileSize(size: @props.directory.size)
 
         DeleteFileLink file: @props.directory

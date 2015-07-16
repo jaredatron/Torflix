@@ -16,7 +16,7 @@ component 'TransfersList',
 
   componentDidMount: ->
     putio.transfers.on('change', @transfersChanged)
-    # putio.transfers.startPolling()
+    putio.transfers.startPolling()
     putio.transfers.load()
 
   componentWillUnmount: ->
@@ -72,8 +72,9 @@ Transfer = component
       when 'COMPLETING'  then 'wrench'
       when 'SEEDING'     then 'open'
       when 'COMPLETED'   then 'ok'
+      when 'ERROR'       then 'warning-sign'
       else
-        console.log('UNKNOWN transfer status', @props.transfer.status)
+        console.log('UNKNOWN transfer status:', @props.transfer.status)
         'question-sign'
 
     DOM.Glyphicon glyph: glyph, className: 'TransfersList-Transfer-statusIcon'
@@ -93,7 +94,7 @@ Transfer = component
     div
       className: 'TransfersList-Transfer',
       'data-status': transfer.status,
-      style: percentDoneGradientSyle(transfer.percent_done),
+      style: percentDoneGradientSyle(transfer),
 
       div className: 'flex-row',
         @statusIcon()
@@ -107,13 +108,13 @@ Transfer = component
 
 GREEN = 'rgba(41,154,11, 0.5)'
 TRANSPARENT = 'rgba(0, 0, 0, 0)'
-percentDoneGradientSyle = (percent_done) ->
-  if percent_done < 100
-    {
-      background: "linear-gradient(to right, #{GREEN} 0%, #{GREEN} #{percent_done}%, #{TRANSPARENT} #{percent_done}%, #{TRANSPARENT} 100%)"
-    }
-  else
-    {}
+percentDoneGradientSyle = (transfer) ->
+  return unless transfer.status == 'DOWNLOADING'
+  return unless transfer.percent_done < 100
+  percent_done = transfer.percent_done
+  {
+    backgroundImage: "linear-gradient(to right, #{GREEN} 0%, #{GREEN} #{percent_done}%, #{TRANSPARENT} #{percent_done}%, #{TRANSPARENT} 100%)"
+  }
 
 DeleteTransferLink = component 
   displayName: 'TransfersList-DeleteTransferLink',

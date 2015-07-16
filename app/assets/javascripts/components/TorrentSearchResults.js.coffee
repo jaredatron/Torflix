@@ -9,13 +9,55 @@ component 'TorrentSearchResults',
       PromiseStateMachine
         key: "query-#{@props.query}"
         promise: Torrent.search(@props.query)
-        loadinf: ->
+        loading: ->
           DOM.div(null, 'loading...')
-        loaded: (results) =>
-          DOM.div 
-            className: ''
-            results.map (result, index) ->
-              DOM.div
-                key: index
-                result.title
-      
+        loaded: @renderResults
+
+  renderResults: (results) ->
+    {div, table, thead, tr, th, tbody, td} = DOM
+    
+    results = results.map (result, index) =>
+      SearchResult key: index, result: result
+
+    div 
+      className: 'table-responsive'
+      table 
+        className: 'table-striped table-bordered table-condensed'
+        thead null,
+          tr null,
+            th null, 'Title'
+            th null, 'Rating'
+            th null, 'Age'
+            th null, 'Size'
+            th null, 'Seeders'
+            th null, 'Leachers'
+        tbody null,
+        if results.length == 0
+          tr(null, td(colSpan: 6, 'No results found :/'))
+        else
+          results
+
+
+SearchResult = component
+
+  displayName: 'AddTorrentForm-SearchResult'
+
+  propTypes:
+    result: React.PropTypes.object.isRequired
+
+  render: ->
+    result = @props.result
+    {tr, td, ActionLink} = DOM
+    tr null,
+      td null, ActionLink onClick: @addTorrent, result.title
+      td null, result.rating
+      td null, result.date
+      td null, result.size
+      td null, result.seeders
+      td null, result.leachers
+
+  addTorrent: ->
+    Location.set('/transfers')
+    Torrent.add(@props.result.id)
+    
+

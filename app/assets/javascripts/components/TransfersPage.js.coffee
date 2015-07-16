@@ -10,6 +10,5 @@ component 'TransfersPage',
   render: ->
     DOM.div
       className: 'TransfersPage'
-      DOM.AddTorrentForm()
       DOM.TransfersList()
       @renderPrompt()
