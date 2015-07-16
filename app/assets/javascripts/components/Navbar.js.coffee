@@ -31,6 +31,7 @@ component 'Navbar',
 
       ActionLink(href: '/shows',     'Shows')
       ActionLink(href: '/transfers', 'Transfers')
+      ActionLink(href: '/files',     'Files')
 
       TorrentSearchForm()
 
