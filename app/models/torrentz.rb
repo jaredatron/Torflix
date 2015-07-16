@@ -1,6 +1,6 @@
 class Torrentz
 
-  ENDPOINT = 'http://torrentz.eu/'.freeze
+  ENDPOINT = 'https://torrentz.eu/'.freeze
 
   def self.get(path, params={})
     url = URI.parse(ENDPOINT)
