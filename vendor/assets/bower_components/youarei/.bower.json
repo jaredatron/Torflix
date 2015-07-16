@@ -1,0 +1,33 @@
+{
+  "name": "youarei",
+  "version": "1.0.1",
+  "homepage": "https://github.com/purge/youarei.js",
+  "authors": [
+    "Simon Elliott <simon@papercreatures.com>"
+  ],
+  "description": "Micro URI parser with sane querystring",
+  "main": "dist/youarei.min.js",
+  "keywords": [
+    "uri",
+    "url",
+    "querystring",
+    "query"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "1.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.0.1",
+    "commit": "efe06b3f05656aec034418c5a4e0c3294df2953f"
+  },
+  "_source": "git@github.com:purge/youarei.js.git",
+  "_target": "*",
+  "_originalSource": "git@github.com:purge/youarei.js.git"
+}

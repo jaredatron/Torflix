@@ -29,13 +29,13 @@ component 'TransfersList',
         Transfer(key: transfer.id, transfer: transfer)
     else
       DOM.div(null, 'loading...')
-    
+
 
   render: ->
     DOM.div
       className: 'TransfersList'
       @renderTransfers()
-      
+
 
 Transfer = component
   displayName: 'TransfersList-Transfer',
@@ -72,7 +72,7 @@ Transfer = component
       when 'COMPLETING'  then 'wrench'
       when 'SEEDING'     then 'open'
       when 'COMPLETED'   then 'ok'
-      when 'ERROR'       then 'warning-sign'
+      when 'ERROR'       then 'question-sign'
       else
         console.log('UNKNOWN transfer status:', @props.transfer.status)
         'question-sign'
@@ -113,7 +113,7 @@ percentDoneGradientSyle = (transfer) ->
     backgroundImage: "linear-gradient(to right, #{GREEN} 0%, #{GREEN} #{percent_done}%, #{TRANSPARENT} #{percent_done}%, #{TRANSPARENT} 100%)"
   }
 
-DeleteTransferLink = component 
+DeleteTransferLink = component
   displayName: 'TransfersList-DeleteTransferLink',
 
   propTypes:
