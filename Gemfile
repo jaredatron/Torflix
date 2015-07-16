@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.2.2'
+
 gem 'rails'
 gem 'pg'
 gem 'jquery-rails'
@@ -23,3 +25,6 @@ group :development, :test do
   gem 'dotenv-rails'
 end
 
+group :production do
+  gem 'rails_12factor'
+end
