@@ -1,6 +1,6 @@
 #= require 'mixins/DepthMixin'
 
-component 'FileListMember',
+component 'File',
 
   mixins: [DepthMixin]
 
@@ -16,12 +16,12 @@ component 'FileListMember',
   newIcon: ->
     if @isNew()
       DOM.div 
-        className: 'FileList-File-newIcon',
+        className: 'File-newIcon',
         DOM.Glyphicon(glyph:'asterisk')
 
   size: ->
     DOM.div 
-      className: 'FileList-File-size', 
+      className: 'File-size', 
       DOM.FileSize(size: @props.file.size)
 
   name: ->
@@ -32,61 +32,62 @@ component 'FileListMember',
       )
     else
       DOM.div(className: 'flex-spacer',
-        DOM.Glyphicon(glyph:'file', className: 'FileList-File-icon'),
+        DOM.Glyphicon(glyph:'file', className: 'File-icon'),
         DOM.span(null, @props.file.name),
       )
 
   render: ->
     {div} = DOM
-    div className: 'FileList-File',
-      div className: 'FileList-row flex-row',
+    div className: 'File',
+      div className: 'File-row flex-row',
         div(style: @depthStyle())
         @name()
         @newIcon()
-        FileDownloadLink(file_id: @props.file.id, div(className: 'subtle-text', 'download'))
-        @size()
+        DownloadLink(file_id: @props.file.id, div(className: 'subtle-text', 'download'))
         PutioLink(file: @props.file)
         ChromecastLink(file_id: @props.file.id)
-        DOM.DeleteFileLink(file_id: @props.file.id)
+        @size()
+        DOM.DeleteFileLink(file: @props.file)
 
 ChromecastLink = component
-  displayName: 'FileList-ChromecastLink',
+  displayName: 'File-ChromecastLink',
   render: ->
     DOM.ExternalLink
       href: "https://put.io/file/#{@props.file_id}/chromecast?subtitle=off"
-      className: 'FileList-PutioLink',
+      className: 'File-ChromecastLink',
       title: 'chromecast',
       DOM.Glyphicon glyph: 'new-window'
 
 PutioLink = component
-  displayName: 'FileList-PutioLink',
+  displayName: 'File-PutioLink',
   render: ->
     DOM.ExternalLink 
       href: "https://put.io/file/#{@props.file_id}"
-      className: 'FileList-PutioLink',
+      className: 'File-PutioLink',
       title: 'put.io',
       DOM.Glyphicon glyph: 'new-window'
 
-FileDownloadLink = component
-  displayName: 'FileList-FileDownloadLink',
+DownloadLink = component
+  displayName: 'File-DownloadLink',
   propTypes:
     file_id: React.PropTypes.number.isRequired
   render: ->
     props = Object.assign({}, @props)
     props.href = "https://put.io/v2/files/#{@props.file_id}/download"
+    props.className = 'File-DownloadLink'
     DOM.DownloadLink(props)
 
 
 
 PlayVideoLink = component
-  displayName: 'FileList-PlayVideoLink',
+  displayName: 'File-PlayVideoLink',
   propTypes:
     file: React.PropTypes.object.isRequired
   render: ->
     DOM.LinkToPlayVideo(
       className: @props.className,
       file_id: @props.file.id,
-      DOM.Glyphicon(glyph:'facetime-video', className: 'FileList-File-icon'),
+      DOM.Glyphicon(glyph:'facetime-video', className: 'File-icon'),
       @props.file.name,
     )
 

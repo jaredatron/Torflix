@@ -13,6 +13,7 @@ component 'DeleteFileLink',
 
   render: ->
     DOM.DeleteLink
+      className: 'DeleteFileLink'
       onDelete: @onDelete
       question: =>
         "Are you sure you want to delete #{@props.file.name}?"

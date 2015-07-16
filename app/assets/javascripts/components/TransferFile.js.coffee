@@ -1,10 +1,7 @@
-#= require 'PromiseStateMachine'
-#= require 'mixins/DepthMixin'
-
 isDirectory = (file) ->
   file.content_type == "application/x-directory"
 
-component 'FileList',
+component 'TransferFile',
 
   propTypes:
     file_id: React.PropTypes.number.isRequired
@@ -19,10 +16,10 @@ component 'FileList',
       loaded: @renderFile
 
   renderFile: (file) ->
-    DOM.div className: 'FileList',
+    DOM.div className: 'TransferFile',
       if isDirectory(file)
         DOM.DirectoryContents(directory_id: @props.file_id)
       else
-        DOM.FileListMember(file: file)
+        DOM.File(file: file)
 
 

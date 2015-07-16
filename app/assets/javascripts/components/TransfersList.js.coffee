@@ -81,13 +81,10 @@ Transfer = component
 
   files: ->
     if @completed() && @state.expanded
-      DOM.FileList file_id: @props.transfer.file_id
+      DOM.TransferFile file_id: @props.transfer.file_id
 
   render: ->
     transfer = @props.transfer
-
-    # transfer.estimated_time
-    # transfer.percent_done
 
     {div, FileSize} = DOM
 

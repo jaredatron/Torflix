@@ -1,4 +1,4 @@
-#= require 'mixins/DepthMixin'
+#= require 'ReactPromptMixin'
 
 SORTERS =
 
@@ -25,6 +25,8 @@ isDirectory = (file) ->
 
 component 'DirectoryContents',
 
+  mixins: [DepthMixin]
+
   propTypes:
     directory_id: React.PropTypes.number.isRequired
     sortBy:       React.PropTypes.any
@@ -38,78 +40,32 @@ component 'DirectoryContents',
   getChildContext: ->
     parentDirectory: this
 
-  render: ->
-    PromiseStateMachine
-      promise: putio.files.list(@props.directory_id)
-      loading: -> DOM.div(null, 'loading...')
-      loaded: @renderFiles
-
   reload: ->
+    debugger
     putio.files.uncache(@props.directory_id)
     @forceUpdate()
 
+  render: ->
+    PromiseStateMachine
+      promise: putio.files.list(@props.directory_id)
+      loading: => DOM.div(style: @depthStyle(), 'loading...')
+      loaded: @renderFiles
+
   renderFiles: (files) ->
-    console.log('renderFiles:', files)
     sorter = @props.sortBy
     sorter = SORTERS[sorter] if typeof sorter == 'string'
 
-    DOM.div className: 'FileList-DirectoryContents',
+    DOM.div className: 'DirectoryContents',
       if files.length > 0
         files.sort(sorter).map(@renderFile)
       else
-        DOM.div(className: 'empty', 'empty')
+        DOM.div(className: 'empty', style: @depthStyle(), 'empty')
 
   renderFile: (file) ->
     if isDirectory(file)
-      Directory(key: file.id, directory: file)
+      DOM.Directory(key: file.id, directory: file)
     else
-      DOM.FileListMember(key: file.id, file: file)
+      DOM.File(key: file.id, file: file)
 
-
-
-Directory = component
-  displayName: 'DirectoryContents-Directory',
-
-  mixins: [DepthMixin]
-
-  propTypes:
-    directory: React.PropTypes.object.isRequired
-
-
-  componentDidMount: ->
-    putio.files.on("change:#{@props.directory.id}", @forceUpdate)
-
-  componentWillUnmount: ->
-    putio.files.removeListener("change:#{@props.directory.id}", @forceUpdate)
-
-  getInitialState: ->
-    expanded: @props.expanded
-
-  toggle: ->
-    @setState expanded: !@state.expanded
-
-  chevron: ->
-    DOM.Glyphicon
-      className: 'FileList-Directory-status-icon', 
-      glyph: if @state.expanded then 'chevron-down'else 'chevron-right'
-
-  render: ->
-    {div, ActionLink, FileSize} = DOM
-
-    div className: 'FileList-Directory',
-      div className: 'FileList-row flex-row',
-        @chevron()
-        ActionLink
-          className: 'FileList-Directory-name'
-          onClick: @toggle
-          @props.directory.name
-        div 
-          className: 'FileList-Directory-size'
-          FileSize(size: @props.directory.size)
-
-        DOM.DeleteFileLink file: @props.directory
-
-      if @state.expanded
-        DOM.DirectoryContents(directory_id: @props.directory.id)
 
 
