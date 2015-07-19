@@ -1,16 +1,16 @@
-development: &default
+default: &default
   adapter: postgresql
-  database: Torflix_development
-  min_messages: WARNING
+  encoding: unicode
   pool: 5
-  username: postgres
-  host: <%= ENV['TORFLIX_DB_1_PORT_5432_TCP_ADDR'] %>
-  port: <%= ENV['TORFLIX_DB_1_PORT_5432_TCP_PORT'] %>
+
+development:
+  <<: *default
+  database: torflix
 
 test:
   <<: *default
-  database: Torflix_test
+  database: torflix_test
 
 production:
   <<: *default
-  database: Torflix_production
+  database: torflix
