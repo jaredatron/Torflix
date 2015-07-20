@@ -23,14 +23,17 @@ Putio.Transfers = class Transfers extends EventEmitter
   startPolling: ->
     return this if @polling
     @polling = true
-    TRANSFER_POLL_DELAY = @TRANSFER_POLL_DELAY
+
+    scheduleLoad = =>
+      setTimeout(load, @TRANSFER_POLL_DELAY)
+
     load = =>
-      return unless @polling
-      @load()
-        .then ->
-          setTimeout(load, TRANSFER_POLL_DELAY)
-        .catch ->
-          setTimeout(load, TRANSFER_POLL_DELAY)
+      return if !@polling
+      if document.visibilityState == "visible"
+        @load().then(scheduleLoad).catch(scheduleLoad)
+      else
+        scheduleLoad()
+
     load()
     this
 
@@ -63,9 +66,5 @@ Putio.Transfers = class Transfers extends EventEmitter
 
 
 
-
-
-document.addEventListener "visibilitychange", (event) ->
-  document.title = document.visibilityState
 
 
