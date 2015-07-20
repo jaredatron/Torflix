@@ -13,8 +13,8 @@ gem 'haml'
 gem 'bower-rails'
 gem 'therubyracer'
 gem 'httparty'
-gem 'puma'
 gem 'uglifier'
+gem 'unicorn-rails'
 
 group :development, :test do
   gem 'rspec-rails'
