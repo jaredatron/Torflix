@@ -16,6 +16,8 @@
 
 
 $ ->
+  console.log('ASSET VERSION: ', App.GIT_SHA)
+  console.log('APP   VERSION: ', ENV.GIT_SHA)
   if App.GIT_SHA != ENV.GIT_SHA
     console.error('assets out of date')
   React.render(DOM.App(), document.body)
