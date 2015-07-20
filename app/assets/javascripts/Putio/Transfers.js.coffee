@@ -4,15 +4,17 @@ Putio.Transfers = class Transfers extends EventEmitter
 
   constructor: (putio) ->
     @putio = putio
-    @cache = []
+    @cache = {}
     @polling = false
 
   toArray: ->
-    [].concat(@cache) # clone
+    Object.keys(@cache).map (key) => @cache[key]
 
   load: ->
     @putio.get('/transfers/list').then (response) =>
-      @cache = response.transfers
+      @cache = {}
+      response.transfers.forEach (transfer) =>
+        @cache[transfer.id] = transfer
       # @cache = response.transfers.map (props) ->
       #   new Transfer(props)
       @emit('change')
@@ -41,9 +43,14 @@ Putio.Transfers = class Transfers extends EventEmitter
     @polling = false
     this
 
+  get: (id) ->
+    return Promise.resolve(@cache[id]) if id of @cache
+    @putio.get("/transfers/#{id}").then (response) =>
+      @cache[id] = response.transfer
+
   add: (url) ->
     @putio.post('/transfers/add', url: url).then (response) =>
-      @cache.push response.transfer
+      @cache[response.transfer.id] = response.transfer
       @putio.account.info.load()
       @emit('change')
       response

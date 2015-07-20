@@ -1,6 +1,5 @@
-#= require 'eventemitter3'
-#= require 'Object.assign'
-#= require 'qwest'
+#= require eventemitter3
+#= require Object.assign
 
 @Torrent = class Torrent
   constructor: ->

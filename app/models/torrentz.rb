@@ -7,7 +7,7 @@ class Torrentz
     url.path = path
     url.query = params.to_query
     Rails.logger.warn "Torrentz.get(#{url.to_s.inspect})"
-    response = HTTParty.get(url)
+    response = HTTParty.get(url, query: params)
     raise response.inspect unless response.code == 200
     Nokogiri::HTML(response.parsed_response)
   end

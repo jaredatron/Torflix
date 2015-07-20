@@ -3,6 +3,7 @@ App.request = (method, url, params) ->
     method: method
     url: url
     data: params
+    dataType: 'json'
 
   new Promise (resolve, reject) ->
     request.done (result) ->

@@ -17,7 +17,7 @@ component 'TorrentSearchForm',
 
   onSubmit: (event) ->
     event.preventDefault()
-    return if @valueIsBlank()
+    # return if @valueIsBlank()
     if @valueIsMagnetLink()
       App.putio.transfers.add @state.value
       @clear()
