@@ -8,7 +8,7 @@ system %(git log -1 #{SHA} --decorate)
 
 REMOTE_SCRIPT = <<-SH
   git fetch &&
-  git reset --hard ${SHA} &&
+  git reset --hard #{SHA} &&
   bundle exec rake -v assets:clobber assets:precompile db:migrate
 SH
 
