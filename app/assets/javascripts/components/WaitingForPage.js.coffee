@@ -38,8 +38,8 @@ component 'WaitingForPage',
       className: 'ShowPage'
       if @state.transfer_id
         PromiseStateMachine
-          promise: App.putio.transfers.get(@context.params.show_id)
-          loaded: @renderTransfers
+          promise: App.putio.transfers.get(@state.transfer_id)
+          loaded: @renderTransfer
 
   renderTransfer: (transfer) ->
     console.log(transfer)

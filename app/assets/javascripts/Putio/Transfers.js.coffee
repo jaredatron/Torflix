@@ -44,6 +44,8 @@ Putio.Transfers = class Transfers extends EventEmitter
     this
 
   get: (id) ->
+    debugger if 'number' != typeof id
+    throw Error('id must be a number') if 'number' != typeof id
     return Promise.resolve(@cache[id]) if id of @cache
     @putio.get("/transfers/#{id}").then (response) =>
       @cache[id] = response.transfer
