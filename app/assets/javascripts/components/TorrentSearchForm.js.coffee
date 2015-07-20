@@ -6,23 +6,38 @@ component 'TorrentSearchForm',
   getValue: ->
     @refs.input.getDOMNode().value
 
+  valueIsBlank: ->
+    @state.value.match(/^\s*$/)
+
+  valueIsMagnetLink: ->
+    @state.value.match(/^magnet:/)
+
+  clear: ->
+    @setState value: ''
+
   onSubmit: (event) ->
     event.preventDefault()
-    Location.set("/search?s=#{encodeURIComponent(@getValue())}")
+    return if @valueIsBlank()
+    if @valueIsMagnetLink()
+      putio.transfers.add @state.value
+      @clear()
+    else
+      Location.set("/search?s=#{encodeURIComponent(@getValue())}")
+
 
   onChange: (event) ->
     @setState value: @getValue()
 
   componentDidMount: ->
     Location.on('change', @setValueFromParams)
-  
+
   componentWillUnmount: ->
     Location.off('change', @setValueFromParams)
 
   setValueFromParams: ->
     return unless Location.path == '/search'
     @setState value: (Location.params.s || "")
-  
+
   render: ->
     {div, Form} = DOM
     Form
