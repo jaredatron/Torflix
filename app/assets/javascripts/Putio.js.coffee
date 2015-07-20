@@ -1,6 +1,5 @@
 #= require eventemitter3
 #= require Object.assign
-#= require qwest
 #= require_self
 #= require_tree ./Putio
 
@@ -30,16 +29,5 @@
     @request('post', path, params)
 
   request: (method, path, params) ->
-    request = $.ajax
-      method: method
-      url: @url(path)
-      data: params
-    new Promise (resolve, reject) ->
-      request.done (result) ->
-        resolve(result)
-      request.error (xhr, textStatus, errorThrown) ->
-        error = new Error('Putio request failed: '+textStatus+' / '+errorThrown)
-        error.xhr = xhr
-        reject(error)
-
+    App.request(method, @url(path), params)
 

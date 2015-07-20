@@ -28,7 +28,7 @@
       .then (payload) =>
         @setState loaded: true, payload: payload
       .catch (error) =>
-        raise error
+        throw error
 
   render: ->
     switch

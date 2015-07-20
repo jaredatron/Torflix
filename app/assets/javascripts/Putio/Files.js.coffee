@@ -11,7 +11,7 @@ Putio.Files = class Files extends EventEmitter
     return Promise.resolve(files_cache[id]) if id of files_cache
     @putio.get("/files/#{id}")
       .then (response) ->
-        files_cache[id] = response.file
+        files_cache[id] = new Putio.File(response.file)
       .catch (error) ->
         throw error if error.xhr.status != 404
         files_cache[id] = null
@@ -31,7 +31,7 @@ Putio.Files = class Files extends EventEmitter
       .then (response) ->
         files = response.files
         directory_contents_cache[parent_id] = files
-        files.forEach (file) => files_cache[file.id] = file
+        files.forEach (file) => files_cache[file.id] = new Putio.File(file)
         files
       .catch (error) ->
         throw error if error.xhr.status != 404

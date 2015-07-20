@@ -11,11 +11,14 @@
     "#{@ENDPOINT}#{path}"
 
   @search = (query) ->
-    qwest.get(@url('/search'), q: query)
+    @request('get', '/search', query)
 
   @get = (id) ->
-    qwest.get(@url("/#{id}"))
+    @request('get', "/#{id}")
 
   @add = (id) ->
     @get(id).then (torrent) ->
       App.putio.transfers.add torrent.magnet_link
+
+  @request = (method, path, params) ->
+    App.request(method, @url(path), params)
