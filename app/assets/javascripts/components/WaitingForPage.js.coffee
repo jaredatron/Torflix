@@ -7,22 +7,12 @@ component 'WaitingForPage',
     params: React.PropTypes.object.isRequired
 
   getInitialState: ->
-    transfers: App.putio.transfers.toArray()
-    transfer: null
+    magnet_link = @context.params.link
+    transfer_wait_machine: new TransferWaitMachine(magnet_link)
 
   transfersChanged: ->
-    setTimeout =>
-      magnetLink = @context.params.link
-      transfers = App.putio.transfers.toArray()
-      transfer_id = null
-      transfers.forEach (transfer) ->
-        transfer_id = transfer.id if (
-          transfer.magneturi = magnetLink ||
-          transfer.source = magnetLink
-        )
-      @setState
-        transfers: transfers
-        transfer_id: transfer_id
+    App.putio.transfers.findByMagnetLink(@state.magnet_link).then (transfer) =>
+      @setState transfer: transfer
 
   componentDidMount: ->
     App.putio.transfers.on('change', @transfersChanged)
@@ -36,12 +26,18 @@ component 'WaitingForPage',
   render: ->
     DOM.div
       className: 'ShowPage'
-      if @state.transfer_id
+      if @state.transfer
+        DOM.div(null, JSON.stringify(@state.transfer))
         PromiseStateMachine
-          promise: App.putio.transfers.get(@state.transfer_id)
-          loaded: @renderTransfer
+          promise: App.putio.files.get(@state.transfer.file_id)
+          loaded: @redirectToFile
 
-  renderTransfer: (transfer) ->
-    console.log(transfer)
-    DOM.div(null, JSON.stringify(transfer))
+  redirectToFile: (x) ->
+    debugger
 
+
+
+
+# waiting for transfer
+# waiting for transfer to finish download
+# finding video

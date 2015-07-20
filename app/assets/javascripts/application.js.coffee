@@ -1,3 +1,4 @@
+#= require 'Array.prototype.find'
 #= require jquery
 #= require video
 #= require react

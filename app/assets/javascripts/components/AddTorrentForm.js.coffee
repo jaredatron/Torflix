@@ -36,8 +36,8 @@ component 'AddTorrentForm',
       searchTimeout: null
       searchResultsPromise: null
 
-  addTorrent: (magnetLink) ->
-    App.putio.transfers.add magnetLink
+  addTorrent: (magnet_link) ->
+    App.putio.transfers.add magnet_link
     @clear()
 
   scheduleSearch: ->
