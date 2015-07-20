@@ -1,5 +1,5 @@
 @PromiseStateMachine = React.createFactory React.createClass
-  
+
   displayName: 'PromiseStateMachine'
 
   propTypes:
@@ -12,7 +12,6 @@
     loading: ->
       DOM.span()
     failed: (error) ->
-      console.error(error)
       DOM.span(null,"Error: #{error}")
 
   getInitialState: ->
@@ -22,10 +21,14 @@
 
   componentDidMount: ->
     @props.promise
+      .catch (error) =>
+        console.warn('ERROR caught by PromiseStateMachine')
+        console.error(error)
+        @setState loaded: true, error: error
       .then (payload) =>
         @setState loaded: true, payload: payload
       .catch (error) =>
-        @setState loaded: true, error: error
+        raise error
 
   render: ->
     switch

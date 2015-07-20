@@ -10,7 +10,7 @@ getState = ->
 
 
 component 'App',
-  
+
   childContextTypes:
     path:     React.PropTypes.string.isRequired
     params:   React.PropTypes.object.isRequired
@@ -27,7 +27,7 @@ component 'App',
 
   componentDidMount: ->
     Location.on('change', @onChange)
-    session.on('change', @onChange)
+    session.on('change:put_io_access_token', @onChange)
 
   componentWillUnmount: ->
     session.removeListener('change', @onChange)
@@ -39,7 +39,7 @@ component 'App',
     {div, Login, Layout} = DOM
 
     return Login() if !@state.loggedIn
-      
+
     Page = if @state.params.redirectTo?
       setTimeout => Location.setPath(@state.params.redirectTo)
       (=> DOM.div(null, "redirecting to #{@state.params.redirectTo}"))
@@ -47,7 +47,7 @@ component 'App',
       DOM[@state.params.component] || (=>
         DOM.div(null, "ERROR: routed component not found: #{@state.params.component}")
       )
-      
+
     Layout(null, Page())
 
 

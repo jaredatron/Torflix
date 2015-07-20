@@ -43,11 +43,23 @@ Transfer = component
   PropTypes:
     transfer: React.PropTypes.object.isRequired
 
-  getInitialState: ->
-    expanded: false
+  sessionKey: ->
+    "TransfersList-Transfer-#{@props.transfer.id}-expanded"
+
+  reload: ->
+    @forceUpdate()
+
+  componentDidMount: ->
+    session.on("change:#{@sessionKey()}", @reload)
+
+  componentWillUnmount: ->
+    session.removeListener("change:#{@sessionKey()}", @reload)
+
+  expanded: ->
+    session(@sessionKey()) || false
 
   toggle: ->
-    @setState expanded: !@state.expanded
+    session(@sessionKey(), !@expanded())
 
   completed: ->
     @props.transfer.status == "COMPLETED" ||
@@ -80,7 +92,7 @@ Transfer = component
     DOM.Glyphicon glyph: glyph, className: 'TransfersList-Transfer-statusIcon'
 
   files: ->
-    if @completed() && @state.expanded
+    if @completed() && @expanded()
       DOM.TransferFile file_id: @props.transfer.file_id
 
   render: ->

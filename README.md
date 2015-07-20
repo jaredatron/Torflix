@@ -14,6 +14,7 @@ a user can instruct the app to automatically move shows to offline storage
 
 ## TODO
 
+0. keep directories open via localStorage
 0. impliment http://www.videojs.com/ player
 0. get tv RSS feed data
 0. find artwork for tv rss feed data

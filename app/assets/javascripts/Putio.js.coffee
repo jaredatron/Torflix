@@ -21,13 +21,26 @@
 
   url: (path) ->
     "#{@ENDPOINT}#{path}?oauth_token=#{@TOKEN}"
-  
+
   get: (path, params) ->
     # console.info('PUTIO GET', path, params)
-    qwest.get(@url(path), params)
+    @request('get', path, params)
 
   post: (path, params) ->
     # console.info('PUTIO POST', path, params)
-    qwest.post(@url(path), params)
+    @request('post', path, params)
+
+  request: (method, path, params) ->
+    request = $.ajax
+      method: method
+      url: @url(path)
+      data: params
+    new Promise (resolve, reject) ->
+      request.done (result) ->
+        resolve(result)
+      request.error (xhr, textStatus, errorThrown) ->
+        error = new Error('Putio request failed: '+textStatus+' / '+errorThrown)
+        error.xhr = xhr
+        reject(error)
 
 

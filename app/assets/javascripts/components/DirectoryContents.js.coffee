@@ -41,7 +41,7 @@ component 'DirectoryContents',
     parentDirectory: this
 
   reload: ->
-    debugger
+    # debugger
     putio.files.uncache(@props.directory_id)
     @forceUpdate()
 
@@ -56,16 +56,19 @@ component 'DirectoryContents',
     sorter = SORTERS[sorter] if typeof sorter == 'string'
 
     DOM.div className: 'DirectoryContents',
-      if files.length > 0
-        files.sort(sorter).map(@renderFile)
-      else
-        DOM.div(className: 'empty', style: @depthStyle(), 'empty')
+      switch
+        when null
+          'NOT FOUND'
+        when files.length > 0
+          files.sort(sorter).map(@renderFile)
+        else
+          DOM.div(className: 'empty', style: @depthStyle(), 'empty')
 
   renderFile: (file) ->
-    if isDirectory(file)
-      DOM.Directory(key: file.id, directory: file)
-    else
-      DOM.File(key: file.id, file: file)
-
-
-
+    switch
+      when file == null
+        DOM.div(null, 'Error: File not found')
+      when isDirectory(file)
+        DOM.Directory(key: file.id, directory: file)
+      else
+        DOM.File(key: file.id, file: file)

@@ -10,10 +10,19 @@ PREFIX = "TORFLIX/"
     return if value? then JSON.parse(value) else null
 
   if arguments.length == 2
-    json = JSON.stringify(value)
-    if localStorage["#{PREFIX}#{key}"] != json
-      localStorage["#{PREFIX}#{key}"] = json
-      session.emit('change')
+    if value == null
+      delete localStorage["#{PREFIX}#{key}"]
+      setTimeout ->
+        session.emit('change')
+        session.emit("change:#{key}", null)
+    else
+      json = JSON.stringify(value)
+      value = JSON.parse(json)
+      if localStorage["#{PREFIX}#{key}"] != json
+        localStorage["#{PREFIX}#{key}"] = json
+        setTimeout ->
+          session.emit('change')
+          session.emit("change:#{key}", value)
     value
 
 Object.assign(session, EventEmitter.prototype)

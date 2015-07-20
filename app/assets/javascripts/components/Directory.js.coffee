@@ -7,23 +7,25 @@ component 'Directory',
   propTypes:
     directory: React.PropTypes.object.isRequired
 
+  sessionKey: ->
+    "Directory-#{@props.directory.id}-expanded"
+
+  reload: ->
+    @forceUpdate()
 
   componentDidMount: ->
-    putio.files.on("change:#{@props.directory.id}", @forceUpdate)
+    session.on("change:#{@sessionKey()}", @reload)
+    putio.files.on("change:#{@props.directory.id}", @reload)
 
   componentWillUnmount: ->
-    putio.files.removeListener("change:#{@props.directory.id}", @forceUpdate)
+    session.removeListener("change:#{@sessionKey()}", @reload)
+    putio.files.removeListener("change:#{@props.directory.id}", @reload)
 
-  getInitialState: ->
-    expanded: @props.expanded
+  expanded: ->
+    session(@sessionKey()) || false
 
   toggle: ->
-    @setState expanded: !@state.expanded
-
-  chevron: ->
-    DOM.Glyphicon
-      className: 'Directory-status-icon File-icon', 
-      glyph: if @state.expanded then 'chevron-down'else 'chevron-right'
+    session(@sessionKey(), !@expanded())
 
   render: ->
     {div, ActionLink, FileSize} = DOM
@@ -31,18 +33,20 @@ component 'Directory',
     div className: 'File Directory',
       div className: 'File-row flex-row',
         div(style: @depthStyle())
-        @chevron()
+        DOM.Glyphicon
+          className: 'Directory-status-icon File-icon',
+          glyph: if @expanded() then 'chevron-down' else 'chevron-right'
         ActionLink
           className: 'File-name flex-spacer'
           onClick: @toggle
           @props.directory.name
-        div 
+        div
           className: 'File-size'
           FileSize(size: @props.directory.size)
 
         DOM.DeleteFileLink file: @props.directory
 
-      if @state.expanded
+      if @expanded()
         DOM.DirectoryContents(directory_id: @props.directory.id)
 
 

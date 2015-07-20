@@ -17,9 +17,12 @@ component 'TransferFile',
 
   renderFile: (file) ->
     DOM.div className: 'TransferFile',
-      if isDirectory(file)
-        DOM.DirectoryContents(directory_id: @props.file_id)
-      else
-        DOM.File(file: file)
+      switch
+        when file == null
+          DOM.div(null, 'Error: File not found')
+        when isDirectory(file)
+          DOM.DirectoryContents(directory_id: @props.file_id)
+        else
+          DOM.File(file: file)
 
 

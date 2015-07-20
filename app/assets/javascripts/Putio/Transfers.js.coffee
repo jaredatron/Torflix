@@ -1,7 +1,7 @@
 #= require 'eventemitter3'
 
 Putio.Transfers = class Transfers extends EventEmitter
-  
+
   constructor: (putio) ->
     @putio = putio
     @cache = []
@@ -26,8 +26,11 @@ Putio.Transfers = class Transfers extends EventEmitter
     TRANSFER_POLL_DELAY = @TRANSFER_POLL_DELAY
     load = =>
       return unless @polling
-      @load().complete ->
-        setTimeout(load, TRANSFER_POLL_DELAY)
+      @load()
+        .then ->
+          setTimeout(load, TRANSFER_POLL_DELAY)
+        .catch ->
+          setTimeout(load, TRANSFER_POLL_DELAY)
     load()
     this
 
