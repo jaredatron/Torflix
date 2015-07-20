@@ -4,6 +4,8 @@ Putio.File = class
 
   constructor: (props) ->
     Object.assign(this, props)
+    @isVideo        = /\.(mkv|mp4|avi)$/.test(@name)
+    @isDirectory    = "application/x-directory" == @content_type
     @put_io_url     = "https://put.io/file/#{@id}"
     @download_url   = "https://put.io/v2/files/#{@id}/download"
     @mp4_stream_url = "https://put.io/v2/files/#{@id}/mp4/stream"

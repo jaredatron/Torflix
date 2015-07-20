@@ -1,6 +1,3 @@
-isDirectory = (file) ->
-  file.content_type == "application/x-directory"
-
 component 'TransferFile',
 
   propTypes:
@@ -20,7 +17,7 @@ component 'TransferFile',
       switch
         when file == null
           DOM.div(null, 'Error: File not found')
-        when isDirectory(file)
+        when file.isDirectory
           DOM.DirectoryContents(directory_id: @props.file_id)
         else
           DOM.File(file: file)

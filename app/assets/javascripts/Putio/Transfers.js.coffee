@@ -74,43 +74,55 @@ Putio.Transfers = class Transfers extends EventEmitter
     Promise.all([delete_transfer_promise,delete_file_promise])
 
 
-  findByMagnetLink: (magnet_link) ->
-    console.log('searching local cache for transfer', @toArray(), magnet_link)
+  findByMagnetLink: (magnetLink) ->
+    console.log('searching local cache for transfer', @toArray(), magnetLink)
     transfer = @toArray().find (transfer) ->
-      transfer.source == magnet_link ||
-      transfer.magneturi == magnet_link
+      transfer.source == magnetLink ||
+      transfer.magneturi == magnetLink
     console.log('found:', transfer)
     Promise.resolve(transfer)
 
-  waitFor: (magnet_link) ->
+  waitFor: (magnetLink) ->
 
-    new TransferWaitMachine(magnet_link).start();
-    # @findByMagnetLink(magnet_link).then (transfer) =>
+    new TransferWaitMachine(magnetLink).start();
+    # @findByMagnetLink(magnetLink).then (transfer) =>
     #   return transfer if transfer
     #   console.log('transfer not found, reloading')
     #   @load().then =>
-    #     @waitFor(magnet_link)
+    #     @waitFor(magnetLink)
 
 
 
 
 class TransferWaitMachine extends EventEmitter
-  constructor: (magnet_link) ->
-    @magnet_link = magnet_link
+  constructor: (magnetLink) ->
+    @state = 'waiting' # waiting | downloading | converting | ready
+    @magnetLink = magnetLink
     @transfer = null
     @file = null
-    @video_file = null
+    @videoFile = null
 
   start: ->
-    App.putio.transfers.findByMagnetLink(@magnet_link).then (transfer) =>
+    App.putio.transfers.findByMagnetLink(@magnetLink).then (transfer) =>
       if transfer
         @transfer = transfer
-        @emit('change')
+        @emit('change', @state)
       else
+        console.log('poop')
 
 
   getState: ->
-    status: 'waiting' # waiting | downloading | converting | ready
+    return 'ready'       if @videoFile?
+    return 'ready'       if @file? && @file.isVideo
+    return 'converting'  if @file? && !@file.isVideo
+    return 'downloading' if @transfer
+
+    switch
+      when @video_file? then 'ready'
+      when @file?       then 'ready'
+      when @transfer?   then 'downloading'
+      else                   'waiting'
+    state
 
 
 

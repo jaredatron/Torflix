@@ -18,11 +18,6 @@ SORTERS =
     if a < b then 1 else if a > b then -1 else 0
 
 
-# TODO dry up this duplicate
-isDirectory = (file) ->
-  file.content_type == "application/x-directory"
-
-
 component 'DirectoryContents',
 
   mixins: [DepthMixin]
@@ -67,7 +62,7 @@ component 'DirectoryContents',
     switch
       when file == null
         DOM.div(null, 'Error: File not found')
-      when isDirectory(file)
+      when file.isDirectory
         DOM.Directory(key: file.id, directory: file)
       else
         DOM.File(key: file.id, file: file)
