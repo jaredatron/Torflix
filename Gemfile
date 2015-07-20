@@ -15,14 +15,14 @@ gem 'therubyracer'
 gem 'httparty'
 gem 'uglifier'
 gem 'unicorn-rails'
+gem 'dotenv-rails'
+gem 'pry-rails'
 
 group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'selenium-webdriver'
-  gem 'pry-rails'
   gem 'pry-byebug'
-  gem 'dotenv-rails'
 end
 
 group :production do
