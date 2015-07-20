@@ -14,18 +14,18 @@ component 'Directory',
     @forceUpdate()
 
   componentDidMount: ->
-    session.on("change:#{@sessionKey()}", @reload)
+    App.session.on("change:#{@sessionKey()}", @reload)
     App.putio.files.on("change:#{@props.directory.id}", @reload)
 
   componentWillUnmount: ->
-    session.removeListener("change:#{@sessionKey()}", @reload)
+    App.session.removeListener("change:#{@sessionKey()}", @reload)
     App.putio.files.removeListener("change:#{@props.directory.id}", @reload)
 
   expanded: ->
-    session(@sessionKey()) || false
+    App.session(@sessionKey()) || false
 
   toggle: ->
-    session(@sessionKey(), !@expanded())
+    App.session(@sessionKey(), !@expanded())
 
   render: ->
     {div, ActionLink, FileSize} = DOM

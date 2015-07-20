@@ -1,9 +1,8 @@
-#= require 'eventemitter3'
-#= require 'Object.assign'
-#= require 'qwest'
-#= require 'session'
+#= require eventemitter3
+#= require Object.assign
+#= require qwest
 #= require_self
-#= require_tree './Putio'
+#= require_tree ./Putio
 
 @Putio = class Putio extends EventEmitter
 

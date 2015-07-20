@@ -50,16 +50,16 @@ Transfer = component
     @forceUpdate()
 
   componentDidMount: ->
-    session.on("change:#{@sessionKey()}", @reload)
+    App.session.on("change:#{@sessionKey()}", @reload)
 
   componentWillUnmount: ->
-    session.removeListener("change:#{@sessionKey()}", @reload)
+    App.session.removeListener("change:#{@sessionKey()}", @reload)
 
   expanded: ->
-    session(@sessionKey()) || false
+    App.session(@sessionKey()) || false
 
   toggle: ->
-    session(@sessionKey(), !@expanded())
+    App.session(@sessionKey(), !@expanded())
 
   completed: ->
     @props.transfer.status == "COMPLETED" ||

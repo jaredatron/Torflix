@@ -3,7 +3,7 @@
 
 PREFIX = "TORFLIX/"
 
-@session = (key, value) ->
+App.session = (key, value) ->
   throw new Error('key cannot be blank') if !key?
   if arguments.length == 1
     value = localStorage["#{PREFIX}#{key}"]
@@ -13,16 +13,25 @@ PREFIX = "TORFLIX/"
     if value == null
       delete localStorage["#{PREFIX}#{key}"]
       setTimeout ->
-        session.emit('change')
-        session.emit("change:#{key}", null)
+        App.session.emit('change')
+        App.session.emit("change:#{key}", null)
     else
       json = JSON.stringify(value)
       value = JSON.parse(json)
       if localStorage["#{PREFIX}#{key}"] != json
         localStorage["#{PREFIX}#{key}"] = json
         setTimeout ->
-          session.emit('change')
-          session.emit("change:#{key}", value)
+          App.session.emit('change')
+          App.session.emit("change:#{key}", value)
     value
 
-Object.assign(session, EventEmitter.prototype)
+Object.assign(App.session, EventEmitter.prototype)
+
+
+
+getPutioTokenFromHash = ->
+  if matches = location.hash.match(/^#access_token=(.*)$/)
+    App.session('put_io_access_token', matches[1])
+    window.location = location.toString().substring(0, location.href.indexOf('#'))
+
+getPutioTokenFromHash()

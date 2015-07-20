@@ -16,10 +16,10 @@ component 'App',
 
   componentDidMount: ->
     Location.on('change', @onChange)
-    session.on('change:put_io_access_token', @onChange)
+    App.session.on('change:put_io_access_token', @onChange)
 
   componentWillUnmount: ->
-    session.removeListener('change', @onChange)
+    App.session.removeListener('change', @onChange)
     Location.removeListener('change', @onChange)
 
   render: ->

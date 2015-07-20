@@ -1,6 +1,6 @@
 #= require 'Router'
 
-@router = new Router ->
+App.router = new Router ->
   @match '/',               redirectTo: '/shows'
   @match '/shows',          component: 'ShowsPage'
   @match '/transfers',      component: 'TransfersPage'

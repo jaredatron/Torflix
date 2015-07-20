@@ -2,7 +2,7 @@ component 'LogoutButton',
 
   logout: (event) ->
     event.preventDefault()
-    session('put_io_access_token', null)
+    App.session('put_io_access_token', null)
 
   render: ->
     {ActionLink} = DOM

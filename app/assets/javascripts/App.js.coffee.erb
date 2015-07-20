@@ -1,25 +1,19 @@
-#= require 'session'
-#= require 'Putio'
-#= require 'Location'
-#= require 'router'
+#= require Putio
+#= require Location
+#= require_self
+#= require_tree ./App
 
 
-@App = App = {
-  GIT_SHA: "<%= GIT_SHA %>",
-};
+@App =
 
-App.state = ->
-  path:     Location.path
-  params:   router.pageFor(Location.path, Location.params)
-  loggedIn: !!session('put_io_access_token')
+  GIT_SHA: "<%= GIT_SHA %>"
 
-App.getPutioTokenFromHash = ->
-  if matches = location.hash.match(/^#access_token=(.*)$/)
-    session('put_io_access_token', matches[1])
-    window.location = location.toString().substring(0, location.href.indexOf('#'))
+  state: ->
+    path:     Location.path
+    params:   App.router.pageFor(Location.path, Location.params)
+    loggedIn: !!App.session('put_io_access_token')
 
-App.getPutioTokenFromHash()
-App.putio = new Putio(session('put_io_access_token'))
+
 
 $ ->
   React.render(DOM.App(), document.body)
