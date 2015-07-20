@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+
+SHA = `git rev-parse HEAD`.chomp
+
+puts "deploying:"
+system "git log -1 #{SHA} --decorate"
+
