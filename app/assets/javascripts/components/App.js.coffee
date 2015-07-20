@@ -1,14 +1,3 @@
-#= require 'session'
-#= require 'Putio'
-#= require 'Location'
-#= require 'router'
-
-getState = ->
-  path:     Location.path
-  params:   router.pageFor(Location.path, Location.params)
-  loggedIn: !!session('put_io_access_token')
-
-
 component 'App',
 
   childContextTypes:
@@ -20,10 +9,10 @@ component 'App',
     params:   @state.params
 
   getInitialState: ->
-    getState()
+    App.state()
 
   onChange: ->
-    @setState getState()
+    @setState App.state()
 
   componentDidMount: ->
     Location.on('change', @onChange)
@@ -49,8 +38,5 @@ component 'App',
       )
 
     Layout(null, Page())
-
-
-
 
 

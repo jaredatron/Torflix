@@ -37,7 +37,7 @@ component 'AddTorrentForm',
       searchResultsPromise: null
 
   addTorrent: (magnetLink) ->
-    putio.transfers.add magnetLink
+    App.putio.transfers.add magnetLink
     @clear()
 
   scheduleSearch: ->
@@ -105,7 +105,7 @@ SearchResults = component 'AddTorrentForm-SearchResults',
 
   renderSearchResults: (results) ->
     {div, table, thead, tr, th, tbody, td} = DOM
-    
+
     results = results.map (result, index) =>
       SearchResult
         key:        index,
@@ -118,9 +118,9 @@ SearchResults = component 'AddTorrentForm-SearchResults',
         size:       result.size,
         addTorrent: @props.addTorrent
 
-    div 
+    div
       className: 'table-responsive'
-      table 
+      table
         className: 'table-striped table-bordered table-condensed'
         thead null,
           tr null,
@@ -171,5 +171,5 @@ SearchResult = component 'AddTorrentForm-SearchResult',
   addTorrent: ->
     Torrent.get(@props.id).then (torrent) =>
       @props.addTorrent(torrent.magnet_link)
-    
+
 

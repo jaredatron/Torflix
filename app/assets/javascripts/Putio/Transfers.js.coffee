@@ -62,3 +62,10 @@ Putio.Transfers = class Transfers extends EventEmitter
     Promise.all([delete_transfer_promise,delete_file_promise])
 
 
+
+
+
+document.addEventListener "visibilitychange", (event) ->
+  document.title = document.visibilityState
+
+

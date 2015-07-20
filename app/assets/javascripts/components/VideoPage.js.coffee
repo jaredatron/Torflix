@@ -10,10 +10,10 @@ component 'VideoPage',
       className: 'VideoPage'
 
       PromiseStateMachine
-        promise: putio.files.get(@context.params.file_id)
+        promise: App.putio.files.get(@context.params.file_id)
         loading: =>
           DOM.div(null, 'loading...')
-        loaded: (file) => 
+        loaded: (file) =>
           DOM.VideoPlayer(file: file)
-        
+
 

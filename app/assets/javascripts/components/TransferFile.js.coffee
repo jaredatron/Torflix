@@ -12,7 +12,7 @@ component 'TransferFile',
 
   render: ->
     PromiseStateMachine
-      promise: putio.files.get(@props.file_id)
+      promise: App.putio.files.get(@props.file_id)
       loaded: @renderFile
 
   renderFile: (file) ->

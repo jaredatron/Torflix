@@ -1,5 +1,4 @@
 #= require 'Router'
-#= require 'components/RedirectTo'
 
 @router = new Router ->
   @match '/',               redirectTo: '/shows'

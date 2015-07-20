@@ -41,13 +41,12 @@ component 'DirectoryContents',
     parentDirectory: this
 
   reload: ->
-    # debugger
-    putio.files.uncache(@props.directory_id)
+    App.putio.files.uncache(@props.directory_id)
     @forceUpdate()
 
   render: ->
     PromiseStateMachine
-      promise: putio.files.list(@props.directory_id)
+      promise: App.putio.files.list(@props.directory_id)
       loading: => DOM.div(style: @depthStyle(), 'loading...')
       loaded: @renderFiles
 

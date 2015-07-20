@@ -15,11 +15,11 @@ component 'Directory',
 
   componentDidMount: ->
     session.on("change:#{@sessionKey()}", @reload)
-    putio.files.on("change:#{@props.directory.id}", @reload)
+    App.putio.files.on("change:#{@props.directory.id}", @reload)
 
   componentWillUnmount: ->
     session.removeListener("change:#{@sessionKey()}", @reload)
-    putio.files.removeListener("change:#{@props.directory.id}", @reload)
+    App.putio.files.removeListener("change:#{@props.directory.id}", @reload)
 
   expanded: ->
     session(@sessionKey()) || false

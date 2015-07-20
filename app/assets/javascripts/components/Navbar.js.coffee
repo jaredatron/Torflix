@@ -9,14 +9,14 @@ component 'Navbar',
 
   accountInfoChanged: ->
     setTimeout =>
-      @setState accountInfo: putio.account.info
+      @setState accountInfo: App.putio.account.info
 
   componentDidMount: ->
-    putio.account.info.on('change', @accountInfoChanged)
-    putio.account.info.load()
+    App.putio.account.info.on('change', @accountInfoChanged)
+    App.putio.account.info.load()
 
   componentWillUnmount: ->
-    putio.account.info.removeListener('change', @accountInfoChanged)
+    App.putio.account.info.removeListener('change', @accountInfoChanged)
 
   render: ->
     {div, span, img, ActionLink, LogoutButton, FileSize, ExternalLink, TorrentSearchForm} = DOM

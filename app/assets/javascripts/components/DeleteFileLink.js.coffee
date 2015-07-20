@@ -7,7 +7,7 @@ component 'DeleteFileLink',
     file: React.PropTypes.object.isRequired
 
   onDelete: ->
-    putio.files.delete(@props.file.id).complete =>
+    App.putio.files.delete(@props.file.id).complete =>
       if @context.parentDirectory
         @context.parentDirectory.reload()
 

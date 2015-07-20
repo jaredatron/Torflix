@@ -19,7 +19,7 @@ component 'TorrentSearchForm',
     event.preventDefault()
     return if @valueIsBlank()
     if @valueIsMagnetLink()
-      putio.transfers.add @state.value
+      App.putio.transfers.add @state.value
       @clear()
     else
       Location.set("/search?s=#{encodeURIComponent(@getValue())}")
