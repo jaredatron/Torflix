@@ -8,11 +8,18 @@ component 'VideoPlayer',
   componentDidMount: ->
     videoNode = @getDOMNode().getElementsByTagName('video')[0]
     videojs videoNode, {}, ->
-      console.log('video inititialized', this)
+      player = this
+      window.VIDEO_PLAYER = player
+      console.info('video inititialized')
+      console.info('window.VIDEO_PLAYER = ', this)
+      player.play()
+      # player.currentTime(120)
 
   render: ->
     console.dir(@props.file)
-    DOM.div dangerouslySetInnerHTML: {__html: @renderHTML()}
+    DOM.div
+      className: Classnames('VideoPlayer', @props.className)
+      dangerouslySetInnerHTML: {__html: @renderHTML()}
 
 
   renderHTML: ->
@@ -22,9 +29,9 @@ component 'VideoPlayer',
       className: "video-js vjs-default-skin"
       controls: true
       preload: "none"
-      width: 640
-      height: 264
       poster: file.screenshot
+      height: 'auto'
+      width: '100%'
       source
         src: file.stream_url
         type: file.content_type

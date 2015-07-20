@@ -17,16 +17,17 @@ component 'VideoPage',
 
 
   renderLoaded: (file) ->
-    {div, h1, VideoPlayer, ExternalLink, DownloadLink} = DOM
+    {div, h4, VideoPlayer, ExternalLink, DownloadLink} = DOM
 
-    div null,
+    div
+      className: 'flex-column flex-grow'
 
-      h1 null, file.name
+      h4 null, file.name
 
-      VideoPlayer(file: file)
+      VideoPlayer(className: 'flex-grow', file: file)
 
       div
-        className: 'flex-column'
+        className: 'flex-row flex-space-around'
         ExternalLink href: file.put_io_url,     'put.io'
         DownloadLink href: file.download_url,   'download'
         ExternalLink href: file.stream_url,     'stream'
