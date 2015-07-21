@@ -31,8 +31,8 @@ Putio.Files = class Files extends EventEmitter
       .then (response) ->
         files = response.files
         directory_contents_cache[parent_id] = files
-        files.forEach (file) => files_cache[file.id] = new Putio.File(file)
-        files
+        files.map (file) =>
+          files_cache[file.id] = new Putio.File(file)
       .catch (error) ->
         throw error if error.xhr.status != 404
         directory_contents_cache[parent_id] = []

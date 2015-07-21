@@ -78,7 +78,7 @@ Transfer = component
       style: {width: "#{@props.transfer.percent_done}%"}
 
   statusIcon: ->
-    TransfersStatusIcon status: @props.transfer.status
+    DOM.TransfersStatusIcon status: @props.transfer.status
 
   files: ->
     if @completed() && @expanded()

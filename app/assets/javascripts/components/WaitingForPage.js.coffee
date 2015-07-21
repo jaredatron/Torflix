@@ -17,7 +17,16 @@ component 'WaitingForPage',
       transferWaitMachineState: transferWaitMachine.state
     }
 
+  componentDidMount: ->
+    @state.transferWaitMachine.start()
+
+  componentWillUnmount: ->
+    @state.transferWaitMachine.abort()
+
   onTransferWaitMachineChange: (state) ->
+    if 'ready' == state
+      video_id = @state.transferWaitMachine.videoFile.id
+      Location.set("/video/#{video_id}")
     @setState transferWaitMachineState: state
 
   promise: ->

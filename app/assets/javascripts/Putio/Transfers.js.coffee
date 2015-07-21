@@ -43,10 +43,9 @@ Putio.Transfers = class Transfers extends EventEmitter
     @polling = false
     this
 
-  get: (id) ->
-    debugger if 'number' != typeof id
+  get: (id, ignoreCache=false) ->
     throw Error('id must be a number') if 'number' != typeof id
-    return Promise.resolve(@cache[id]) if id of @cache
+    return Promise.resolve(@cache[id]) if !ignoreCache && id of @cache
     @putio.get("/transfers/#{id}").then (response) =>
       @cache[id] = new Putio.Transfer(response.transfer)
 
@@ -81,16 +80,7 @@ Putio.Transfers = class Transfers extends EventEmitter
     Promise.resolve(transfer)
 
   waitFor: (magnetLink) ->
-
-    new TransferWaitMachine(magnetLink).start();
-    # @findByMagnetLink(magnetLink).then (transfer) =>
-    #   return transfer if transfer
-    #   console.log('transfer not found, reloading')
-    #   @load().then =>
-    #     @waitFor(magnetLink)
-
-
-
+    new TransferWaitMachine(magnetLink)
 
 class TransferWaitMachine extends EventEmitter
   constructor: (magnetLink) ->
@@ -102,35 +92,73 @@ class TransferWaitMachine extends EventEmitter
     @videoFile = null
 
   start: ->
+    return if @aborted
     @findByMagnetLink()
 
   abort: ->
     @aborted = true
+
+  triggerChange: ->
+    return if @aborted
+    @state = @getState()
+    @emit('change', @state)
 
   findByMagnetLink: ->
     return if @aborted
     App.putio.transfers.findByMagnetLink(@magnetLink).then (transfer) =>
       if !transfer
         console.log('transfer not found in local cache')
-        @state = 'waiting'
+        @triggerChange()
         @loadTransfers()
       else
         @transfer = transfer
-        @state = @getState()
+        @waitForTorrentToDownload()
+        @triggerChange()
         @emit('change', @state)
 
     this
 
   loadTransfers: ->
-    return if @stopped
+    return if @aborted
     App.putio.transfers.load().then(@findByMagnetLink.bind(this))
 
+  waitForTorrentToDownload: ->
+    return if @aborted
+    if @transfer.file_id?
+      @loadFile()
+      @triggerChange()
+    else
+      App.putio.transfers.get(@transfer.id, true).then (transfer) =>
+        @transfer = transfer
+        setTimeout((=> @waitForTorrentToDownload()), 1000)
+        @triggerChange()
+
+  loadFile: ->
+    return if @aborted
+    App.putio.files.get(@transfer.file_id).then (file) =>
+      if file == null
+        debugger
+
+      if file.isVideo
+        @videoFile = file
+
+      if file.isDirectory
+        @directory = file
+        App.putio.files.list(@directory.id).then (files) =>
+          videos = files.filter (file) -> file.isVideo
+          @videoFile = videos[0]
+          @triggerChange()
+
+      @triggerChange()
 
   getState: ->
-    return 'ready'       if @videoFile?
-    return 'ready'       if @file? && @file.isVideo
-    return 'converting'  if @file? && !@file.isVideo
-    return 'downloading' if @transfer && !@transfer.isComplete
+    if @videoFile?
+      return 'ready'
+    if @directory?
+      return 'searching'
+    if @transfer?
+      return 'loading files' if @transfer.isComplete
+      return 'downloading' if !@transfer.isComplete
     return 'waiting'
 
 
