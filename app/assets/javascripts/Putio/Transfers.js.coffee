@@ -14,7 +14,7 @@ Putio.Transfers = class Transfers extends EventEmitter
     @putio.get('/transfers/list').then (response) =>
       @cache = {}
       response.transfers.forEach (transfer) =>
-        @cache[transfer.id] = transfer
+        @cache[transfer.id] = new Putio.Transfer(transfer)
       # @cache = response.transfers.map (props) ->
       #   new Transfer(props)
       @emit('change')
@@ -48,11 +48,11 @@ Putio.Transfers = class Transfers extends EventEmitter
     throw Error('id must be a number') if 'number' != typeof id
     return Promise.resolve(@cache[id]) if id of @cache
     @putio.get("/transfers/#{id}").then (response) =>
-      @cache[id] = response.transfer
+      @cache[id] = new Putio.Transfer(response.transfer)
 
   add: (url) ->
     @putio.post('/transfers/add', url: url).then (response) =>
-      @cache[response.transfer.id] = response.transfer
+      @cache[response.transfer.id] = new Putio.Transfer(response.transfer)
       @putio.account.info.load()
       @emit('change')
       response
@@ -75,11 +75,9 @@ Putio.Transfers = class Transfers extends EventEmitter
 
 
   findByMagnetLink: (magnetLink) ->
-    console.log('searching local cache for transfer', @toArray(), magnetLink)
     transfer = @toArray().find (transfer) ->
       transfer.source == magnetLink ||
       transfer.magneturi == magnetLink
-    console.log('found:', transfer)
     Promise.resolve(transfer)
 
   waitFor: (magnetLink) ->
@@ -96,6 +94,7 @@ Putio.Transfers = class Transfers extends EventEmitter
 
 class TransferWaitMachine extends EventEmitter
   constructor: (magnetLink) ->
+    @aborted = false
     @state = 'waiting' # waiting | downloading | converting | ready
     @magnetLink = magnetLink
     @transfer = null
@@ -103,26 +102,36 @@ class TransferWaitMachine extends EventEmitter
     @videoFile = null
 
   start: ->
+    @findByMagnetLink()
+
+  abort: ->
+    @aborted = true
+
+  findByMagnetLink: ->
+    return if @aborted
     App.putio.transfers.findByMagnetLink(@magnetLink).then (transfer) =>
-      if transfer
-        @transfer = transfer
-        @emit('change', @state)
+      if !transfer
+        console.log('transfer not found in local cache')
+        @state = 'waiting'
+        @loadTransfers()
       else
-        console.log('poop')
+        @transfer = transfer
+        @state = @getState()
+        @emit('change', @state)
+
+    this
+
+  loadTransfers: ->
+    return if @stopped
+    App.putio.transfers.load().then(@findByMagnetLink.bind(this))
 
 
   getState: ->
     return 'ready'       if @videoFile?
     return 'ready'       if @file? && @file.isVideo
     return 'converting'  if @file? && !@file.isVideo
-    return 'downloading' if @transfer
-
-    switch
-      when @video_file? then 'ready'
-      when @file?       then 'ready'
-      when @transfer?   then 'downloading'
-      else                   'waiting'
-    state
+    return 'downloading' if @transfer && !@transfer.isComplete
+    return 'waiting'
 
 
 

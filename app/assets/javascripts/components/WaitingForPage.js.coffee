@@ -8,7 +8,8 @@ component 'WaitingForPage',
 
   getInitialState: ->
     magnetLink = @context.params.link
-    transferWaitMachine = new TransferWaitMachine(magnetLink)
+    transferWaitMachine = App.putio.transfers.waitFor(magnetLink)
+    window.DEBUG = transferWaitMachine
     transferWaitMachine.on('change', @onTransferWaitMachineChange)
     {
       magnetLink: magnetLink
@@ -24,7 +25,7 @@ component 'WaitingForPage',
     {div, h1} = DOM
     div
       className: 'ShowPage'
-      h1(null, transferWaitMachineState)
+      h1(null, @state.transferWaitMachineState)
 
 
 
