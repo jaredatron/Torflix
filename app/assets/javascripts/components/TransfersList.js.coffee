@@ -78,18 +78,7 @@ Transfer = component
       style: {width: "#{@props.transfer.percent_done}%"}
 
   statusIcon: ->
-    glyph = switch @props.transfer.status
-      when 'IN_QUEUE'    then 'pause'
-      when 'DOWNLOADING' then 'download-alt'
-      when 'COMPLETING'  then 'wrench'
-      when 'SEEDING'     then 'open'
-      when 'COMPLETED'   then 'ok'
-      when 'ERROR'       then 'question-sign'
-      else
-        console.log('UNKNOWN transfer status:', @props.transfer.status)
-        'question-sign'
-
-    DOM.Glyphicon glyph: glyph, className: 'TransfersList-Transfer-statusIcon'
+    TransfersStatusIcon status: @props.transfer.status
 
   files: ->
     if @completed() && @expanded()

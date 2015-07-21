@@ -10,7 +10,7 @@
     "#{@ENDPOINT}#{path}"
 
   @search = (query) ->
-    @request('get', '/search', query)
+    @request('get', '/search', q: query)
 
   @get = (id) ->
     @request('get', "/#{id}")

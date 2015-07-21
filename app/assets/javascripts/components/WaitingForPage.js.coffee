@@ -20,6 +20,13 @@ component 'WaitingForPage',
   onTransferWaitMachineChange: (state) ->
     @setState transferWaitMachineState: state
 
+  promise: ->
+    App.putio.transfers.get(@state.transfer_id).then (transfer) ->
+      if transfer.status == 'COMPLETED' || transfer.status == 'SEEDING'
+        App.putio.files.get(transfer.file_id)
+      else
+        transfer
+
   render: ->
     console.log('WaitingForPage', @state)
     {div, h1} = DOM
