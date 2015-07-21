@@ -1,3 +1,5 @@
+#= require Putio
+
 SORT = (a, b) ->
   a = Date.parse(a.created_at)
   b = Date.parse(b.created_at)
@@ -17,7 +19,6 @@ component 'TransfersList',
   componentDidMount: ->
     App.putio.transfers.on('change', @transfersChanged)
     App.putio.transfers.startPolling()
-    App.putio.transfers.load()
 
   componentWillUnmount: ->
     App.putio.transfers.removeListener('change', @transfersChanged)
@@ -41,7 +42,7 @@ Transfer = component
   displayName: 'TransfersList-Transfer',
 
   PropTypes:
-    transfer: React.PropTypes.object.isRequired
+    transfer: React.PropTypes.instanceOf(Putio.Transfer).isRequired
 
   sessionKey: ->
     "TransfersList-Transfer-#{@props.transfer.id}-expanded"
@@ -50,10 +51,15 @@ Transfer = component
     @forceUpdate()
 
   componentDidMount: ->
+    @props.transfer.on('change', @transferChanged)
     App.session.on("change:#{@sessionKey()}", @reload)
 
   componentWillUnmount: ->
+    @props.transfer.removeListener('change', @transferChanged)
     App.session.removeListener("change:#{@sessionKey()}", @reload)
+
+  transferChanged: ->
+    @forceUpdate()
 
   expanded: ->
     App.session(@sessionKey()) || false
@@ -89,8 +95,15 @@ Transfer = component
 
     {div, FileSize} = DOM
 
+    className = Classnames('TransfersList-Transfer',
+      'TransfersList-Transfer-complete':    transfer.isComplete
+      'TransfersList-Transfer-deleting':    transfer.isDeleting
+      'TransfersList-Transfer-deleted':     transfer.isDeleted
+      'TransfersList-Transfer-downloading': transfer.isDownloading
+    )
+
     div
-      className: 'TransfersList-Transfer',
+      className: className
       'data-status': transfer.status,
       style: percentDoneGradientSyle(transfer),
 
@@ -118,10 +131,11 @@ DeleteTransferLink = component
   displayName: 'TransfersList-DeleteTransferLink',
 
   propTypes:
-    transfer: React.PropTypes.object.isRequired
+    transfer: React.PropTypes.instanceOf(Putio.Transfer).isRequired
 
   onDelete: ->
-    App.putio.transfers.delete(@props.transfer.id)
+    @props.transfer.delete()
+    # App.putio.transfers.delete(@props.transfer.id)
 
   render: ->
     DOM.DeleteLink

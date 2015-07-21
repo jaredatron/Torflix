@@ -19,10 +19,10 @@ component 'Modal',
 
   render: ->
     {div} = DOM
-    div 
+    div
       className: 'modal fade',
-      div 
+      div
         className: 'modal-dialog',
-        div 
+        div
           className: 'modal-content',
             @props.children

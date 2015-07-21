@@ -58,19 +58,20 @@ Putio.Transfers = class Transfers extends EventEmitter
 
 
   delete: (id) ->
-    transfer = @cache.filter((transfer) -> transfer.id == id)[0]
+    transfer = @cache[id]
 
     delete_transfer_promise = @putio.post('/transfers/cancel', transfer_ids: id).then (response) =>
-      @cache = transfers.filter((transfer) -> transfer.id != id)
+      delete @cache[id]
       @emit('change')
       response
 
     @putio.account.info.load()
 
-    return delete_transfer_promise unless transfer? && transfer.file_id
-
-    delete_file_promise = @putio.files.delete(transfer.file_id)
-    Promise.all([delete_transfer_promise,delete_file_promise])
+    if transfer? && transfer.file_id
+      delete_file_promise = @putio.files.delete(transfer.file_id)
+      Promise.all([delete_transfer_promise,delete_file_promise])
+    else
+      delete_transfer_promise
 
 
   findByMagnetLink: (magnetLink) ->
