@@ -12,4 +12,8 @@ class ShowsController < ApplicationController
     render json: Show.find(params[:id])
   end
 
+  def art
+    redirect_to Show.art(params[:show_name])
+  end
+
 end

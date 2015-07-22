@@ -8,6 +8,10 @@ class Show
     ShowrssInfo.find(id)
   end
 
+  def self.art(name)
+    SquaredTvArt.search(name)
+  end
+
   def self.search(query)
     # html = Torrentz.get('/search', q: query)
 

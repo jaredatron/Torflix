@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/show-art/:show_name' => 'shows#art'
 
   get '*path' => 'app#show'
   root 'app#show'
