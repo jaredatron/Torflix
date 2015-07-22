@@ -2,7 +2,7 @@ component 'TorrentSearchResults',
 
   propTypes:
     query: React.PropTypes.string.isRequired
-    
+
   render: ->
     DOM.div
       className: 'TorrentSearchResults'
@@ -15,13 +15,13 @@ component 'TorrentSearchResults',
 
   renderResults: (results) ->
     {div, table, thead, tr, th, tbody, td} = DOM
-    
+
     results = results.map (result, index) =>
       SearchResult key: index, result: result
 
-    div 
+    div
       className: 'table-responsive'
-      table 
+      table
         className: 'table-striped table-bordered table-condensed'
         thead null,
           tr null,
@@ -49,7 +49,7 @@ SearchResult = component
     result = @props.result
     {tr, td, ActionLink} = DOM
     tr null,
-      td null, ActionLink onClick: @addTorrent, result.title
+      td null, ActionLink className: 'link', onClick: @addTorrent, result.title
       td null, result.rating
       td null, result.date
       td null, result.size
@@ -59,5 +59,5 @@ SearchResult = component
   addTorrent: ->
     Location.set('/transfers')
     Torrent.add(@props.result.id)
-    
+
 
