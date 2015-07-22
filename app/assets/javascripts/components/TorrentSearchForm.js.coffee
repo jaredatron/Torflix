@@ -17,12 +17,12 @@ component 'TorrentSearchForm',
 
   onSubmit: (event) ->
     event.preventDefault()
-    # return if @valueIsBlank()
     if @valueIsMagnetLink()
       App.putio.transfers.add @state.value
+      Location.set Location.for('/waiting-for', link: @state.value)
       @clear()
     else
-      Location.set("/search?s=#{encodeURIComponent(@getValue())}")
+      Location.set Location.for('/search', s: @getValue())
 
 
   onChange: (event) ->

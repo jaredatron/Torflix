@@ -12,7 +12,7 @@ component 'TransfersStatusIcon',
       when 'COMPLETED'   then 'ok'
       when 'ERROR'       then 'question-sign'
       else
-        console.log('UNKNOWN transfer status:', @props.transfer.status)
+        console.log('UNKNOWN transfer status:', @props.transfer)
         'question-sign'
 
     DOM.Glyphicon glyph: glyph, className: 'TransfersList-Transfer-statusIcon'

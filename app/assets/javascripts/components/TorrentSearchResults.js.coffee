@@ -57,7 +57,7 @@ SearchResult = component
       td null, result.leachers
 
   addTorrent: ->
-    Location.set('/transfers')
-    Torrent.add(@props.result.id)
-
+    Torrent.get(@props.result.id).then (torrent) ->
+      App.putio.transfers.add torrent.magnet_link
+      Location.set Location.for('/waiting-for', link: torrent.magnet_link)
 
