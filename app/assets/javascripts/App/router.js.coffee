@@ -7,6 +7,6 @@ App.router = new Router ->
   @match '/transfers',      component: 'TransfersPage'
   @match '/files',          component: 'FilesPage'
   @match '/search',         component: 'SearchPage'
-  @match '/waiting-for',    component: 'WaitingForPage'
+  @match '/autoplay',       component: 'AutoplayPage'
   @match '/video/:file_id', component: 'VideoPage'
   @match '/*path',          component: 'PageNotFound'

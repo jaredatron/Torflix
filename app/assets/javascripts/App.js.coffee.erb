@@ -15,7 +15,7 @@
 
   downloadAndPlayMagnetLink: (magnetLink) ->
     App.putio.transfers.add(magnetLink)
-    Location.set Location.for('/waiting-for', link: magnetLink)
+    Location.set Location.for('/autoplay', link: magnetLink)
 
 $ ->
   console.log('ASSET VERSION: ', App.GIT_SHA)

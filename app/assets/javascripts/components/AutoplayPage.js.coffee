@@ -1,7 +1,7 @@
 #= require ReactPromptMixin
 #= require Show
 
-component 'WaitingForPage',
+component 'AutoplayPage',
 
   contextTypes:
     params: React.PropTypes.object.isRequired
@@ -37,12 +37,18 @@ component 'WaitingForPage',
         transfer
 
   render: ->
-    console.log('WaitingForPage', @state)
+    console.log('AutoplayPage', @state)
     {div, h1} = DOM
+    state = @state.transferWaitMachineState
     div
-      className: 'ShowPage'
-      h1(null, @state.transferWaitMachineState)
+      className: 'AutoplayPage flex-frame'
+      h1(null, state)
+      @renderProgressBar() if 'downloading' == state
 
+  renderProgressBar: ->
+    DOM.progress
+      max: 100
+      value: @state.transferWaitMachine.transfer.percent_done
 
 
 # waiting for transfer
