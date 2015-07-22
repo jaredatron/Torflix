@@ -2,8 +2,6 @@ class SquaredTvArt
 
   ENDPOINT = 'http://squaredtvart.tumblr.com'.freeze
 
-  DEFAULT_SHOW_IMAGE = 'http://trevinwax.com/wp-content/uploads/2010/05/lost2_1280x1024.jpg'
-
   def self.get(path, params={})
     url = URI.parse(ENDPOINT)
     url.path = path
@@ -15,10 +13,9 @@ class SquaredTvArt
   end
 
   def self.search(name)
-    name = Rack::Utils.escape('12 monkeys')
+    name = Rack::Utils.escape(name)
     page = Nokogiri::HTML(get("/search/#{name}"))
-    src = page.css('.ThePhoto img').first.try(:[], :src)
-    src || DEFAULT_SHOW_IMAGE
+    page.css('.ThePhoto img').first.try(:[], :src)
   end
 
 end

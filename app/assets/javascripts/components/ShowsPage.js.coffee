@@ -15,12 +15,14 @@ component 'ShowsPage',
 
   renderShows: (shows) ->
     console.log(shows)
-    {div, ActionLink} = DOM
+    {div, ActionLink, img} = DOM
     div
       className: 'shows-list'
       shows.map (show, index) ->
         ActionLink
           key: index
+          className: 'ShowPage-show'
           href: "/shows/#{show.id}"
+          img src: "/show-art/#{escape(show.name)}"
           show.name
 

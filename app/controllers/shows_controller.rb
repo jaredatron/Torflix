@@ -13,7 +13,8 @@ class ShowsController < ApplicationController
   end
 
   def art
-    redirect_to Show.art(params[:show_name])
+    image_url = Show.art(params[:show_name])
+    redirect_to image_url || view_context.image_path('blank.gif')
   end
 
 end
