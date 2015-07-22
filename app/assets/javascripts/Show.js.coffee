@@ -1,28 +1,41 @@
 #= require 'eventemitter3'
 #= require 'Object.assign'
+#= require 'Object.values'
 
 @Show = class Show
-  constructor: ->
+  constructor: (props) ->
+    Object.assign(this, props)
 
   @ENDPOINT = '/shows'
+
+  @request = (method, path, params) ->
+    App.request(method, @url(path), params)
 
   @url = (path) ->
     "#{@ENDPOINT}#{path}"
 
+
+  @_cache = {}
+  @_allCached = false
+
   @all = ->
-    return Promise.resolve(@_all) if @_all?
-    @request('get', '/').then (all) =>
-      @_all = all
+    return Promise.resolve(Object.values(@_cache)) if @_allCached
+    @request('get', '/').then(cacheShows).then (shows) =>
+      @_allCached = true
+      shows
 
   @search = (query) ->
-    @request('get', '/search', query)
+    @request('get', '/search', s: query).then(cacheShows)
 
   @find = (id) ->
-    @request('get', "/#{id}")
+    @request('get', "/#{id}").then(cacheShow).then(cacheShow)
 
-  # @add = (id) ->
-  #   @get(id).then (torrent) ->
-  #     App.putio.transfers.add torrent.magnet_link
 
-  @request = (method, path, params) ->
-    App.request(method, @url(path), params)
+cacheShow = (props) ->
+  Show._cache[props.id] = new Show(props)
+
+cacheShows = (shows) ->
+  shows.map(cacheShow)
+
+
+Show.find(12)

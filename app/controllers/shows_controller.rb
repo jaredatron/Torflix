@@ -4,7 +4,7 @@ class ShowsController < ApplicationController
     # shows = Show.all.as_json.each do |show|
     #   show['artwork_url'] ||= view_context.image_path('blank.gif')
     # end
-    render json: Show.all
+    render json: Show.all.includes(:episodes)
   end
 
   def search

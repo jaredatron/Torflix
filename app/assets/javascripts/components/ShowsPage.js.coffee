@@ -19,12 +19,13 @@ component 'ShowsPage',
     div
       className: 'shows-list'
       shows.map (show, index) ->
+
         ActionLink
           key: index
-          className: 'ShowPage-show flex-column'
+          className: 'ShowsPage-show flex-column'
           href: "/shows/#{show.id}"
           if show.artwork_url
-            img className: 'ShowPage-show-artwork', src: show.artwork_url
+            img className: 'ShowsPage-show-artwork', src: show.artwork_url
           else
-            div className: 'ShowPage-show-name flex-grow', show.name
+            div className: 'ShowsPage-show-name flex-grow', show.name
 

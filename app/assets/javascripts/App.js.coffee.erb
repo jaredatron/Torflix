@@ -13,7 +13,9 @@
     params:   App.router.pageFor(Location.path, Location.params)
     loggedIn: !!App.session('put_io_access_token')
 
-
+  downloadAndPlayMagnetLink: (magnetLink) ->
+    App.putio.transfers.add(magnetLink)
+    Location.set Location.for('/waiting-for', link: magnetLink)
 
 $ ->
   console.log('ASSET VERSION: ', App.GIT_SHA)

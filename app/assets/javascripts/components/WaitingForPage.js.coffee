@@ -26,7 +26,7 @@ component 'WaitingForPage',
   onTransferWaitMachineChange: (state) ->
     if 'ready' == state
       video_id = @state.transferWaitMachine.videoFile.id
-      Location.set("/video/#{video_id}")
+      Location.set("/video/#{video_id}", true)
     @setState transferWaitMachineState: state
 
   promise: ->

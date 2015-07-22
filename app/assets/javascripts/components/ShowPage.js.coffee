@@ -7,8 +7,7 @@ component 'ShowPage',
     params: React.PropTypes.object.isRequired
 
   watchEpisode: (episode) ->
-    App.putio.transfers.add(episode.link)
-    Location.set Location.for('/waiting-for', link: episode.link)
+    App.downloadAndPlayMagnetLink(episode.magnet_link)
 
   render: ->
     DOM.div
@@ -19,12 +18,16 @@ component 'ShowPage',
 
   renderShow: (show) ->
     console.log(show)
-    {div, h1, h4, p, ActionLink} = DOM
+    {div, h1, h4, p, ActionLink, img} = DOM
     div null,
-      h1(null, show.title.replace(/^feed for /,''))
-      show.episodes.map (episode, index) ->
+      if show.artwork_url
+        img className: 'ShowPage-show-artwork', src: show.artwork_url
+
+      h1 null, show.name
+      show.episodes.map (episode, index) =>
         ActionLink
+          className: 'link'
           onClick: @watchEpisode.bind(this, episode)
           key: index
-          h4 null, episode.title
+          h4 null, episode.name
 
