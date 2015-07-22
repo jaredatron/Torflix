@@ -6,7 +6,7 @@ module ShowrssInfo
     url = URI.parse(ENDPOINT)
     url.path = path
     url.query = params.to_query
-    Rails.logger.warn "ShowrssInfo.get(#{url.to_s.inspect})"
+    Rails.logger.warn "ShowrssInfo.get(#{path.to_s.inspect})"
     response = HTTParty.get(url, query: params)
     raise response.inspect unless response.code == 200
     response.parsed_response
@@ -17,8 +17,8 @@ module ShowrssInfo
     options = page.css('select[name=show] option[value]')
     shows = options.map do |option|
       {
-        id: option[:value].to_i,
-        name: option.text,
+        'id'   => option[:value].to_i,
+        'name' => option.text,
       }
     end
   end
@@ -26,10 +26,10 @@ module ShowrssInfo
   def self.find(id)
     show = get("/feeds/#{id}.rss")["rss"]["channel"]
     {
-      title: show["title"].gsub('showRSS: ',''),
-      description: show["description"].gsub('showRSS ',''),
-      link: show["link"],
-      episodes: show["item"],
+      'title'       => show["title"].gsub('showRSS: ',''),
+      'description' => show["description"].gsub('showRSS ',''),
+      'link'        => show["link"],
+      'episodes'    => show["item"],
     }
   end
 

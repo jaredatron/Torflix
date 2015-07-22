@@ -11,14 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150722153130) do
+ActiveRecord::Schema.define(version: 20150722163402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "episodes", force: :cascade do |t|
+    t.string   "show_rss_guid",         null: false
+    t.integer  "show_id",               null: false
+    t.string   "name",                  null: false
+    t.integer  "show_rss_info_show_id", null: false
+    t.datetime "published_at",          null: false
+    t.string   "magnet_link",           null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
   create_table "shows", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "showrss_info_id"
+    t.string   "name",            null: false
+    t.integer  "showrss_info_id", null: false
     t.string   "artwork_url"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
