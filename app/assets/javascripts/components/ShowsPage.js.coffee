@@ -23,8 +23,7 @@ component 'ShowsPage',
           key: index
           className: 'ShowPage-show flex-column'
           href: "/shows/#{show.id}"
-
-          img src: "/show-art/#{escape(show.name)}"
+          img className: 'ShowPage-show-artwork', src: show.artwork_url
           div className: 'flex-spacer'
           div className: 'ShowPage-show-name', show.name
 

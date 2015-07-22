@@ -1,7 +1,10 @@
 class ShowsController < ApplicationController
 
   def index
-    render json: Show.all
+    shows = Show.all.as_json.each do |show|
+      show['artwork_url'] ||= view_context.image_path('blank.gif')
+    end
+    render json: shows
   end
 
   def search
@@ -10,11 +13,6 @@ class ShowsController < ApplicationController
 
   def show
     render json: Show.find(params[:id])
-  end
-
-  def art
-    image_url = Show.art(params[:show_name])
-    redirect_to image_url || view_context.image_path('blank.gif')
   end
 
 end

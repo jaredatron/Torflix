@@ -1,4 +1,4 @@
-class ShowrssInfo
+module ShowrssInfo
 
   ENDPOINT = 'http://showrss.info/'.freeze
 

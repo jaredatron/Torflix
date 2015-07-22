@@ -17,6 +17,7 @@ gem 'uglifier'
 gem 'unicorn-rails'
 gem 'dotenv-rails'
 gem 'pry-rails'
+gem 'sidekiq'
 
 group :development, :test do
   gem 'rspec-rails'

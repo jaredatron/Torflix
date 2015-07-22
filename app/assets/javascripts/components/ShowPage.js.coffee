@@ -6,6 +6,10 @@ component 'ShowPage',
   contextTypes:
     params: React.PropTypes.object.isRequired
 
+  watchEpisode: (episode) ->
+    App.putio.transfers.add(episode.link)
+    Location.set Location.for('/waiting-for', link: episode.link)
+
   render: ->
     DOM.div
       className: 'ShowPage'
@@ -20,9 +24,7 @@ component 'ShowPage',
       h1(null, show.title.replace(/^feed for /,''))
       show.episodes.map (episode, index) ->
         ActionLink
-          onClick: =>
-            App.putio.transfers.add(episode.link)
-            Location.set Location.for('/waiting-for', link: episode.link)
+          onClick: @watchEpisode.bind(this, episode)
           key: index
           h4 null, episode.title
 
