@@ -26,7 +26,7 @@ module ShowrssInfo
   def self.find(id)
     show = get("/feeds/#{id}.rss")["rss"]["channel"]
     {
-      'title'       => show["title"].gsub('showRSS: ',''),
+      'name'        => show["title"].gsub('showRSS: ',''),
       'description' => show["description"].gsub('showRSS ',''),
       'link'        => show["link"],
       'episodes'    => show["item"],
