@@ -31,8 +31,8 @@ module Eztv
       id = show_page_path.match(%r{^/shows/(.+)/$})[1]
       # show_page_url = "#{ENDPOINT}#{show_page_path.slice(1..-1)}"
       {
-        'id'            => id,
-        'name'          => name,
+        'eztv_id' => id,
+        'name'    => name,
       }
     end
   end
@@ -48,10 +48,6 @@ module Eztv
     episodes = trs.map do |tr|
       name = tr.css('a.epinfo').first.try(:[], :title)
       magnet_link = tr.css('a.magnet').first.try(:[],:href)
-      # show_path_path = URI.parse(link[:href]).path
-      # episode_page = Nokogiri::HTML(get(show_path_path))
-      # season_number  = episode_page.css('b:contains("Season:")').first.next.text.to_i
-      # episode_number = episode_page.css('b:contains("Season:")').first.next.text.to_i
       {
         'name'        => name,
         'magnet_link' => magnet_link,

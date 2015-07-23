@@ -17,29 +17,31 @@ ActiveRecord::Schema.define(version: 20150722163402) do
   enable_extension "plpgsql"
 
   create_table "episodes", force: :cascade do |t|
-    t.string   "show_rss_guid",         null: false
-    t.integer  "show_id",               null: false
-    t.string   "name",                  null: false
-    t.integer  "show_rss_info_show_id", null: false
-    t.datetime "published_at",          null: false
-    t.string   "magnet_link",           null: false
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.integer  "show_id",                 null: false
+    t.string   "name",                    null: false
+    t.string   "normalized_name",         null: false
+    t.string   "magnet_link",             null: false
+    t.integer  "episode_number"
+    t.integer  "season_number"
+    t.integer  "seasonal_episode_number"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
-  add_index "episodes", ["show_id"], name: "index_episodes_on_show_id", using: :btree
-  add_index "episodes", ["show_rss_guid"], name: "index_episodes_on_show_rss_guid", unique: true, using: :btree
+  add_index "episodes", ["show_id", "normalized_name"], name: "index_episodes_on_show_id_and_normalized_name", unique: true, using: :btree
 
   create_table "shows", force: :cascade do |t|
-    t.string   "normalized_name", null: false
     t.string   "name",            null: false
-    t.integer  "showrss_info_id", null: false
+    t.string   "normalized_name", null: false
+    t.integer  "showrss_id"
+    t.string   "eztv_id"
     t.string   "artwork_url"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
 
+  add_index "shows", ["eztv_id"], name: "index_shows_on_eztv_id", unique: true, using: :btree
   add_index "shows", ["normalized_name"], name: "index_shows_on_normalized_name", unique: true, using: :btree
-  add_index "shows", ["showrss_info_id"], name: "index_shows_on_showrss_info_id", using: :btree
+  add_index "shows", ["showrss_id"], name: "index_shows_on_showrss_id", unique: true, using: :btree
 
 end

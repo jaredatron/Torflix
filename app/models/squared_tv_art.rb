@@ -10,6 +10,8 @@ class SquaredTvArt
     response = HTTParty.get(url, query: params)
     raise response.inspect unless response.code == 200
     response.parsed_response
+  rescue SocketError
+    retry
   end
 
   def self.search(name)

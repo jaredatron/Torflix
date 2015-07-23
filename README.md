@@ -14,6 +14,6 @@ a user can instruct the app to automatically move shows to offline storage
 
 ## TODO
 
-0. get tv RSS feed data
+0. dry up HTTParty calls to handle SocketError
 0. find artwork for tv rss feed data
 0. build netflix like interface for tv shows
