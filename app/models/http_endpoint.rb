@@ -21,8 +21,6 @@ class HttpEndpoint
     response.parsed_response
   rescue SocketError
     retry
-  rescue
-    binding.pry
   end
 
 

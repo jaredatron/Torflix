@@ -31,6 +31,9 @@ Location.setPath = (path, replace) ->
 Location.setParams = (params, replace) ->
   @set(@for(null, params), replace)
 
+Location.updateParams = (params, replace) ->
+  @setParams Object.assign({}, @params, params)
+
 
 # private
 
@@ -47,19 +50,26 @@ searchToObject = (search) ->
   search.split(/&+/).forEach (param) ->
     [key, value] = param.split('=')
     key = decodeURIComponent(key)
-    value = decodeURIComponent(value) if value?
+    if value?
+      value = decodeURIComponent(value)
+    else
+      value = true
     params[key] = value
   params
 
 
 objectToQueryString = (params) ->
   return undefined if !params?
-  params = Object.keys(params).map (key) ->
-    if value = params[key]
-      "#{encodeURIComponent(key)}=#{encodeURIComponent(value)}"
-    else
-      "#{encodeURIComponent(key)}"
-  params.join('&')
+  pairs = []
+  Object.keys(params).forEach (key) ->
+    value = params[key]
+    switch value
+      when true
+        pairs.push "#{encodeURIComponent(key)}"
+      when false, null, undefined
+      else
+        pairs.push "#{encodeURIComponent(key)}=#{encodeURIComponent(value)}"
+  pairs.join('&')
 
 objectToSearch = (params) ->
   search = objectToQueryString(params)

@@ -24,13 +24,18 @@ component 'DirectoryContents',
 
   propTypes:
     directory_id: React.PropTypes.number.isRequired
-    sortBy:       React.PropTypes.any
+    sortBy:       React.PropTypes.oneOfType([
+                    React.PropTypes.string,
+                    React.PropTypes.fun,
+                  ]).isRequired
+    sortOrder:    React.PropTypes.oneOf(['asc','desc'])
 
   childContextTypes:
     parentDirectory: React.PropTypes.object
 
   getDefaultProps: ->
     sortBy: 'name'
+    sortOrder: 'asc'
 
   getChildContext: ->
     parentDirectory: this
@@ -49,12 +54,15 @@ component 'DirectoryContents',
     sorter = @props.sortBy
     sorter = SORTERS[sorter] if typeof sorter == 'string'
 
+    files = files.sort(sorter)
+    files = files.reverse() if @props.sortOrder == 'desc'
+
     DOM.div className: 'DirectoryContents',
       switch
         when null
           'NOT FOUND'
         when files.length > 0
-          files.sort(sorter).map(@renderFile)
+          files.map(@renderFile)
         else
           DOM.div(className: 'empty', style: @depthStyle(), 'empty')
 
