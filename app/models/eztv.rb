@@ -1,25 +1,9 @@
 module Eztv
 
-  ENDPOINT = 'https://eztv.ch/'.freeze
-
-  def self.url_for_path(path, params={})
-    url = URI.parse(ENDPOINT)
-    url.path = path
-    url.query = params.to_query
-    url.to_s
-  end
-
-  def self.get(path, params={})
-    url = url_for_path(path, params)
-    Rails.logger.warn "Eztv.get(#{path.to_s.inspect})"
-    response = HTTParty.get(url, query: params)
-    binding.pry unless response.code == 200
-    raise response.inspect unless response.code == 200
-    response.parsed_response
-  end
+  ENDPOINT = HttpEndpoint.new('https://eztv.ch/')
 
   def self.shows
-    page = Nokogiri::HTML(get('/showlist/'))
+    page = Nokogiri::HTML(ENDPOINT.get('/showlist/'))
     trs = page.css('.forum_header_border tr').to_a
     trs.reject! do |tr|
       tr.css('.forum_thread_post').blank?
@@ -38,8 +22,8 @@ module Eztv
   end
 
   def self.find(id)
-    link = url_for_path("/shows/#{id}/")
-    page = Nokogiri::HTML(get("/shows/#{id}/"))
+    link = ENDPOINT.url_for("/shows/#{id}/")
+    page = Nokogiri::HTML(ENDPOINT.get("/shows/#{id}/"))
 
     name = page.css('.section_post_header:contains("Show Information:") b').first.text
 

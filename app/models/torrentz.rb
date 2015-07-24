@@ -1,19 +1,9 @@
 class Torrentz
 
-  ENDPOINT = 'https://torrentz.eu/'.freeze
-
-  def self.get(path, params={})
-    url = URI.parse(ENDPOINT)
-    url.path = path
-    url.query = params.to_query
-    Rails.logger.warn "Torrentz.get(#{url.to_s.inspect})"
-    response = HTTParty.get(url, query: params)
-    raise response.inspect unless response.code == 200
-    Nokogiri::HTML(response.parsed_response)
-  end
+  ENDPOINT = HttpEndpoint.new('https://torrentz.eu/')
 
   def self.providers(id)
-    get("/#{id}").css('.download > dl > dt > a').map do |a|
+    ENDPOINT.get("/#{id}").css('.download > dl > dt > a').map do |a|
       name = a.css('> span').first.text
       url  = a.attr('href')
       [name, url]

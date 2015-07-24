@@ -1,19 +1,9 @@
 module Showrss
 
-  ENDPOINT = 'http://showrss.info/'.freeze
-
-  def self.get(path, params={})
-    url = URI.parse(ENDPOINT)
-    url.path = path
-    url.query = params.to_query
-    Rails.logger.warn "Showrss.get(#{path.to_s.inspect})"
-    response = HTTParty.get(url, query: params)
-    raise response.inspect unless response.code == 200
-    response.parsed_response
-  end
+  ENDPOINT = HttpEndpoint.new('http://showrss.info/')
 
   def self.shows
-    page = Nokogiri::HTML(get('/', cs: 'feeds'))
+    page = Nokogiri::HTML(ENDPOINT.get('/', cs: 'feeds'))
     options = page.css('select[name=show] option[value]')
     options.map do |option|
       {
@@ -24,7 +14,7 @@ module Showrss
   end
 
   def self.find(id)
-    show = get("/feeds/#{id}.rss")["rss"]["channel"]
+    show = ENDPOINT.get("/feeds/#{id}.rss")["rss"]["channel"]
     episodes = show["item"]
     episodes = [] if episodes.nil?
     episodes = [episodes] if !episodes.is_a?(Array)
@@ -32,8 +22,6 @@ module Showrss
       {
         'name'           => episode['title'],
         'magnet_link'    => episode['link'],
-        'season_number'  =>
-        'episode_number' =>
       }
     end
     {
