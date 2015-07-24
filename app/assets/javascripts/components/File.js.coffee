@@ -15,23 +15,23 @@ component 'File',
 
   newIcon: ->
     if @isNew()
-      DOM.div 
+      DOM.div
         className: 'File-newIcon',
         DOM.Glyphicon(glyph:'asterisk')
 
   size: ->
-    DOM.div 
-      className: 'File-size', 
+    DOM.div
+      className: 'File-size',
       DOM.FileSize(size: @props.file.size)
 
   name: ->
     if @isVideo()
       PlayVideoLink(
-        className: 'flex-spacer'
+        className: 'File-name flex-spacer'
         file: @props.file
       )
     else
-      DOM.div(className: 'flex-spacer',
+      DOM.div(className: 'File-name flex-spacer',
         DOM.Glyphicon(glyph:'file', className: 'File-icon'),
         DOM.span(null, @props.file.name),
       )
@@ -43,7 +43,7 @@ component 'File',
         div(style: @depthStyle())
         @name()
         @newIcon()
-        DownloadLink(file_id: @props.file.id, div(className: 'subtle-text', 'download'))
+        DownloadLink(file_id: @props.file.id, DOM.Glyphicon(glyph:'download'))
         PutioLink(file: @props.file)
         ChromecastLink(file_id: @props.file.id)
         @size()
@@ -61,7 +61,7 @@ ChromecastLink = component
 PutioLink = component
   displayName: 'File-PutioLink',
   render: ->
-    DOM.ExternalLink 
+    DOM.ExternalLink
       href: "https://put.io/file/#{@props.file_id}"
       className: 'File-PutioLink',
       title: 'put.io',

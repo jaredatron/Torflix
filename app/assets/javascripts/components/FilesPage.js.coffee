@@ -7,25 +7,20 @@ component 'FilesPage',
   contextTypes:
     params: React.PropTypes.object.isRequired
 
-  getInitialState: ->
-    sortBy:    Location.params.sortBy    || 'name' # created_at | name | size
-    sortOrder: Location.params.sortOrder || 'asc'  # asc | desc
-
-  controlsChange: (state) ->
-    @setState state
-
   render: ->
+    sortBy    = Location.params.sortBy    || 'name' # created_at | name | size
+    sortOrder = Location.params.sortOrder || 'asc'  # asc | desc
     DOM.div
       className: 'FilesPage'
 
       Controls
-        sortBy:    @state.sortBy
-        sortOrder: @state.sortOrder
+        sortBy:    sortBy
+        sortOrder: sortOrder
 
       DOM.DirectoryContents
         directory_id: 0
-        sortBy:       @state.sortBy
-        sortOrder:    @state.sortOrder
+        sortBy:       sortBy
+        sortOrder:    sortOrder
 
       @renderPrompt()
 
@@ -36,13 +31,12 @@ Controls = component
   propTypes:
     sortBy:    React.PropTypes.string.isRequired
     sortOrder: React.PropTypes.string.isRequired
-    onChange:  React.PropTypes.func.isRequired
 
   sortByChange: ->
-    @props.onChange(
-      sortBy:    @refs.sortBy.getDOMNode().value
-      sortOrder: @refs.sortOrder.getDOMNode().value
-    )
+    Location.updateParams sortBy: @refs.sortBy.getDOMNode().value
+
+  sortOrderChange: ->
+    Location.updateParams sortOrder: @refs.sortOrder.getDOMNode().value
 
   render: ->
     {div, select, option} = DOM
@@ -52,12 +46,14 @@ Controls = component
       select
         ref: 'sortBy'
         onChange: @sortByChange
+        value: @props.sortBy
         option value: 'name',       'Name'
         option value: 'created_at', 'Created at'
         option value: 'size',       'Size'
 
       select
-        ref: 'sortBy'
-        onChange: @onChange
-        option value: 'name',       'Name'
-        option value: 'created_at', 'Created at'
+        ref: 'sortOrder'
+        onChange: @sortOrderChange
+        value: @props.sortOrder
+        option value: 'asc',  'Asc'
+        option value: 'desc', 'Desc'
