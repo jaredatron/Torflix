@@ -23,5 +23,8 @@ class HttpEndpoint
     retry
   end
 
+  def get_html(path, params={})
+    Nokogiri::HTML(get(path, params))
+  end
 
 end

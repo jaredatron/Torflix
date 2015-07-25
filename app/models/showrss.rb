@@ -3,7 +3,7 @@ module Showrss
   ENDPOINT = HttpEndpoint.new('http://showrss.info/')
 
   def self.shows
-    page = Nokogiri::HTML(ENDPOINT.get('/', cs: 'feeds'))
+    page = ENDPOINT.get_html('/', cs: 'feeds'))
     options = page.css('select[name=show] option[value]')
     options.map do |option|
       {
