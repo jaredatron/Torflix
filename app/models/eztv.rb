@@ -3,7 +3,7 @@ module Eztv
   ENDPOINT = HttpEndpoint.new('https://eztv.ch/')
 
   def self.shows
-    page = ENDPOINT.get_html('/showlist/'))
+    page = ENDPOINT.get_html('/showlist/')
     trs = page.css('.forum_header_border tr').to_a
     trs.reject! do |tr|
       tr.css('.forum_thread_post').blank?
@@ -23,7 +23,7 @@ module Eztv
 
   def self.find(id)
     link = ENDPOINT.url_for("/shows/#{id}/")
-    page = ENDPOINT.get_html("/shows/#{id}/"))
+    page = ENDPOINT.get_html("/shows/#{id}/")
 
     name = page.css('.section_post_header:contains("Show Information:") b').first.text
 
