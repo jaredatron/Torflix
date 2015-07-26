@@ -12,7 +12,7 @@
   getShow: (series_id) ->
     Request.get("#{@ENDPOINT}/#{@APIK_KEY}/series/#{series_id}/all").then (response) ->
       show = extractshow(response)
-      show.episodes = extractEpisodes(response)
+      show.episodes = extractEpisodes(response, show)
       show
 
 extractshow = (response) ->
@@ -27,12 +27,13 @@ extractshow = (response) ->
   show.description    = get('Overview')
   show
 
-extractEpisodes = (response) ->
+extractEpisodes = (response, show) ->
   episodes = $(response).find('Episode')
-  episodes.map ->
-    node = $(this)
+  episodes.get().map (node) ->
+    node = $(node)
     get = (key) -> node.find(key).text()
     episode = {}
+    episode.show = show
     episode.thetvdb_id              = get('id')
     episode.thetvdb_series_id       = get('seriesid')
     episode.thetvdb_season_id       = get('seriesid')
@@ -41,9 +42,9 @@ extractEpisodes = (response) ->
     episode.first_aired_at          = get('FirstAired')
     episode.language                = get('Language')
     episode.language                = get('Language')
-    episode.episode_number          = get('Combined_episodenumber')
-    episode.season_number           = get('SeasonNumber')
-    episode.seasonal_episode_number = get('EpisodeNumber')
+    episode.episode_number          = parseInt(get('Combined_episodenumber'), 10)
+    episode.season_number           = parseInt(get('SeasonNumber'), 10)
+    episode.seasonal_episode_number = parseInt(get('EpisodeNumber'), 10)
     episode
 
 

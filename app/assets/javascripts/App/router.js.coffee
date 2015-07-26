@@ -2,6 +2,7 @@
 
 App.router = new Router ->
   @match '/',               redirectTo: '/shows'
+  @match '/search/shows',   component: 'SearchShowsPage'
   @match '/shows',          component: 'ShowsPage'
   @match '/shows/:show_id', component: 'ShowPage'
   @match '/transfers',      component: 'TransfersPage'
