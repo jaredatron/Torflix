@@ -22,7 +22,6 @@ component 'ShowSearchResults',
     console.dir(show)
     {div, span, h1, p} = DOM
 
-
     div
       className: ''
       h1(null, show.name)
@@ -40,6 +39,7 @@ component 'ShowSearchResults',
             th null, 'Season'
             th null, 'Episode'
             th null, 'Name'
+            th null, 'Description'
         tbody null,
           if show.episodes.length == 0
             tr(null, td(colSpan: 6, 'No episodes found :/'))
@@ -56,6 +56,7 @@ component 'ShowSearchResults',
       td null, episode.season_number
       td null, episode.seasonal_episode_number
       td null, ActionLink className: 'link', href: href, episode.name
+      td null, episode.description
 
   renderFailed: (error) ->
     if error.xhr.status == 404

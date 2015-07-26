@@ -1,32 +1,24 @@
 component 'TorrentSearchForm',
 
   getInitialState: ->
-    value: Location.params.s || ""
+    value: valueFromParams()
 
-  getValue: ->
-    @refs.input.getDOMNode().value
-
-  valueIsBlank: ->
-    @state.value.match(/^\s*$/)
-
-  valueIsMagnetLink: ->
-    @state.value.match(/^magnet:/)
+  setValueFromParams: ->
+    @setState value: valueFromParams()
 
   clear: ->
     @setState value: ''
 
-  onSubmit: (event) ->
-    event.preventDefault()
-    if @valueIsMagnetLink()
-      App.putio.transfers.add @state.value
-      Location.set Location.for('/autoplay', link: @state.value)
+  onSearch: (query) ->
+    if isMagnetLink(query)
+      App.putio.transfers.add query
+      Location.set Location.for('/autoplay', link: query)
       @clear()
     else
-      Location.set Location.for('/search', s: @getValue())
+      Location.set Location.for('/search', s: query)
 
-
-  onChange: (event) ->
-    @setState value: @getValue()
+  onChange: (value) ->
+    @setState value: value
 
   componentDidMount: ->
     Location.on('change', @setValueFromParams)
@@ -34,16 +26,21 @@ component 'TorrentSearchForm',
   componentWillUnmount: ->
     Location.off('change', @setValueFromParams)
 
-  setValueFromParams: ->
-    return unless Location.path == '/search'
-    @setState value: (Location.params.s || "")
-
   render: ->
-    {div, Form} = DOM
-    Form
+    DOM.SearchForm
       className: 'TorrentSearchForm'
-      onSubmit: @onSubmit
-      DOM.input
-        ref: 'input'
-        value: @state.value
-        onChange: @onChange
+
+      onSearch:  @onSearch
+      value:     @state.value
+      onChange:  @onChange
+
+
+valueFromParams = ->
+  if Location.path == '/search'
+    Location.params.s || ""
+  else
+    ""
+
+
+isMagnetLink = (string) ->
+  string.match(/^magnet:/)
