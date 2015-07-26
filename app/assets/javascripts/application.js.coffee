@@ -7,3 +7,4 @@
 #= require App
 #= require components
 #= require Torrentz
+#= require Thetvdb

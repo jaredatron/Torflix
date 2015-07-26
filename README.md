@@ -19,3 +19,23 @@ a user can instruct the app to automatically move shows to offline storage
 0. build netflix like interface for tv shows
 0. feature: watch later list (stores magnet links)
 0. movies page
+
+
+
+
+
+http://thetvdb.com/api/GetSeries.php?seriesname=The+Daily+Show
+
+Get recently changes serieses?
+http://thetvdb.com/api/Updates.php?type=all&time=1437534456
+
+
+# search for series
+http://thetvdb.com/api/GetSeries.php?seriesname=Last+Man+ON+Earth
+
+
+# get series
+http://thetvdb.com/api/9D971F89A53A01B9/series/281622
+
+# get series with episodes
+http://thetvdb.com/api/9D971F89A53A01B9/series/281622/all
