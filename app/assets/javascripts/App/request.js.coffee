@@ -1,14 +1,12 @@
-App.request = (method, url, params) ->
-  request = $.ajax
-    method: method
-    url: url
-    data: params
-    dataType: 'json'
+#= require Request
 
-  new Promise (resolve, reject) ->
-    request.done (result) ->
-      resolve(result)
-    request.error (xhr, textStatus, errorThrown) ->
-      error = new Error('Putio request failed: '+textStatus+' / '+errorThrown)
-      error.xhr = xhr
-      reject(error)
+App.request = (method, url, params) ->
+  Request(method, url, params, {
+    dataType: 'json'
+  })
+
+App.get = (url, params) ->
+  App.request('GET', url, params)
+
+App.post = (url, params) ->
+  App.request('POST', url, params)
