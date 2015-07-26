@@ -16,18 +16,24 @@ component 'ShowSearchResults',
           promise: Thetvdb.search(@props.query)
           loading: ->
             DOM.div(null, 'loading...')
-          loaded: @renderShow
+          loaded: @renderShows
           failed: @renderFailed
 
-  renderShow: (show) ->
-    console.dir(show)
-    {div, span, h1, p} = DOM
+  renderShows: (shows) ->
+    console.dir(shows)
 
-    div
+    DOM.div
+      className: ''
+      shows.map(@renderShow)
+
+
+  renderShow: (show) ->
+    {div, span, h1, p} = DOM
+    DOM.div
+      key: show.id
       className: ''
       h1(null, show.name)
       p(null, show.description)
-      @renderEpisodes(show)
 
   renderEpisodes: (show) ->
     {div, table, thead, tbody, tr, th} = DOM

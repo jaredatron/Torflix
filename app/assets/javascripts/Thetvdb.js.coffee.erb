@@ -6,19 +6,19 @@
 
   search: (showName) ->
     Request.get("#{@ENDPOINT}/GetSeries.php", seriesname: showName).then (response) ->
-      series_id = $('Series id', response).text()
-      Thetvdb.getShow(series_id)
+      shows = $('Series', response).get().map(SeriesToShow)
 
   getShow: (series_id) ->
     Request.get("#{@ENDPOINT}/#{@APIK_KEY}/series/#{series_id}/all").then (response) ->
-      show = extractshow(response)
+      show = SeriesToShow($('Series', response).first())
       show.episodes = extractEpisodes(response, show)
       show
 
-extractshow = (response) ->
-  node = $(response).find('Series')
-  get = (key) -> node.find(key).text()
+SeriesToShow = (series) ->
+  series = $(series)
+  get = (key) -> series.find(key).text()
   show = {}
+  show.id             = get('seriesid')
   show.thetvdb_id     = get('seriesid')
   show.name           = get('SeriesName')
   show.aliases        = get('AliasNames').split('|')

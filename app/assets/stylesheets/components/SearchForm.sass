@@ -1,20 +1,21 @@
 .SearchForm
-  display: inline-block
-  position: relative
-  border: 1px solid black
-  +border-radius(5px)
   overflow: hidden
+  display: inline-flex
+  align-items: center
+
+  border: 1px solid #ccc
+  +border-radius(5px)
+  padding: 0.2em 0.5em
+  background-color: white
+
   input
+    margin-right: 0.5em
     border: none
-    padding: 0.2em 0.5em
     font-size: inherit
     color: inherit
-
+    background-color: inherit
     &:focus
       outline: none
       outline-offset: 0
 
   .glyphicon
-    position: absolute
-    top: 0.35em
-    right: 0.3em
