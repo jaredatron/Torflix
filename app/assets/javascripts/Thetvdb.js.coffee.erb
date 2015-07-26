@@ -35,6 +35,7 @@ extractEpisodes = (response, show) ->
     get = (key) -> node.find(key).text()
     episode = {}
     episode.show = show
+    episode.id                      = get('id')
     episode.thetvdb_id              = get('id')
     episode.thetvdb_series_id       = get('seriesid')
     episode.thetvdb_season_id       = get('seriesid')

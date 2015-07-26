@@ -1,5 +1,3 @@
-#= require 'ReactPromptMixin'
-
 component 'ShowPageLayout',
 
   render: ->

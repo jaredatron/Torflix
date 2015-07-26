@@ -1,7 +1,7 @@
 component 'ShowArt',
 
   propTypes:
-    ShowArt: React.PropTypes.object.isRequired
+    show: React.PropTypes.object.isRequired
 
   render: ->
     PromiseStateMachine
