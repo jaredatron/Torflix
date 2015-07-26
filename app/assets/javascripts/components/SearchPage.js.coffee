@@ -6,8 +6,9 @@ component 'SearchPage',
 
   contextTypes:
     params: React.PropTypes.object.isRequired
-  
+
   render: ->
     DOM.div
       className: 'SearchPage'
+      DOM.TorrentSearchForm()
       DOM.TorrentSearchResults(query: @context.params.s)

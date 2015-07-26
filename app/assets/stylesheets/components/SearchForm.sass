@@ -1,7 +1,9 @@
 .SearchForm
   overflow: hidden
-  display: inline-flex
+  display: flex
+  // display: inline-flex
   align-items: center
+  margin: 0.5em
 
   border: 1px solid #ccc
   +border-radius(5px)
@@ -10,6 +12,8 @@
   color: black
 
   input
+    flex-grow: 1
+    flex-shrink: 1
     margin-right: 0.5em
     border: none
     font-size: inherit
@@ -20,3 +24,5 @@
       outline-offset: 0
 
   .glyphicon
+    flex-grow: 0
+    flex-shrink: 0

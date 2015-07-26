@@ -6,9 +6,10 @@ component 'TransfersPage',
 
   contextTypes:
     params: React.PropTypes.object.isRequired
-  
+
   render: ->
     DOM.div
       className: 'TransfersPage'
+      DOM.TorrentSearchForm()
       DOM.TransfersList()
       @renderPrompt()
