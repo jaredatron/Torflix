@@ -1,4 +1,4 @@
-@Torrentz = class
+class Torrentz
 
   ENDPOINT = HttpEndpoint.new('https://torrentz.eu/')
 
