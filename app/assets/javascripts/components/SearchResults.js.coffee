@@ -1,24 +1,29 @@
-component 'ShowSearchResults',
+component 'SearchResults',
 
   propTypes:
-    query: React.PropTypes.string.isRequired
+    promise:      React.PropTypes.object.isRequired
+    renderResult: React.PropTypes.func.isRequired
+
 
   render: ->
-    DOM.SearchResults
-      key: "query-#{@props.query}"
-      promise: Show.search(@props.query)
-      renderResult: @renderResult
+    PromiseStateMachine
+      promise: @props.promise
+      loaded: @renderLoaded
+      # failed: @renderFailed
 
-  renderResult: (show) ->
-    {div, p, LinkToShow} = DOM
+  renderFailed: (error) ->
+    DOM.div(null)
 
-    href = Location.for("/shows/#{show.id}")
-    LinkToShow
-      show: show,
-      key: show.id
-      p(className: 'link', show.name)
-      p(className: 'small', show.description)
+  renderLoaded: (results) ->
+    DOM.div
+      className: 'SearchResults-results'
+      results.map(@renderResult)
 
+
+  renderResult: (result) ->
+    DOM.div
+      className: 'SearchResults-result'
+      @props.renderResult(result)
 
 
 #   autoplayEpisode: (episode) ->
@@ -91,10 +96,10 @@ component 'ShowSearchResults',
 
 
 
-formatEpisodeQuery = (season, episode) ->
-  "S#{zeroPad(season)}E#{zeroPad(episode)}"
+# formatEpisodeQuery = (season, episode) ->
+#   "S#{zeroPad(season)}E#{zeroPad(episode)}"
 
-zeroPad = (number) ->
-  number = parseInt(number.toString(), 10).toString()
-  number = "0#{number}" if number.length < 2
-  number
+# zeroPad = (number) ->
+#   number = parseInt(number.toString(), 10).toString()
+#   number = "0#{number}" if number.length < 2
+#   number

@@ -8,4 +8,5 @@ component 'ShowSearchForm',
       collectionName: 'shows'
       className:      'ShowSearchForm'
       onSearch:        @onSearch
+      autofocus:       @props.autofocus
 

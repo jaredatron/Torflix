@@ -46,6 +46,7 @@ component 'SearchForm',
         value: @props.value
         onChange: @onChange
         placeholder: @props.placeholder || @placeholder()
+        autofocus: @props.autofocus
       DOM.Glyphicon glyph: 'search'
 
 

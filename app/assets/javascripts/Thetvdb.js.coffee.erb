@@ -18,13 +18,14 @@ SeriesToShow = (series) ->
   series = $(series)
   get = (key) -> series.find(key).text()
   show = {}
-  show.id             = get('seriesid')
-  show.thetvdb_id     = get('seriesid')
+  show.id             = get('seriesid') || get('id')
+  show.thetvdb_id     = get('seriesid') || get('id')
   show.name           = get('SeriesName')
   show.aliases        = get('AliasNames').split('|')
   show.first_aired_at = get('FirstAired')
   show.imdb_id        = get('IMDB_ID')
   show.description    = get('Overview')
+  debugger if show.id == '' || show.id == null || show.id == undefined
   show
 
 extractEpisodes = (response, show) ->

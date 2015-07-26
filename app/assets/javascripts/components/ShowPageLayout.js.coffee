@@ -5,5 +5,5 @@ component 'ShowPageLayout',
   render: ->
     DOM.div
       className: Classnames('ShowPageLayout', @props.className)
-      DOM.ShowSearchForm()
+      DOM.ShowSearchForm(autofocus: true)
       @props.children
