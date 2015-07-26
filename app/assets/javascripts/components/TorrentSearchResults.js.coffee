@@ -60,5 +60,5 @@ SearchResult = component
     Torrent.get(@props.result.id).then (torrent) ->
       debugger
       App.putio.transfers.add torrent.magnet_link
-      Location.set Location.for('/waiting-for', link: torrent.magnet_link)
+      Location.set Location.for('/autoplay', link: torrent.magnet_link)
 

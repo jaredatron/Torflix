@@ -19,7 +19,7 @@ component 'TorrentSearchForm',
     event.preventDefault()
     if @valueIsMagnetLink()
       App.putio.transfers.add @state.value
-      Location.set Location.for('/waiting-for', link: @state.value)
+      Location.set Location.for('/autoplay', link: @state.value)
       @clear()
     else
       Location.set Location.for('/search', s: @getValue())
