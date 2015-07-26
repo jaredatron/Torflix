@@ -31,7 +31,8 @@
       console.log('FOUND PROVIDERS', providers)
       magnet_link = null
       next = ->
-        return null if providers.length == 0
+        if providers.length == 0
+          throw new Error('unable to find magnet for '+id)
         [name, url] = providers.shift()
         scraper = SCRAPERS[name]
         if scraper
@@ -59,10 +60,14 @@ Scraper = class
     Request.get(url).then (html) =>
       console.log('SCRAPER parsing html')
       dom = parseHTML(html)
-      magnet_link = @parser(dom)
+      try
+        magnet_link = @parser(dom)
+      catch error
+        debugger
       console.log('magnet_link??', magnet_link)
       unless magnet_link
         throw new Error('unable to find magnet link at '+url)
+      magnet_link
 
 
 
@@ -71,11 +76,17 @@ define_scraper = (name, parser) ->
   SCRAPERS[name] = new Scraper(parser)
 
 
+FIRST_MAGNET_LINK = (dom) ->
+  dom.find('a[href^="magnet:"]').attr('href')
+
+define_scraper 'kat.cr', (dom) ->
+  dom.find('a[title="Magnet link"]').attr('href')
+
 define_scraper 'torrenthound.com', (dom) ->
   dom.find('[title="Magnet download"]').attr('href')
 
-# define_scraper 'monova.org', ->
-#   find('#download-magnet').attr('href')
+define_scraper 'monova.org', ->
+  find('#download-magnet').attr('href')
 
 define_scraper 'torrentreactor.com', (dom) ->
   dom.find('#download-magnet').attr('href')
@@ -83,4 +94,29 @@ define_scraper 'torrentreactor.com', (dom) ->
 define_scraper 'torrents.net', (dom) ->
   dom.find('.btn2-download').attr('href')
 
+
+
+
+define_scraper 'rarbg.com', FIRST_MAGNET_LINK
+
+define_scraper 'torlock.com', (dom) ->
+  debugger
+
+define_scraper 'yourbittorrent.com', (dom) ->
+  debugger
+
+define_scraper 'torrentdownloads.me', (dom) ->
+  debugger
+
+define_scraper 'torrentfunk.com', (dom) ->
+  debugger
+
+define_scraper 'limetorrents.cc', (dom) ->
+  debugger
+
+define_scraper 'bitsnoop.com', (dom) ->
+  debugger
+
+define_scraper 'torrentproject.se', (dom) ->
+  debugger
 
