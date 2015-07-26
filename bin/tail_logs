@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+ssh torflix "tail -f /home/rails/log/* /var/log/unicorn/unicorn.log"
