@@ -28,10 +28,11 @@ component 'ShowSearchResults',
 
 
   renderShow: (show) ->
-    {div, span, h1, p} = DOM
-    DOM.div
+    {div, span, h1, p, ShowArt} = DOM
+    div
       key: show.id
       className: ''
+      ShowArt(show: show)
       h1(null, show.name)
       p(null, show.description)
 

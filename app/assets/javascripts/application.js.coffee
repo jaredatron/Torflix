@@ -8,3 +8,4 @@
 #= require components
 #= require Torrentz
 #= require Thetvdb
+#= require FindArtFor
