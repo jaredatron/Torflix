@@ -23,10 +23,11 @@ component 'TorrentSearchForm',
   render: ->
     console.log('TorrentSearchForm', @state)
     DOM.SearchForm
-      key:         "query-#{@state.query}"
-      className:   'TorrentSearchForm'
-      defaultValue: @state.query
-      onSearch:     @onSearch
+      key:            "query-#{@state.query}"
+      collectionName: 'torrents'
+      className:      'TorrentSearchForm'
+      defaultValue:    @state.query
+      onSearch:        @onSearch
 
 
 valueFromParams = ->

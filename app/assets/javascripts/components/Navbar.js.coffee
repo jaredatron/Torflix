@@ -33,8 +33,6 @@ component 'Navbar',
       ActionLink(href: '/transfers', 'Transfers')
       ActionLink(href: '/files',     'Files')
 
-      TorrentSearchForm()
-
       div className: 'flex-spacer'
 
       div className: 'Navbar-username', username

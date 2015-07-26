@@ -1,9 +1,29 @@
 component 'SearchForm',
 
   propTypes:
-    onSearch:     React.PropTypes.func.isRequired
-    value:        React.PropTypes.string
-    defaultValue: React.PropTypes.string
+    onSearch:       React.PropTypes.func.isRequired
+    value:          React.PropTypes.string
+    defaultValue:   React.PropTypes.string
+    collectionName: React.PropTypes.string
+
+  getInitialState: ->
+    query: valueFromParams()
+
+  componentDidMount: ->
+    Location.on('change', @updateQueryFromParams)
+
+  componentWillUnmount: ->
+    Location.off('change', @updateQueryFromParams)
+
+  updateQueryFromParams: ->
+    @setState query: valueFromParams()
+
+
+  placeholder: ->
+    if @props.collectionName
+      "Search #{@props.collectionName}"
+    else
+      'Search…'
 
   getValue: ->
     @refs.input.getDOMNode().value
@@ -22,10 +42,14 @@ component 'SearchForm',
       onSubmit: @onSubmit
       DOM.input
         ref: 'input'
-        defaultValue: @props.defaultValue
+        defaultValue: @props.defaultValue || valueFromParams()
         value: @props.value
         onChange: @onChange
+        placeholder: @props.placeholder || @placeholder()
       DOM.Glyphicon glyph: 'search'
 
 
 
+
+valueFromParams = ->
+  Location.params.s || ''

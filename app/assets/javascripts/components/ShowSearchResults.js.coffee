@@ -13,14 +13,14 @@ component 'ShowSearchResults',
       if @props.query?
         PromiseStateMachine
           key: "query-#{@props.query}"
-          promise: Thetvdb.search(@props.query)
+          promise: Show.search(@props.query)
           loading: ->
             DOM.div(null, 'loading...')
           loaded: @renderShows
           failed: @renderFailed
 
   renderShows: (shows) ->
-    console.dir(shows)
+    console.info('SHOWS:', shows)
 
     DOM.div
       className: ''
@@ -32,7 +32,6 @@ component 'ShowSearchResults',
     div
       key: show.id
       className: ''
-      ShowArt(show: show)
       h1(null, show.name)
       p(null, show.description)
 

@@ -6,29 +6,15 @@
   constructor: (props) ->
     Object.assign(this, props)
 
-  @ENDPOINT = '/shows'
-
-  @request = (method, path, params) ->
-    App.request(method, @url(path), params)
-
-  @url = (path) ->
-    "#{@ENDPOINT}#{path}"
-
-
   @_cache = {}
-  @_allCached = false
-
-  @all = ->
-    return Promise.resolve(Object.values(@_cache)) if @_allCached
-    @request('get', '/').then(cacheShows).then (shows) =>
-      @_allCached = true
-      shows
 
   @search = (query) ->
-    @request('get', '/search', s: query).then(cacheShows)
+    Thetvdb.search(query)
+
 
   @find = (id) ->
-    @request('get', "/#{id}").then(cacheShow).then(cacheShow)
+    return Promise.resolve(Show._cache[id]) if id in Show._cache
+    Thetvdb.getShow(id).then(cacheShow).then(cacheShow)
 
 
 cacheShow = (props) ->
@@ -37,5 +23,3 @@ cacheShow = (props) ->
 cacheShows = (shows) ->
   shows.map(cacheShow)
 
-
-Show.find(12)

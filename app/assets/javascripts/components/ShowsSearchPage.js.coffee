@@ -1,6 +1,6 @@
 #= require 'ReactPromptMixin'
 
-component 'SearchShowsPage',
+component 'ShowsSearchPage',
 
   mixins: [ReactPromptMixin]
 
@@ -8,7 +8,6 @@ component 'SearchShowsPage',
     params: React.PropTypes.object.isRequired
 
   render: ->
-    DOM.div
-      className: 'SearchShowsPage'
-      DOM.ShowSearchForm()
+    DOM.ShowPageLayout
+      className: 'ShowsSearchPage'
       DOM.ShowSearchResults(query: @context.params.s)

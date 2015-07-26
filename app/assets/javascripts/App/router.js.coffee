@@ -2,8 +2,8 @@
 
 App.router = new Router ->
   @match '/',               redirectTo: '/shows'
-  @match '/search/shows',   component: 'SearchShowsPage'
   @match '/shows',          component: 'ShowsPage'
+  @match '/shows/search',   component: 'ShowsSearchPage'
   @match '/shows/:show_id', component: 'ShowPage'
   @match '/transfers',      component: 'TransfersPage'
   @match '/files',          component: 'FilesPage'
