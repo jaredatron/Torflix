@@ -25,6 +25,7 @@ component 'SearchForm',
         defaultValue: @props.defaultValue
         value: @props.value
         onChange: @onChange
+      DOM.Glyphicon glyph: 'search'
 
 
 

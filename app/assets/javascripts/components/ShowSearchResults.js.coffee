@@ -10,13 +10,14 @@ component 'ShowSearchResults',
   render: ->
     DOM.div
       className: 'ShowSearchResults'
-      PromiseStateMachine
-        key: "query-#{@props.query}"
-        promise: Thetvdb.search(@props.query)
-        loading: ->
-          DOM.div(null, 'loading...')
-        loaded: @renderShow
-        failed: @renderFailed
+      if @props.query?
+        PromiseStateMachine
+          key: "query-#{@props.query}"
+          promise: Thetvdb.search(@props.query)
+          loading: ->
+            DOM.div(null, 'loading...')
+          loaded: @renderShow
+          failed: @renderFailed
 
   renderShow: (show) ->
     console.dir(show)
