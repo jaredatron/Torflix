@@ -10,5 +10,5 @@ component 'SearchShowsPage',
   render: ->
     DOM.div
       className: 'SearchShowsPage'
-      # DOM.ShowSearchForm(query: @context.params.s)
+      DOM.ShowSearchForm()
       DOM.ShowSearchResults(query: @context.params.s)

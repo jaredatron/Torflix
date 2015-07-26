@@ -1,4 +1,4 @@
-component 'TorrentSearchForm',
+component 'ShowSearchForm',
 
   getInitialState: ->
     query: valueFromParams()
@@ -14,23 +14,19 @@ component 'TorrentSearchForm',
 
 
   onSearch: (query) ->
-    if isMagnetLink(query)
-      App.putio.transfers.add query
-      Location.set Location.for('/autoplay', link: query)
-    else
-      Location.set Location.for('/search', s: query)
+    Location.set Location.for('/search/shows', s: query)
 
   render: ->
-    console.log('TorrentSearchForm', @state)
+    console.log('ShowSearchForm', @state)
     DOM.SearchForm
       key:         "query-#{@state.query}"
-      className:   'TorrentSearchForm'
+      className:   'ShowSearchForm'
       defaultValue: @state.query
       onSearch:     @onSearch
 
 
 valueFromParams = ->
-  if Location.path == '/search'
+  if Location.path == '/search/shows'
     Location.params.s || ""
   else
     ""

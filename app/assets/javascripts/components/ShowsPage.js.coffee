@@ -18,6 +18,7 @@ component 'ShowsPage',
     {div, ActionLink, img} = DOM
     div
       className: 'shows-list'
+      DOM.ShowSearchForm()
       shows.map (show, index) ->
 
         ActionLink

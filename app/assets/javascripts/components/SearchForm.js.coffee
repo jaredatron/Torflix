@@ -1,9 +1,9 @@
 component 'SearchForm',
 
   propTypes:
-    onSearch: React.PropTypes.func.isRequired
-    value:    React.PropTypes.string
-    onChange: React.PropTypes.func
+    onSearch:     React.PropTypes.func.isRequired
+    value:        React.PropTypes.string
+    defaultValue: React.PropTypes.string
 
   getValue: ->
     @refs.input.getDOMNode().value
@@ -13,7 +13,8 @@ component 'SearchForm',
     @props.onSearch @getValue()
 
   onChange: (event) ->
-    @props.onChange @getValue()
+    if @props.onChange
+      @props.onChange @getValue()
 
   render: ->
     DOM.Form
@@ -21,6 +22,7 @@ component 'SearchForm',
       onSubmit: @onSubmit
       DOM.input
         ref: 'input'
+        defaultValue: @props.defaultValue
         value: @props.value
         onChange: @onChange
 
