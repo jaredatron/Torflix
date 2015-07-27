@@ -8,7 +8,7 @@ component 'FilesPage',
     params: React.PropTypes.object.isRequired
 
   render: ->
-    sortBy    = Location.params.sortBy    || 'name' # created_at | name | size
+    sortBy    = Location.params.sortBy    || 'size' # created_at | name | size
     sortOrder = Location.params.sortOrder || 'asc'  # asc | desc
     DOM.div
       className: 'FilesPage'
