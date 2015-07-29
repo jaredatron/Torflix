@@ -19,7 +19,7 @@ component 'Navbar',
     App.putio.account.info.removeListener('change', @accountInfoChanged)
 
   render: ->
-    {div, span, img, ActionLink, LogoutButton, FileSize, ExternalLink, TorrentSearchForm} = DOM
+    {a, div, span, img, ActionLink, LogoutButton, FileSize, ExternalLink, TorrentSearchForm, Glyphicon} = DOM
     {username, disk, avatar_url} = @state.accountInfo
 
     div(
@@ -37,6 +37,11 @@ component 'Navbar',
 
       div className: 'Navbar-username', username
       img(src: avatar_url, className: 'Navbar-avatar')
+
+      a
+        href: "/Torflix-chrome-extension.crx"
+        download: true
+        Glyphicon glyph: 'cog'
 
       if disk? && disk.avail?
         div
