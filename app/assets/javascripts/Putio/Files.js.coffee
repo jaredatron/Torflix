@@ -6,6 +6,9 @@ Putio.Files = class Files extends EventEmitter
     @files_cache = {}
     @directory_contents_cache = {}
 
+  search: (query, page=0) ->
+    @putio.get("/files/search/#{query}/page/#{page}")
+
   get: (id) ->
     files_cache = @files_cache
     return Promise.resolve(files_cache[id]) if id of files_cache

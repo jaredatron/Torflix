@@ -25,6 +25,7 @@ component 'FilesPage',
       @renderPrompt()
 
 
+
 Controls = component
   displayName: 'FilesPage-Controls'
 
@@ -39,9 +40,14 @@ Controls = component
     Location.updateParams sortOrder: @refs.sortOrder.getDOMNode().value
 
   render: ->
-    {div, select, option} = DOM
+    {div, select, option, FilesSearchForm} = DOM
     div
-      className: 'FilesPage-Controls'
+      className: 'flex-row flex-align-items-center'
+
+      FilesSearchForm()
+
+      div className: 'flex-spacer'
+
 
       select
         ref: 'sortBy'

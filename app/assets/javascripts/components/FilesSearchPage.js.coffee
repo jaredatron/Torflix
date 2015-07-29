@@ -1,6 +1,6 @@
 #= require 'ReactPromptMixin'
 
-component 'SearchPage',
+component 'FilesSearchPage',
 
   mixins: [ReactPromptMixin]
 
@@ -9,6 +9,6 @@ component 'SearchPage',
 
   render: ->
     DOM.div
-      className: 'SearchPage'
-      DOM.TorrentSearchForm()
-      DOM.TorrentSearchResults(query: @context.params.s)
+      className: 'FilesSearchPage'
+      DOM.FilesSearchForm
+      DOM.FilesSearchResults(query: @context.params.s)
