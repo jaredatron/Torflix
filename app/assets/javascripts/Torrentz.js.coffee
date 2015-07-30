@@ -106,7 +106,7 @@ define_scraper 'yourbittorrent.com', (dom) ->
   debugger
 
 define_scraper 'torrentdownloads.me', (dom) ->
-  debugger
+  dom.find('a[href^="magnet:"]').attr('href')
 
 define_scraper 'torrentfunk.com', (dom) ->
   debugger
@@ -115,7 +115,7 @@ define_scraper 'limetorrents.cc', (dom) ->
   debugger
 
 define_scraper 'bitsnoop.com', (dom) ->
-  debugger
+  dom.find('a[title="Magnet Link"]').attr('href')
 
 define_scraper 'torrentproject.se', (dom) ->
   debugger

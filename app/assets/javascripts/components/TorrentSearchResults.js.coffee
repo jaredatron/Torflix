@@ -25,6 +25,7 @@ component 'TorrentSearchResults',
         className: 'table-striped table-bordered table-condensed'
         thead null,
           tr null,
+            th null, ''
             th null, 'Title'
             th null, 'Rating'
             th null, 'Age'
@@ -45,19 +46,37 @@ SearchResult = component
   propTypes:
     result: React.PropTypes.object.isRequired
 
+  getInitialState: ->
+    loaded: false
+
+  addTorrent: ->
+    Torrent.get(@props.result.id).then (torrent) =>
+      App.putio.transfers.add(torrent.magnet_link)
+        .then =>
+          @setState loaded: true
+          torrent
+        .catch (error) =>
+          if error.xhr.responseJSON.error_message
+            @setState loaded: true
+            torrent
+
+  autoplay: ->
+    @addTorrent.then (torrent) ->
+      Location.set Location.for('/autoplay', link: torrent.magnet_link)
+
   render: ->
     result = @props.result
-    {tr, td, ActionLink} = DOM
+    {tr, td, ActionLink, Glyphicon} = DOM
     tr null,
+      td null,
+        if @state.loaded
+          ':D'
+        else
+          ActionLink onClick: @addTorrent,
+            Glyphicon glyph: 'cog'
       td null, ActionLink className: 'link', onClick: @addTorrent, result.title
       td null, result.rating
       td null, result.date
       td null, result.size
       td null, result.seeders
       td null, result.leachers
-
-  addTorrent: ->
-    Torrent.get(@props.result.id).then (torrent) ->
-      App.putio.transfers.add torrent.magnet_link
-      Location.set Location.for('/autoplay', link: torrent.magnet_link)
-
