@@ -10,7 +10,6 @@ component 'DeleteLink',
     onAbort:  React.PropTypes.func
 
   onClick: ->
-    console.log('HERE')
     @context.setPrompt =>
       DOM.ConfirmationPrompt
         abort:   'Don\'t Delete'

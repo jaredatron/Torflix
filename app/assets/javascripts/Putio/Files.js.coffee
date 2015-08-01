@@ -26,26 +26,28 @@ Putio.Files = class Files extends EventEmitter
 
   list: (parent_id) ->
     parent_id ||= 0
-    files_cache = @files_cache
-    directory_contents_cache = @directory_contents_cache
-    if parent_id of directory_contents_cache
-      return Promise.resolve(directory_contents_cache[parent_id])
+    if parent_id of @directory_contents_cache
+      console.info('putio.files.list('+parent_id+') CACHED')
+      return Promise.resolve(@directory_contents_cache[parent_id])
+    console.info('putio.files.list('+parent_id+') LOAD')
     @putio.get('/files/list', parent_id: parent_id)
-      .then (response) ->
+      .then (response) =>
         files = response.files
-        directory_contents_cache[parent_id] = files
-        files.map (file) =>
-          files_cache[file.id] = new Putio.File(file)
-      .catch (error) ->
+        @directory_contents_cache[parent_id] = files
+        files = files.map (file) =>
+          @files_cache[file.id] = new Putio.File(file)
+        console.info('putio.files.list('+parent_id+') LOADED', {files:files})
+        files
+      .catch (error) =>
         if error && error.xhr
-          directory_contents_cache[parent_id] = null
+          @directory_contents_cache[parent_id] = null
         else
           throw error
 
 
   delete: (id) ->
     throw new Error("File ID required: #{id}") unless id
-    @putio.post('/files/delete', file_ids: id).then (response) ->
+    @putio.post('/files/delete', file_ids: id).then (response) =>
       @uncache(id)
       @putio.account.info.load()
       @emit("change:#{id}")

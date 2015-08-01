@@ -11,6 +11,7 @@ component 'Directory',
     "Directory-#{@props.directory.id}-expanded"
 
   reload: ->
+    console.log('reloading', @props.directory.name)
     @forceUpdate()
 
   componentDidMount: ->

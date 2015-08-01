@@ -60,7 +60,7 @@ SearchResult = component
             @setState loaded: true
             torrent
 
-  autoplay: ->
+  autoplayTorrent: ->
     @addTorrent.then (torrent) ->
       Location.set Location.for('/autoplay', link: torrent.magnet_link)
 
@@ -74,7 +74,7 @@ SearchResult = component
         else
           ActionLink onClick: @addTorrent,
             Glyphicon glyph: 'cog'
-      td null, ActionLink className: 'link', onClick: @addTorrent, result.title
+      td null, ActionLink className: 'link', onClick: @autoplayTorrent, result.title
       td null, result.rating
       td null, result.date
       td null, result.size

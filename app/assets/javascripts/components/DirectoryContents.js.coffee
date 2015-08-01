@@ -51,7 +51,7 @@ component 'DirectoryContents',
       loaded: @renderFiles
 
   renderFiles: (files) ->
-    console.log('DIREC CON RERENDER', @props, @state)
+    console.log('DirectoryContents#renderFiles', @props.directory_id)
     sorter = @props.sortBy
     sorter = SORTERS[sorter] if typeof sorter == 'string'
 

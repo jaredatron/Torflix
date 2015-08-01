@@ -1,7 +1,7 @@
 #= require Object.assign
 #= require eventemitter3
 
-Putio.Transfer = class extends EventEmitter
+class Putio.Transfer extends EventEmitter
 
   constructor: (props) ->
     @update(props)
