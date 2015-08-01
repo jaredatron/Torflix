@@ -13,4 +13,4 @@
     @context.depth || 0
 
   depthStyle: ->
-    { paddingLeft: "#{@depth()}em" }
+    { paddingLeft: "#{@depth()-1}em" }
