@@ -13,4 +13,5 @@
   componentFactory = React.createFactory(component)
   componentFactory.component = component
   DOM[name] = componentFactory if name?
+  componentFactory.displayName = name
   componentFactory
