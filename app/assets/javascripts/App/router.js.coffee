@@ -1,7 +1,7 @@
 #= require 'Router'
 
 App.router = new Router ->
-  @match '/',               redirectTo: '/shows'
+  @match '/',               redirectTo: '/transfers'
   @match '/shows',          component: 'ShowsPage'
   @match '/shows/search',   component: 'ShowsSearchPage'
   @match '/shows/:show_id', component: 'ShowPage'

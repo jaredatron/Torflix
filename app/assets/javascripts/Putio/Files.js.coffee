@@ -37,9 +37,10 @@ Putio.Files = class Files extends EventEmitter
         files.map (file) =>
           files_cache[file.id] = new Putio.File(file)
       .catch (error) ->
-        throw error if error.xhr.status != 404
-        directory_contents_cache[parent_id] = []
-
+        if error && error.xhr
+          directory_contents_cache[parent_id] = null
+        else
+          throw error
 
 
   delete: (id) ->
