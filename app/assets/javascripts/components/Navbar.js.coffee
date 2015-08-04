@@ -27,11 +27,14 @@ component 'Navbar',
 
       ActionLink
         href: '/'
+        className: 'Navbar-logo'
         img src: '//put.io/images/tinylogo.png'
 
-      ActionLink(href: '/shows',     'Shows')
       ActionLink(href: '/transfers', 'Transfers')
       ActionLink(href: '/files',     'Files')
+      ActionLink(href: '/shows',     'Shows')
+
+      TorrentSearchForm()
 
       div className: 'flex-spacer'
 
