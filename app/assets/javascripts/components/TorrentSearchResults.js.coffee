@@ -20,26 +20,23 @@ component 'TorrentSearchResults',
       SearchResult key: index, result: result
 
     div
-      className: 'TorrentSearchResults'
-      DOM.StringInput(ref: 'filter', type:'text', value: @state.filter, onChange: @setFilter)
-      div
-        className: 'table-responsive'
-        table
-          className: 'table-striped table-bordered table-condensed'
-          thead null,
-            tr null,
-              th null, ''
-              th null, 'Title'
-              th null, 'Rating'
-              th null, 'Age'
-              th null, 'Size'
-              th null, 'Seeders'
-              th null, 'Leachers'
-          tbody null,
-          if results.length == 0
-            tr(null, td(colSpan: 6, 'No results found :/'))
-          else
-            results
+      className: 'TorrentSearchResults table-responsive'
+      table
+        className: 'table-striped table-bordered table-condensed'
+        thead null,
+          tr null,
+            th null, ''
+            th null, 'Title'
+            th null, 'Rating'
+            th null, 'Age'
+            th null, 'Size'
+            th null, 'Seeders'
+            th null, 'Leachers'
+        tbody null,
+        if results.length == 0
+          tr(null, td(colSpan: 6, 'No results found :/'))
+        else
+          results
 
 
 SearchResult = component
