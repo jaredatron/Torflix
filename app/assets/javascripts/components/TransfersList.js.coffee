@@ -10,24 +10,37 @@ SORT = (a, b) ->
 component 'TransfersList',
 
   getInitialState: ->
+    filter: Location.params.f || ''
     transfers: App.putio.transfers.toArray()
+
+  filterChange: ->
+    @setState filter: Location.params.f || ''
+
+  setFilter: ->
+    filter = @refs.filter.getValue()
+    filter = undefined if filter == ''
+    Location.updateParams({f: filter}, true)
 
   transfersChanged: ->
     setTimeout =>
       @setState transfers: App.putio.transfers.toArray()
 
   componentDidMount: ->
+    Location.on('change', @filterChange)
     App.putio.transfers.on('change', @transfersChanged)
     App.putio.transfers.startPolling()
 
   componentWillUnmount: ->
+    Location.off('change', @filterChange)
     App.putio.transfers.removeListener('change', @transfersChanged)
     App.putio.transfers.stopPolling()
 
   renderTransfers: ->
     if @state.transfers.length > 0
-      @state.transfers.sort(SORT).map (transfer) ->
-        Transfer(key: transfer.id, transfer: transfer)
+      @state.transfers.
+        sort(SORT).
+        filter(filterBy(@state.filter)).
+        map(transferToComponent)
     else
       DOM.div(null, 'loading...')
 
@@ -35,7 +48,23 @@ component 'TransfersList',
   render: ->
     DOM.div
       className: 'TransfersList'
+      DOM.div
+        className: 'flex-row flex-justify-content-end'
+        DOM.StringInput
+          ref: 'filter'
+          value: @state.filter
+          onChange: @setFilter
+          glyph: 'filter'
       @renderTransfers()
+
+transferToComponent = (transfer) ->
+  Transfer(key: transfer.id, transfer: transfer)
+
+filterBy = (filter) ->
+  filter = filter.toLowerCase()
+  return (transfer) ->
+    name = transfer.name.toLowerCase()
+    name.includes(filter)
 
 
 Transfer = component

@@ -40,14 +40,15 @@ component 'SearchForm',
     DOM.Form
       className: Classnames('SearchForm', @props.className)
       onSubmit: @onSubmit
-      DOM.input
+      DOM.StringInput
         ref: 'input'
         defaultValue: @props.defaultValue || valueFromParams()
         value: @props.value
         onChange: @onChange
         placeholder: @props.placeholder || @placeholder()
         autofocus: @props.autofocus
-      DOM.Glyphicon glyph: 'search'
+        glyph: 'search'
+
 
 
 

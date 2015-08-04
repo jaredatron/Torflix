@@ -37,3 +37,4 @@ detectAccessControlAllowOriginError = (xhr) ->
 
       ~~~~~ WARNING ~~~~~
     """)
+

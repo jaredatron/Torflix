@@ -1,0 +1,28 @@
+.StringInput
+  overflow: hidden
+  display: flex
+  // display: inline-flex
+  align-items: center
+  margin: 0.5em
+
+  border: 1px solid #ccc
+  +border-radius(5px)
+  padding: 0.2em 0.5em
+  background-color: white
+  color: black
+
+  input
+    flex-grow: 1
+    flex-shrink: 1
+    margin-right: 0.5em
+    border: none
+    font-size: inherit
+    color: inherit
+    background-color: inherit
+    &:focus
+      outline: none
+      outline-offset: 0
+
+  .glyphicon
+    flex-grow: 0
+    flex-shrink: 0

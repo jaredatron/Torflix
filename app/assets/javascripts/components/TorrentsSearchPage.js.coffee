@@ -10,5 +10,4 @@ component 'TorrentsSearchPage',
   render: ->
     DOM.div
       className: 'TorrentsSearchPage'
-      DOM.TorrentSearchForm()
       DOM.TorrentSearchResults(query: @context.params.s)

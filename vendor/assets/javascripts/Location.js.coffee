@@ -32,7 +32,7 @@ Location.setParams = (params, replace) ->
   @set(@for(null, params), replace)
 
 Location.updateParams = (params, replace) ->
-  @setParams Object.assign({}, @params, params)
+  @setParams(Object.assign({}, @params, params), replace)
 
 
 # private

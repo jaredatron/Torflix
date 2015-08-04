@@ -15,3 +15,5 @@ String.prototype.includes = (string) ->
   return this.indexOf(string) != -1
 
 
+String.prototype.includes = (string) ->
+  @indexOf(string) != -1
