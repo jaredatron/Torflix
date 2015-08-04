@@ -26,7 +26,7 @@ component 'SearchForm',
       'Search…'
 
   getValue: ->
-    @refs.input.getDOMNode().value
+    @refs.input.getValue()
 
   onSubmit: (event) ->
     event.preventDefault()
