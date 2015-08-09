@@ -2,7 +2,13 @@ component 'ActionLink',
 
   onClick: (event) ->
     return if event.metaKey || event.shiftKey || event.ctrlKey
-    @props.onClick(event) if @props.onClick?
+    if @props.onClick?
+      try
+        @props.onClick(event)
+      catch error
+        console.warn('Error caught by ActionLink')
+        console.error(error)
+        throw error
     return if event.defaultPrevented
     event.preventDefault()
     if @props.href

@@ -61,20 +61,27 @@ SearchResult = component
             torrent
 
   autoplayTorrent: ->
-    @addTorrent.then (torrent) ->
+    @addTorrent().then (torrent) ->
       Location.set Location.for('/autoplay', link: torrent.magnet_link)
 
   render: ->
     result = @props.result
     {tr, td, ActionLink, Glyphicon} = DOM
     tr null,
+
       td null,
         if @state.loaded
           ':D'
         else
           ActionLink onClick: @addTorrent,
             Glyphicon glyph: 'cog'
-      td null, ActionLink className: 'link', onClick: @autoplayTorrent, result.title
+
+      td null,
+        ActionLink
+          className: 'link',
+          onClick: @autoplayTorrent,
+          result.title
+
       td null, result.rating
       td null, result.date
       td null, result.size
