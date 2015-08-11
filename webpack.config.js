@@ -16,17 +16,16 @@ module.exports = {
     filename: 'client.js',
     publicPath: '/assets/'
   },
+
   module: {
 
     loaders: [
-
-      // Let us also add the style-loader and css-loader, which you can
-      // expand with less-loader etc.
-      {
-        test: /\.css$/,
-        loader: 'style!css'
-      }
-
+      { test: /\.css$/,    loader: 'style!css'},
+      { test: /\.coffee$/, loader: "coffee" }
     ]
+  },
+  resolve: {
+    extensions: ["", ".coffee", ".js"]
   }
 };
+

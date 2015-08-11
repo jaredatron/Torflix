@@ -6,6 +6,7 @@
     "start": "node web_server.js"
   },
   "dependencies": {
+    "coffee-loader": "^0.7.2",
     "coffee-script": "^1.9.3",
     "dotenv": "^1.2.0",
     "ejs": "^2.3.3",
