@@ -8,8 +8,8 @@
 @App.GIT_SHA = "<%= GIT_SHA %>"
 
 @App.state = ->
-  path:     Location.path
-  params:   App.router.pageFor(Location.path, Location.params)
+  path:     Route.path
+  params:   Route.params
   loggedIn: !!App.session('put_io_access_token')
 
 @App.downloadAndPlayMagnetLink = (magnetLink) ->

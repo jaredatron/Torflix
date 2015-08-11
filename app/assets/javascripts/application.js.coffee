@@ -5,6 +5,7 @@
 #= require video
 #= require react
 #= require Classnames
+#= require routes
 #= require App
 #= require components
 #= require Torrentz

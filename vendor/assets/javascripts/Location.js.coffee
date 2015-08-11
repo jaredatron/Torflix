@@ -3,10 +3,7 @@
 
 location = @location
 
-Location = @Location = {
-  path:   '/',
-  params: {},
-}
+Location = @Location = Object.create(EventEmitter.prototype)
 
 Object.assign(Location, EventEmitter.prototype)
 
