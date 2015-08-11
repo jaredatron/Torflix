@@ -3,32 +3,39 @@
 
 location = @location
 
-Location = @Location = Object.create(EventEmitter.prototype)
+@Location = class Location
+  constructor: ->
+    window.addEventListener 'popstate', @update.bind(this)
+    @update()
 
-Object.assign(Location, EventEmitter.prototype)
+Object.assign(Location.prototype, EventEmitter.prototype)
 
-Location.for = (path=@path, params=@params) ->
+Location.prototype.update = ->
+  @path   = location.pathname
+  @params = searchToObject(location.search)
+  @emit('change')
+
+Location.prototype.for = (path=@path, params=@params) ->
   path ||= ''
   path = '/'+path if path[0] != '/'
   "#{path}#{objectToSearch(params)}"
 
 
-Location.set = (value, replace) ->
+Location.prototype.set = (value, replace) ->
   value = "/#{value}" unless value[0] == '/'
   if replace
     history.replaceState({}, document.title, value)
   else
     history.pushState({}, document.title, value)
-  update()
-  Location
+  @update()
 
-Location.setPath = (path, replace) ->
+Location.prototype.setPath = (path, replace) ->
   @set(@for(path), replace)
 
-Location.setParams = (params, replace) ->
+Location.prototype.setParams = (params, replace) ->
   @set(@for(null, params), replace)
 
-Location.updateParams = (params, replace) ->
+Location.prototype.updateParams = (params, replace) ->
   @setParams(Object.assign({}, @params, params), replace)
 
 
@@ -73,6 +80,3 @@ objectToSearch = (params) ->
   if search.length == 0 then '' else '?'+search
 
 
-window.addEventListener 'popstate', update
-
-update()

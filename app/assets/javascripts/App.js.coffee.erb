@@ -3,9 +3,11 @@
 #= require_tree ./App
 
 
-@App = Object.create(EventEmitter.prototype)
+@App = {}; # Object.create(EventEmitter.prototype)
 
 @App.GIT_SHA = "<%= GIT_SHA %>"
+if App.GIT_SHA != ENV.GIT_SHA
+  console.error('assets out of date', App.GIT_SHA, 'vs.', ENV.GIT_SHA)
 
 @App.state = ->
   path:     Route.path
@@ -14,18 +16,17 @@
 
 @App.downloadAndPlayMagnetLink = (magnetLink) ->
   App.putio.transfers.add(magnetLink)
-  Location.set Location.for('/autoplay', link: magnetLink)
+  App.location.set App.location.for('/autoplay', link: magnetLink)
+
+App.start = ->
+  props = {}
+  app = DOM.App(props)
+  React.render(app, document.body)
+  $(window).on('unload', App.stop)
 
 
-
-App.on 'start', ->
-  if App.GIT_SHA != ENV.GIT_SHA
-    console.error('assets out of date', App.GIT_SHA, 'vs.', ENV.GIT_SHA)
-  React.render(DOM.App(), document.body)
-
-$ ->
-  App.emit('start')
-
-$(window).on 'unload', (event) ->
-  App.emit('stop')
+App.stop = ->
   document.body.innerHTML = ''
+
+$(App.start)
+

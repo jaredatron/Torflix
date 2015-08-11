@@ -12,7 +12,7 @@ component 'ActionLink',
     return if event.defaultPrevented
     event.preventDefault()
     if @props.href
-      Location.set(@props.href, !!@props.default)
+      App.location.set(@props.href, !!@props.default)
 
   render: ->
     props = Object.assign({}, @props)

@@ -3,16 +3,17 @@ component 'App',
   getInitialState: ->
     App.state()
 
-  onChange: ->
+  updateState: ->
     @setState App.state()
 
   componentDidMount: ->
-    Location.on('change', @onChange)
-    App.session.on('change:put_io_access_token', @onChange)
+    App.on('login',           @updateState)
+    App.on('logout',          @updateState)
+    App.on('location:change', @updateState)
 
   componentWillUnmount: ->
-    App.session.removeListener('change', @onChange)
-    Location.removeListener('change', @onChange)
+    App.session.removeListener('change', @updateState)
+    # Location.removeListener('change', @updateState)
 
   render: ->
     console.info('APP RENDER', @state)
