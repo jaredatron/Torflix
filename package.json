@@ -2,7 +2,14 @@
   "name": "Torflix",
   "version": "0.0.1",
   "description": "Torflix",
+  "scripts": {
+    "start": "node web_server.js"
+  },
   "dependencies": {
+    "coffee-script": "^1.9.3",
+    "dotenv": "^1.2.0",
+    "ejs": "^2.3.3",
+    "express": "^4.13.3",
     "webpack": "^1.11.0"
   },
   "devDependencies": {
