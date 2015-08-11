@@ -1,2 +1,7 @@
-@App =
-  VERSION: '0.1.1'
+ReactatronApp = require('reactatron/App')
+
+App = new ReactatronApp
+  RootComponent: require('./RootComponent')
+
+
+module.exports = App
