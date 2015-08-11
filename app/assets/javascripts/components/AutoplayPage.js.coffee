@@ -3,11 +3,8 @@
 
 component 'AutoplayPage',
 
-  contextTypes:
-    params: React.PropTypes.object.isRequired
-
   getInitialState: ->
-    magnetLink = @context.params.link
+    magnetLink = Location.params.link
     transferWaitMachine = App.putio.transfers.waitFor(magnetLink)
     window.DEBUG = transferWaitMachine
     transferWaitMachine.on('change', @onTransferWaitMachineChange)

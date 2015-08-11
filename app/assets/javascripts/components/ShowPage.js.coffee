@@ -3,9 +3,6 @@
 
 component 'ShowPage',
 
-  contextTypes:
-    params: React.PropTypes.object.isRequired
-
   watchEpisode: (episode) ->
     App.downloadAndPlayMagnetLink(episode.magnet_link)
 
@@ -13,7 +10,7 @@ component 'ShowPage',
     DOM.ShowPageLayout
       className: 'ShowPage'
       PromiseStateMachine
-        promise: Show.find(@context.params.show_id)
+        promise: Show.find(Location.params.show_id)
         loaded: @renderShow
 
   renderShow: (show) ->

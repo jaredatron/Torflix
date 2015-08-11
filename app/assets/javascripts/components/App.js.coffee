@@ -1,13 +1,5 @@
 component 'App',
 
-  childContextTypes:
-    path:     React.PropTypes.string.isRequired
-    params:   React.PropTypes.object.isRequired
-
-  getChildContext: ->
-    path:     @state.path
-    params:   @state.params
-
   getInitialState: ->
     App.state()
 
