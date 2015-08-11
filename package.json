@@ -11,6 +11,7 @@
     "domready": "^1.0.8",
     "dotenv": "^1.2.0",
     "ejs": "^2.3.3",
+    "eventemitter3": "^1.1.1",
     "express": "^4.13.3",
     "http-proxy": "^1.11.1",
     "react": "^0.13.3",

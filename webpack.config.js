@@ -22,7 +22,7 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.css$/,    loader: 'style!css'},
-      { test: /\.coffee$/, loader: "coffee" }
+      { test: /\.coffee$/, loader: "coffee-loader" },
     ]
   },
 
