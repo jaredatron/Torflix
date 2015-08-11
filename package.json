@@ -10,6 +10,7 @@
     "dotenv": "^1.2.0",
     "ejs": "^2.3.3",
     "express": "^4.13.3",
+    "http-proxy": "^1.11.1",
     "webpack": "^1.11.0"
   },
   "devDependencies": {
