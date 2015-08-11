@@ -1,0 +1,11 @@
+{
+  "name": "Torflix",
+  "version": "0.0.1",
+  "description": "Torflix",
+  "dependencies": {
+    "webpack": "^1.11.0"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^1.10.1"
+  }
+}
