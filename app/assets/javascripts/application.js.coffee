@@ -1,5 +1,6 @@
 #= require debug
 #= require polyfills
+#= require Location
 #= require jquery
 #= require video
 #= require react

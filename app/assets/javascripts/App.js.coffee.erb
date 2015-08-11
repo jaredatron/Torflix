@@ -1,28 +1,31 @@
-#= require Putio
-#= require Location
+#= require eventemitter3
 #= require_self
 #= require_tree ./App
 
 
-@App =
+@App = Object.create(EventEmitter.prototype)
 
-  GIT_SHA: "<%= GIT_SHA %>"
+@App.GIT_SHA = "<%= GIT_SHA %>"
 
-  state: ->
-    path:     Location.path
-    params:   App.router.pageFor(Location.path, Location.params)
-    loggedIn: !!App.session('put_io_access_token')
+@App.state = ->
+  path:     Location.path
+  params:   App.router.pageFor(Location.path, Location.params)
+  loggedIn: !!App.session('put_io_access_token')
 
-  downloadAndPlayMagnetLink: (magnetLink) ->
-    App.putio.transfers.add(magnetLink)
-    Location.set Location.for('/autoplay', link: magnetLink)
+@App.downloadAndPlayMagnetLink = (magnetLink) ->
+  App.putio.transfers.add(magnetLink)
+  Location.set Location.for('/autoplay', link: magnetLink)
 
-$ ->
-  console.log('ASSET VERSION: ', App.GIT_SHA)
-  console.log('APP   VERSION: ', ENV.GIT_SHA)
+
+
+App.on 'start', ->
   if App.GIT_SHA != ENV.GIT_SHA
-    console.error('assets out of date')
+    console.error('assets out of date', App.GIT_SHA, 'vs.', ENV.GIT_SHA)
   React.render(DOM.App(), document.body)
 
+$ ->
+  App.emit('start')
+
 $(window).on 'unload', (event) ->
+  App.emit('stop')
   document.body.innerHTML = ''
