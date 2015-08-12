@@ -24,10 +24,7 @@ publicDir = __dirname + '/public'
 app.use(express.static(publicDir));
 
 app.get('/*', function(request, response) {
-  fs.readFile(publicDir+'/index.html', function (err, html) {
-    if (err) throw err;
-    response.send(html);
-  });
+  response.sendFile(publicDir+'/index.html');
 });
 
 app.listen(app.get('port'), function() {
