@@ -7,7 +7,7 @@ var clientPath = path.resolve(__dirname, 'client');
 module.exports = {
   // Makes sure errors in console map to the correct file
   // and line number
-  devtool: 'eval',
+  // devtool: 'eval',
 
   entry: [
     clientPath
