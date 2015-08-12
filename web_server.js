@@ -1,4 +1,5 @@
 require('./environment');
+var fs = require('fs')
 var express = require('express');
 var app = express();
 var asset_path = require('./asset_path')
@@ -18,16 +19,14 @@ if ('development' === process.env.NODE_ENV){
 
 app.set('port', (process.env.PORT || 3000));
 
-app.use(express.static(__dirname + '/public'));
+publicDir = __dirname + '/public'
 
-// views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+app.use(express.static(publicDir));
 
 app.get('/*', function(request, response) {
-  fs.readFile('/etc/passwd', function (err, html) {
+  fs.readFile(publicDir+'/index.html', function (err, html) {
     if (err) throw err;
-    reponse.send(html);
+    response.send(html);
   });
 });
 
