@@ -1,6 +1,16 @@
-React = require 'react'
-App = require '../App'
+component = require 'reactatron/component'
+{div, h1} = require 'reactatron/DOM'
+Link = require '../components/Link'
 
-module.exports = App.component 'TransfersPage',
+module.exports = component 'TransfersPage',
+
+  contextTypes:
+    params: component.PropTypes.object
+
   render: ->
-    React.DOM.div(null, 'this is annoying')
+    div
+      className: 'TransfersPage'
+      h1(null, 'Trasnfers')
+      div null, JSON.stringify(@context.params)
+      div null,
+        Link href: '/', 'Home'
