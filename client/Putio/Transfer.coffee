@@ -1,7 +1,7 @@
-#= require Object.assign
-#= require eventemitter3
+require 'stdlibjs/Object.assign'
+EventEmitter = require 'eventemitter3'
 
-class Putio.Transfer extends EventEmitter
+module.exports = class Transfer extends EventEmitter
 
   constructor: (props) ->
     @update(props)

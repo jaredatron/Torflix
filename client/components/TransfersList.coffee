@@ -1,3 +1,4 @@
+Putio = require '../Putio'
 component = require 'reactatron/component'
 {div, h1} = require 'reactatron/DOM'
 
@@ -10,29 +11,33 @@ SORT = (a, b) ->
 
 module.exports = component 'TransfersList',
 
+  contextTypes:
+    params:       component.PropTypes.object
+    updateParams: component.PropTypes.func
+
   getInitialState: ->
-    filter: Location.params.f || ''
+    filter: @context.params.f || ''
     transfers: App.putio.transfers.toArray()
 
-  filterChange: ->
-    @setState filter: Location.params.f || ''
+  # filterChange: ->
+  #   @setState filter: @context.params.f || ''
 
   setFilter: ->
     filter = @refs.filter.getValue()
     filter = undefined if filter == ''
-    Location.updateParams({f: filter}, true)
+    @context.updateParams({f: filter}, true)
 
   transfersChanged: ->
     setTimeout =>
       @setState transfers: App.putio.transfers.toArray()
 
   componentDidMount: ->
-    Location.on('change', @filterChange)
+    # @context.on('change', @filterChange)
     App.putio.transfers.on('change', @transfersChanged)
     App.putio.transfers.startPolling()
 
   componentWillUnmount: ->
-    Location.off('change', @filterChange)
+    # @context.off('change', @filterChange)
     App.putio.transfers.removeListener('change', @transfersChanged)
     App.putio.transfers.stopPolling()
 

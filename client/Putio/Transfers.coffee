@@ -1,6 +1,6 @@
-#= require 'eventemitter3'
+EventEmitter = require 'eventemitter3'
 
-Putio.Transfers = class Transfers extends EventEmitter
+module.exports = class Transfers extends EventEmitter
 
   constructor: (putio) ->
     @putio = putio

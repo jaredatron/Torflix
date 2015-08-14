@@ -1,6 +1,7 @@
-#= require 'eventemitter3'
+EventEmitter = require 'eventemitter3'
 
-class Putio.TransferWaitMachine extends EventEmitter
+module.exports = class TransferWaitMachine extends EventEmitter
+
   constructor: (magnetLink) ->
     @aborted = false
     @state = 'waiting' # waiting | downloading | converting | ready

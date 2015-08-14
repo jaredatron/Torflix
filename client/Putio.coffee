@@ -1,17 +1,17 @@
-#= require eventemitter3
-#= require Object.assign
-#= require_self
-#= require_tree ./Putio
+EventEmitter = require 'eventemitter3'
+require 'stdlibjs/Object.assign'
+AccountInfo = require './Putio/AccountInfo'
+Transfers   = require './Putio/Transfers'
+Files       = require './Putio/Files'
 
 @Putio = class Putio extends EventEmitter
 
   constructor: (token) ->
     @TOKEN = token
     @account = {}
-    @account.info = new Putio.AccountInfo(this)
-    @transfers = new Putio.Transfers(this)
-    @files = new Putio.Files(this)
-
+    @account.info = new AccountInfo(this)
+    @transfers    = new Transfers(this)
+    @files        = new Files(this)
 
   ENDPOINT: 'https://api.put.io/v2'
 

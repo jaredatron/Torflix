@@ -1,6 +1,6 @@
-#= require Object.assign
+require 'stdlibjs/Object.assign'
 
-class Putio.File
+module.exports = class File
 
   STREAM_AUTH_TOKEN: '<% ENV['PUT_IO_STREAM_AUTH_TOKEN'] %>'
 
