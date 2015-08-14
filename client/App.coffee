@@ -8,5 +8,4 @@ App.router.map ->
   @match '/transfers', require('./pages/TransfersPage')
   @match '/*path',     require('./pages/NotFoundPage')
 
-
 module.exports = App
