@@ -1,16 +1,15 @@
 component = require 'reactatron/component'
 {div, h1} = require 'reactatron/DOM'
-Link = require '../components/Link'
+TransfersList = require '../components/TransfersList'
+# ReactPromptMixin = require '../???'
 
 module.exports = component 'TransfersPage',
 
-  contextTypes:
-    params: component.PropTypes.object
+  # mixins: [ReactPromptMixin]
 
   render: ->
     div
       className: 'TransfersPage'
-      h1(null, 'Trasnfers')
-      div null, JSON.stringify(@context.params)
-      div null,
-        Link href: '/', 'Home'
+      TransfersList()
+      # @renderPrompt()
+

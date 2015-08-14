@@ -1,4 +1,5 @@
-#= require Putio
+component = require 'reactatron/component'
+{div, h1} = require 'reactatron/DOM'
 
 SORT = (a, b) ->
   a = Date.parse(a.created_at)
@@ -7,7 +8,7 @@ SORT = (a, b) ->
   return  1 if a < b
   return  0 if a == b
 
-component 'TransfersList',
+module.exports = component 'TransfersList',
 
   getInitialState: ->
     filter: Location.params.f || ''
@@ -67,11 +68,10 @@ filterBy = (filter) ->
     name.includes(filter)
 
 
-Transfer = component
-  displayName: 'TransfersList-Transfer',
+Transfer = component 'TransfersList-Transfer',
 
   PropTypes:
-    transfer: React.PropTypes.instanceOf(Putio.Transfer).isRequired
+    transfer: component.PropTypes.instanceOf(Putio.Transfer).isRequired
 
   sessionKey: ->
     "TransfersList-Transfer-#{@props.transfer.id}-expanded"
@@ -156,11 +156,10 @@ percentDoneGradientSyle = (transfer) ->
     backgroundImage: "linear-gradient(to right, #{GREEN} 0%, #{GREEN} #{percent_done}%, #{TRANSPARENT} #{percent_done}%, #{TRANSPARENT} 100%)"
   }
 
-DeleteTransferLink = component
-  displayName: 'TransfersList-DeleteTransferLink',
+DeleteTransferLink = component 'TransfersList-DeleteTransferLink',
 
   propTypes:
-    transfer: React.PropTypes.instanceOf(Putio.Transfer).isRequired
+    transfer: component.PropTypes.instanceOf(Putio.Transfer).isRequired
 
   onDelete: ->
     @props.transfer.delete()
