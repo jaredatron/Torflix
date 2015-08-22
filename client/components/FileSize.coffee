@@ -1,7 +1,11 @@
-component 'FileSize',
+component = require 'reactatron/component'
+{span} = require 'reactatron/DOM'
+ColumnContainer = require './ColumnContainer'
+
+module.exports = component 'FileSize',
 
   propTypes:
-    size: React.PropTypes.number.isRequired
+    size: component.PropTypes.number.isRequired
 
   render: ->
     size = @props.size
@@ -14,4 +18,4 @@ component 'FileSize',
       number = 0
       unit = 'B'
 
-    DOM.span(className:'FileSize', "#{number}#{unit}")
+    span(className:'FileSize', "#{number}#{unit}")

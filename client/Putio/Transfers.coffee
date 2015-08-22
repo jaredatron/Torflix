@@ -1,4 +1,6 @@
-class Transfers
+Transfer = require './Transfer'
+
+module.exports = class Transfers
 
   constructor: (putio) ->
     @putio = putio
@@ -12,7 +14,7 @@ class Transfers
     @putio.get('/transfers/list').then (response) =>
       @cache = {}
       response.transfers.forEach (transfer) =>
-        @cache[transfer.id] = new Putio.Transfer(transfer)
+        @cache[transfer.id] = Transfer(transfer)
       # @cache = response.transfers.map (props) ->
       #   new Transfer(props)
       @emit('change')
@@ -45,11 +47,11 @@ class Transfers
     throw Error('id must be a number') if 'number' != typeof id
     return Promise.resolve(@cache[id]) if !ignoreCache && id of @cache
     @putio.get("/transfers/#{id}").then (response) =>
-      @cache[id] = new Putio.Transfer(response.transfer)
+      @cache[id] = Transfer(response.transfer)
 
   add: (url) ->
     @putio.post('/transfers/add', url: url).then (response) =>
-      @cache[response.transfer.id] = new Putio.Transfer(response.transfer)
+      @cache[response.transfer.id] = Transfer(response.transfer)
       @putio.account.info.load()
       @emit('change')
       response
@@ -79,6 +81,5 @@ class Transfers
     Promise.resolve(transfer)
 
   waitFor: (magnetLink) ->
-    new Putio.TransferWaitMachine(magnetLink)
+    TransferWaitMachine(magnetLink)
 
-module.exports = Transfers

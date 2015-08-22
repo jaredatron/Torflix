@@ -1,7 +1,7 @@
 require 'stdlibjs/Object.assign'
 EventEmitter = require 'eventemitter3'
 
-module.exports = class Transfer extends EventEmitter
+module.exports = class Transfer
 
   constructor: (props) ->
     @update(props)

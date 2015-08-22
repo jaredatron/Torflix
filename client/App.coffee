@@ -29,15 +29,26 @@ App.Component = component 'App',
     Component = switch
       when !@data.put_io_access_token
         require('./pages/LoginPage')
+
       when path == '/shows'
         require('./pages/ShowsPage')
+
+      when path == '/transfers'
+        require('./pages/TransfersPage')
+
       else
         require('./pages/PageNotFound')
 
-    div null,
-      div null, "hello there",
-      div null, JSON.stringify(@data.location)
-      div null, Component()
+    Component()
+
+
+App.sub 'reload transfers', ->
+  App.putio.transfers().then (transfers) ->
+    App.set('transfers', transfers)
+
+App.sub 'load accountInfo', ->
+  App.putio.accountInfo().then (accountInfo) ->
+    App.set('accountInfo', accountInfo)
 
 
 # App.router = ->

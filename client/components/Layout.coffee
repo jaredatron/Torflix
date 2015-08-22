@@ -1,10 +1,12 @@
-#= require 'ReactPromptMixin'
+component = require 'reactatron/component'
+{div} = require 'reactatron/DOM'
+Navbar = require './Navbar'
+Layer = require './Layer'
 
-component 'Layout',
+module.exports = component 'Layout',
 
   render: ->
-    {div, span, Navbar} = DOM
-    div
-      className: 'Layout layer flex-column layer-scroll-y'
+
+    Layer null,
       Navbar()
       @props.children
