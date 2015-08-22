@@ -4,7 +4,7 @@ AccountInfo = require './Putio/AccountInfo'
 Transfers   = require './Putio/Transfers'
 Files       = require './Putio/Files'
 
-@Putio = class Putio extends EventEmitter
+class Putio extends EventEmitter
 
   constructor: (token) ->
     @TOKEN = token
@@ -31,3 +31,4 @@ Files       = require './Putio/Files'
   request: (method, path, params) ->
     App.request(method, @url(path), params)
 
+module.exports = Putio
