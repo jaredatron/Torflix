@@ -1,4 +1,6 @@
-component 'ActionLink',
+component = require 'reactatron/component'
+
+module.exports = component 'ActionLink',
 
   onClick: (event) ->
     return if event.metaKey || event.shiftKey || event.ctrlKey

@@ -1,6 +1,6 @@
-#= require 'ReactPromptMixin'
+component = require 'reactatron/component'
 
-component 'StringInput',
+module.exports = component 'StringInput',
 
   getValue: ->
     @refs.input.getDOMNode().value

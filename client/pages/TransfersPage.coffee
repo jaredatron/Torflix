@@ -7,10 +7,20 @@ module.exports = component 'TransfersPage',
 
   # mixins: [ReactPromptMixin]
 
+  getDataBindings: ->
+    ['transfers']
+
+  componentDidMount: ->
+    @app.putio.transfers.load()
+
   render: ->
     div
       className: 'TransfersPage'
-      h1 null, 'Transfers Page'
-      TransfersList()
-      # @renderPrompt()
+      div null, 'TRANSFERS PAGE'
+      div null, 'path:',   JSON.stringify(@props.path)
+      div null, 'params:', JSON.stringify(@props.params)
+      div null, 'transfers:', JSON.stringify(@data.transfers)
+      TransfersList
+        transfers: @data.transfers
+
 

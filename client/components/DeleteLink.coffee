@@ -1,13 +1,15 @@
-component 'DeleteLink',
+component = require 'reactatron/component'
+
+module.exports = component 'DeleteLink',
 
   contextTypes:
-    setPrompt:   React.PropTypes.func.isRequired
-    clearPrompt: React.PropTypes.func.isRequired
+    setPrompt:   component.PropTypes.func.isRequired
+    clearPrompt: component.PropTypes.func.isRequired
 
   propTypes:
-    question: React.PropTypes.func.isRequired
-    onDelete: React.PropTypes.func.isRequired
-    onAbort:  React.PropTypes.func
+    question: component.PropTypes.func.isRequired
+    onDelete: component.PropTypes.func.isRequired
+    onAbort:  component.PropTypes.func
 
   onClick: ->
     @context.setPrompt =>

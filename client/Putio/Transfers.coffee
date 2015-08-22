@@ -1,6 +1,4 @@
-EventEmitter = require 'eventemitter3'
-
-module.exports = class Transfers extends EventEmitter
+class Transfers
 
   constructor: (putio) ->
     @putio = putio
@@ -83,3 +81,4 @@ module.exports = class Transfers extends EventEmitter
   waitFor: (magnetLink) ->
     new Putio.TransferWaitMachine(magnetLink)
 
+module.exports = Transfers

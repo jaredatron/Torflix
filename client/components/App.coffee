@@ -12,7 +12,7 @@ component 'App',
     App.on('location:change', @updateState)
 
   componentWillUnmount: ->
-    App.session.removeListener('change', @updateState)
+    # App.session.removeListener('change', @updateState)
     # Location.removeListener('change', @updateState)
 
   render: ->

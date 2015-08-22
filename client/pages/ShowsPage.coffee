@@ -4,9 +4,10 @@ component = require 'reactatron/component'
 module.exports = component 'ShowsPage',
 
   render: ->
+    location = @app.get('location')
     div null,
       div null, 'SHOWS PAGE'
-      div null, 'path:',   JSON.stringify(@app.get('location').path)
-      div null, 'params:', JSON.stringify(@app.get('location').params)
+      div null, 'path:',   JSON.stringify(location.path)
+      div null, 'params:', JSON.stringify(location.params)
     # DOM.ShowPageLayout()
 

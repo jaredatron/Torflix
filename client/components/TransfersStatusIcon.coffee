@@ -1,7 +1,9 @@
-component 'TransfersStatusIcon',
+component = require 'reactatron/component'
+
+module.exports = component 'TransfersStatusIcon',
 
   propTypes:
-    status: React.PropTypes.string.isRequired
+    status: component.PropTypes.string.isRequired
 
   render: ->
     glyph = switch @props.status

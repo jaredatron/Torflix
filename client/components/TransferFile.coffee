@@ -1,7 +1,9 @@
-component 'TransferFile',
+component = require 'reactatron/component'
+
+module.exports = component 'TransferFile',
 
   propTypes:
-    file_id: React.PropTypes.number.isRequired
+    file_id: component.PropTypes.number.isRequired
 
   getInitialState: ->
     loading: true
