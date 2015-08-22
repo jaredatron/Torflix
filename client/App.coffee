@@ -4,6 +4,7 @@ Putio = require('./Putio')
 {div} = require('reactatron/DOM')
 
 App = new ReactatronApp
+
 module.exports = App
 App.putio = new Putio(App)
 
