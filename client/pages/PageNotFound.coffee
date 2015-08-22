@@ -1,4 +1,4 @@
-#= require 'ReactPromptMixin'
+component = require 'reactatron/component'
 
 component 'PageNotFound',
 

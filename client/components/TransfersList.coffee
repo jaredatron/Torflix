@@ -11,13 +11,9 @@ SORT = (a, b) ->
 
 module.exports = component 'TransfersList',
 
-  contextTypes:
-    params:       component.PropTypes.object
-    updateParams: component.PropTypes.func
-
   getInitialState: ->
-    filter: @context.params.f || ''
-    transfers: App.putio.transfers.toArray()
+    filter: @app.get('location').params.f || ''
+    # transfers: App.putio.transfers.toArray()
 
   # filterChange: ->
   #   @setState filter: @context.params.f || ''
@@ -25,7 +21,7 @@ module.exports = component 'TransfersList',
   setFilter: ->
     filter = @refs.filter.getValue()
     filter = undefined if filter == ''
-    @context.updateParams({f: filter}, true)
+    @app().updateParams({f: filter}, true)
 
   transfersChanged: ->
     setTimeout =>
