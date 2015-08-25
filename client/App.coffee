@@ -38,7 +38,7 @@ App.Component = component 'App',
         require('./pages/TransfersPage')
 
       else
-        require('./pages/PageNotFound')
+        require('./pages/NotFoundPage')
 
     Component()
 
@@ -51,6 +51,11 @@ App.sub 'load accountInfo', ->
   App.putio.accountInfo().then (accountInfo) ->
     App.set('accountInfo', accountInfo)
 
+App.sub 'delete transfer', (event, info) ->
+  # App.putio.deleteTransfers().then (transfers) ->
+  transfers = App.get('transfers').filter (transfer) ->
+    transfer.id != info.id
+  App.set('transfers', transfers)
 
 # App.router = ->
 #   path = @get('path')

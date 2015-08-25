@@ -1,6 +1,8 @@
 Putio = require '../Putio'
 component = require 'reactatron/component'
-{div, h1} = require 'reactatron/DOM'
+{div, h1, button} = require 'reactatron/DOM'
+ColumnContainer = require './ColumnContainer'
+RowContainer = require './RowContainer'
 
 module.exports = component 'TransfersList',
 
@@ -8,11 +10,40 @@ module.exports = component 'TransfersList',
     transfers: component.PropTypes.any
 
   render: ->
-    div
-      className: 'TransfersList'
-      'TransfersList here'
-      div null, 'transfers:', JSON.stringify(@props.transfers)
+    transfers = @props.transfers.map (transfer) ->
+      Transfer(transfer)
+    RowContainer null, transfers
+    #
 
+
+Transfer = component 'TransfersList.Transfer',
+
+  delete: ->
+    @app.pub 'delete transfer', id: @props.id
+
+  render: ->
+    ColumnContainer null,
+      StatusColumn status: @props.status
+      NameColumn name: @props.name
+      DeleteTransferButton onClick: @delete
+
+
+StatusColumn = (props={}) ->
+  props.style = {
+    marginRight: '1em'
+  }
+  div(props, props.status)
+
+NameColumn = (props={}) ->
+  props.style = {}
+  div(props, props.name)
+
+# DeleteColumn = (props={}) ->
+#   props.style = {}
+#   div(props, props.name)
+
+DeleteTransferButton = (props) ->
+  button(props, 'X')
 # StringInput = require './StringInput'
 # ActionLink = require './ActionLink'
 # TransfersStatusIcon = require './TransfersStatusIcon'

@@ -5,8 +5,8 @@ DEBUG.React = require 'react'
 App = require './App'
 DEBUG.App = App
 
-DEBUG.App.sub /.*/, (event) ->
-  console.log('Event', event)
+DEBUG.App.sub /.*/, (event, payload) ->
+  console.log('Event', event, payload)
 
 DEBUG.App.sub 'store:change:location', ->
   console.info('Location change', App.get('location'))

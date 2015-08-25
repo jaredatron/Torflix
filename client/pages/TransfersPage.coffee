@@ -16,9 +16,9 @@ module.exports = component 'TransfersPage',
       div
         className: 'TransfersPage'
         div null, 'TRANSFERS PAGE'
-        div null, 'path:',   JSON.stringify(@props.path)
-        div null, 'params:', JSON.stringify(@props.params)
-        div null, 'transfers:', JSON.stringify(@data.transfers)
+        # div null, 'path:',   JSON.stringify(@props.path)
+        # div null, 'params:', JSON.stringify(@props.params)
+        # div null, 'transfers:', JSON.stringify(@data.transfers)
         TransfersList
           transfers: @data.transfers
 
