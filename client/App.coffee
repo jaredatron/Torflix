@@ -8,16 +8,7 @@ App = new ReactatronApp
 module.exports = App
 App.putio = new Putio(App)
 
-App.Component = component 'App',
-
-  propTypes:
-    app: component.PropTypes.instanceOf(ReactatronApp).isRequired
-
-  childContextTypes:
-    app: component.PropTypes.object
-
-  getChildContext: ->
-    app: @props.app
+App.Component = component 'Router',
 
   getDataBindings: ->
     ['location', 'put_io_access_token']
