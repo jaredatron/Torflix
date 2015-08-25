@@ -5,7 +5,6 @@ Layout = require '../components/Layout'
 module.exports = component 'NotFoundPage',
 
   render: ->
-    console.count('NotFoundPage render')
     Layout {},
       Block
         grow: 1

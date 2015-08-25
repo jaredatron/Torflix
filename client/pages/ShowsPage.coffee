@@ -1,13 +1,15 @@
 component = require 'reactatron/component'
-{div} = require 'reactatron/DOM'
+Rows = require 'reactatron/Rows'
+Block = require 'reactatron/Block'
 Layout = require '../components/Layout'
 
 module.exports = component 'ShowsPage',
 
   render: ->
-    Layout null,
-      div null, 'SHOWS PAGE'
-      div null, 'path:',   JSON.stringify(location.path)
-      div null, 'params:', JSON.stringify(location.params)
-    # DOM.ShowPageLayout()
+    location = @get('location')
+    Layout {},
+      Rows grow: 1,
+        Block {}, 'SHOWS PAGE'
+        Block {}, 'path:',   JSON.stringify(location.path)
+        Block {}, 'params:', JSON.stringify(location.params)
 

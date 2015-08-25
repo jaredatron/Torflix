@@ -4,6 +4,7 @@ Layer     = require 'reactatron/Layer'
 Rows      = require 'reactatron/Rows'
 Columns   = require 'reactatron/Columns'
 Text      = require 'reactatron/Text'
+Link      = require 'reactatron/Link'
 
 # Sidebar = require './Sidebar'
 
@@ -51,7 +52,9 @@ Sidebar = component 'Sidebar',
     color: 'white'
 
   render: ->
-    Block @cloneProps(), 'sidebar here'
+    Rows @cloneProps(),
+      Link path: '/transfers', 'Transfers'
+      Link path: '/shows',     'Shows'
 
 
       #   render: ->
