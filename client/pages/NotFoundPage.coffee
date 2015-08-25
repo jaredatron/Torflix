@@ -1,7 +1,10 @@
 component = require 'reactatron/component'
+Text = require 'reactatron/Text'
 Layout = require '../components/Layout'
 
 module.exports = component 'NotFoundPage',
 
   render: ->
-    Layout {}, 'Page Not Found'
+    console.count('NotFoundPage render')
+    Layout {},
+      Text {}, 'Page Not Found'

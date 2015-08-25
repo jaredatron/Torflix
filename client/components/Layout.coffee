@@ -9,14 +9,26 @@ Text      = require 'reactatron/Text'
 
 module.exports = component 'Layout',
 
-  render: ->
+  getDataBindings: ->
+    ['horizontalSize']
 
-    Layer {},
-      Rows grow: 1,
-        Navbar shrink: 0
-        Columns grow: 1,
-          Sidebar minWidth: '200px'
+  render: ->
+    console.count('Layout render')
+
+    if @data.horizontalSize >= 1
+      Layer {},
+        Rows grow: 1,
+          Navbar shrink: 0
+          Columns grow: 1,
+            Sidebar minWidth: sideBarWidth
+            Block grow: 1, overflowY: 'auto', @props.children
+    else
+      Layer {},
+        Rows grow: 1,
+          Navbar shrink: 0
+          Sidebar {}
           Block grow: 1, overflowY: 'auto', @props.children
+
 
 
 Navbar = component 'Navbar',

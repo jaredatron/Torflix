@@ -1,12 +1,16 @@
 ReactatronApp = require('reactatron/App')
 component = require('reactatron/component')
 Putio = require('./Putio')
-{div} = require('reactatron/DOM')
+ResponsiveSizePlugin = require 'reactatron/ResponsiveSizePlugin'
 
 App = new ReactatronApp
 
 module.exports = App
 App.putio = new Putio(App)
+
+App.registerPlugin new ResponsiveSizePlugin
+  window: global.window,
+  widths: [768, 992, 1200]
 
 App.Component = component 'Router',
 

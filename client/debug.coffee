@@ -5,11 +5,16 @@ DEBUG.React = require 'react'
 App = require './App'
 DEBUG.App = App
 
-DEBUG.App.sub /.*/, (event, payload) ->
-  console.log('Event', event, payload)
+# DEBUG.App.sub /.*/, (event, payload) ->
+#   console.log('Event', event, payload)
 
-DEBUG.App.sub 'store:change:location', ->
-  console.info('Location change', App.get('location'))
+# DEBUG.App.sub 'store:change:location', ->
+#   console.info('Location change', App.get('location'))
+
+App.sub 'store:change:horizontalSize', ->
+  console.info('horizontalSize', App.get('horizontalSize'))
+
+console.info('horizontalSize', App.get('horizontalSize'))
 
 
 DEBUG.App.pub('DEBUG:here')
