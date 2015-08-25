@@ -16,18 +16,19 @@ module.exports = component 'Layout',
     console.count('Layout render')
 
     if @data.horizontalSize >= 1
+      sideBarWidth = if @data.horizontalSize > 2 then '300px' else '200px'
       Layer {},
         Rows grow: 1,
           Navbar shrink: 0
           Columns grow: 1,
             Sidebar minWidth: sideBarWidth
-            Block grow: 1, overflowY: 'auto', @props.children
+            @props.children
     else
       Layer {},
         Rows grow: 1,
           Navbar shrink: 0
           Sidebar {}
-          Block grow: 1, overflowY: 'auto', @props.children
+          @props.children
 
 
 

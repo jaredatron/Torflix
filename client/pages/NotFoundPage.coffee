@@ -1,5 +1,5 @@
 component = require 'reactatron/component'
-Text = require 'reactatron/Text'
+Block = require 'reactatron/Block'
 Layout = require '../components/Layout'
 
 module.exports = component 'NotFoundPage',
@@ -7,4 +7,11 @@ module.exports = component 'NotFoundPage',
   render: ->
     console.count('NotFoundPage render')
     Layout {},
-      Text {}, 'Page Not Found'
+      Block
+        grow: 1
+        style: {
+          alignItems: 'center'
+          justifyContent: 'center'
+          flexWrap: 'nowrap'
+        }
+        Block {}, 'Page Not Found'
