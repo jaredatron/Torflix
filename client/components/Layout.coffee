@@ -8,5 +8,4 @@ module.exports = component 'Layout',
   render: ->
 
     Layer {},
-      Navbar {}
       @props.children
