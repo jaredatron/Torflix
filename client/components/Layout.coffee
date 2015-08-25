@@ -1,12 +1,12 @@
 component = require 'reactatron/component'
 {div} = require 'reactatron/DOM'
+Layer = require 'reactatron/Layer'
 Navbar = require './Navbar'
-Layer = require './Layer'
 
 module.exports = component 'Layout',
 
   render: ->
 
-    Layer null,
-      Navbar()
+    Layer {},
+      Navbar {}
       @props.children
