@@ -9,14 +9,17 @@ Text      = require 'reactatron/Text'
 
 module.exports = component 'Layout',
 
-  getDataBindings: ->
-    ['horizontalSize']
+  # getDataBindings: ->
+  #   ['horizontalSize']
+
 
   render: ->
     console.count('Layout render')
 
-    if @data.horizontalSize >= 1
-      sideBarWidth = if @data.horizontalSize > 2 then '300px' else '200px'
+    horizontalSize = @get('horizontalSize')
+
+    if horizontalSize >= 1
+      sideBarWidth = if horizontalSize > 2 then '300px' else '200px'
       Layer {},
         Rows grow: 1,
           Navbar shrink: 0

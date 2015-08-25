@@ -14,16 +14,13 @@ App.registerPlugin new ResponsiveSizePlugin
 
 App.Component = component 'Router',
 
-  getDataBindings: ->
-    ['location', 'put_io_access_token']
-
   render: ->
 
 
-    {path, params} = @data.location
+    {path, params} = @get('location')
 
     Component = switch
-      when !@data.put_io_access_token
+      when !@get('put_io_access_token')
         require('./pages/LoginPage')
 
       when path == '/shows'
