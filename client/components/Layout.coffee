@@ -21,12 +21,11 @@ module.exports = component 'Layout',
     horizontalSize = @get('horizontalSize')
 
     if horizontalSize >= 1
-      sideBarWidth = if horizontalSize > 2 then '300px' else '200px'
       Layer {},
         Rows grow: 1,
           Navbar shrink: 0
           Columns grow: 1,
-            Sidebar minWidth: sideBarWidth
+            Sidebar {}
             @props.children
     else
       Layer {},
@@ -56,6 +55,8 @@ Sidebar = component 'Sidebar',
     Rows @cloneProps(),
       SidebarLink path: '/transfers', 'Transfers'
       SidebarLink path: '/shows',     'Shows'
+      SidebarLink path: '/files',     'Files'
+      SidebarLink path: '/bookmarks', 'Bookmarks'
 
 
 SidebarLink = styledComponent Link,
@@ -68,10 +69,6 @@ SidebarLink = styledComponent Link,
   ':focus':
     backgroundColor: 'purple'
     color: 'yellow'
-  ':mousedown':
-    fontWeight: 'bold'
-    outline: '10px dotted green'
-
   # ':active':
 
       #   render: ->

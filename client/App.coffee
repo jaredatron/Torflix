@@ -10,7 +10,7 @@ App.putio = new Putio(App)
 
 App.registerPlugin new ResponsiveSizePlugin
   window: global.window,
-  widths: [768, 992, 1200]
+  widths: [480, 768, 992, 1200]
 
 App.Component = component 'Router',
 

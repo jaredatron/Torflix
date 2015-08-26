@@ -1,8 +1,19 @@
 Putio = require '../Putio'
 component = require 'reactatron/component'
-{div, h1, button} = require 'reactatron/DOM'
-ColumnContainer = require './ColumnContainer'
-RowContainer = require './RowContainer'
+styledComponent = require 'reactatron/styledComponent'
+
+Block   = require 'reactatron/Block'
+Columns = require 'reactatron/Columns'
+Rows    = require 'reactatron/Rows'
+Link    = require 'reactatron/Link'
+
+
+
+
+
+# DELETE ME
+# ColumnContainer = require './ColumnContainer'
+# RowContainer = require './RowContainer'
 
 module.exports = component 'TransfersList',
 
@@ -10,10 +21,13 @@ module.exports = component 'TransfersList',
     transfers: component.PropTypes.any
 
   render: ->
-    transfers = @props.transfers.map (transfer) ->
+    Rows {}, @renderTransfers()
+
+  renderTransfers: ->
+    (@props.transfers || []).map (transfer) ->
+      transfer = Object.clone(transfer)
+      transfer.key = transfer.id
       Transfer(transfer)
-    RowContainer null, transfers
-    #
 
 
 Transfer = component 'TransfersList.Transfer',
@@ -22,28 +36,24 @@ Transfer = component 'TransfersList.Transfer',
     @app.pub 'delete transfer', id: @props.id
 
   render: ->
-    ColumnContainer null,
-      StatusColumn status: @props.status
-      NameColumn name: @props.name
+    Columns shrink: 0,
+      StatusColumn {}, @props.status
+      NameColumn {}, @props.name
       DeleteTransferButton onClick: @delete
 
 
-StatusColumn = (props={}) ->
-  props.style = {
-    marginRight: '1em'
-  }
-  div(props, props.status)
+StatusColumn = styledComponent Block,
+  marginRight: '1em'
 
-NameColumn = (props={}) ->
-  props.style = {}
-  div(props, props.name)
+NameColumn = styledComponent Block,
+  marginRight: '1em'
 
 # DeleteColumn = (props={}) ->
 #   props.style = {}
 #   div(props, props.name)
 
 DeleteTransferButton = (props) ->
-  button(props, 'X')
+  Link(props, 'X')
 # StringInput = require './StringInput'
 # ActionLink = require './ActionLink'
 # TransfersStatusIcon = require './TransfersStatusIcon'

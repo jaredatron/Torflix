@@ -20,6 +20,7 @@ module.exports = component 'TransfersPage',
         Block {}, 'TRANSFERS PAGE'
         # Block {}, 'transfers:', JSON.stringify(transfers)
         TransfersList transfers: transfers
+        # TransfersList grow: 1, transfers: transfers
 
         # div null, 'TRANSFERS PAGE'
         # # div null, 'path:',   JSON.stringify(@props.path)
