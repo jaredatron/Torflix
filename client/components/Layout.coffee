@@ -51,9 +51,10 @@ Navbar = component 'Navbar',
   defaultStyle:
     backgroundColor: 'black'
     color: 'white'
+    padding: '0.25em'
 
   render: ->
-    Block @cloneProps(), 'Navbar here'
+    Block @cloneProps(), 'Torflix'
 
 Sidebar = component 'Sidebar',
 
@@ -70,13 +71,10 @@ Sidebar = component 'Sidebar',
 
 
 SidebarLink = styledComponent 'SidebarLink', Link,
-  backgroundColor: 'orange'
+  backgroundColor: 'rgb(0, 59, 95)'
   padding: '0.5em'
-  textDecoration: 'none'
   ':hover':
-    backgroundColor: 'green'
-    color: 'blue'
+    backgroundColor: 'rgb(0, 73, 117)'
   ':focus':
-    backgroundColor: 'purple'
-    color: 'yellow'
+    backgroundColor: 'rgb(0, 73, 117)'
 

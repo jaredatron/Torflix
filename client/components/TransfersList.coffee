@@ -2,10 +2,14 @@ Putio = require '../Putio'
 component = require 'reactatron/component'
 styledComponent = require 'reactatron/styledComponent'
 
+Text    = require 'reactatron/Text'
+SublteText    = require 'reactatron/SublteText'
 Block   = require 'reactatron/Block'
 Columns = require 'reactatron/Columns'
 Rows    = require 'reactatron/Rows'
 Link    = require 'reactatron/Link'
+
+{progress} = require 'reactatron/DOM'
 
 # DELETE ME
 # ColumnContainer = require './ColumnContainer'
@@ -22,9 +26,10 @@ module.exports = component 'TransfersList',
   renderTransfers: ->
     (@props.transfers || []).map (transfer, index) ->
       Transfer
-        index: index
+        stripe: index % 2 == 1
         key: transfer.id
         transfer: transfer
+
 
 
 
@@ -37,12 +42,16 @@ Transfer = component 'Transfer',
     transfer = @props.transfer
 
     style =
-      backgroundColor: if @props.index % 2 == 1 then 'grey' else 'lightgrey'
+      padding: '0.25em 0.5em'
+      backgroundColor: if @props.stripe then 'rgb(235,235,235)' else 'rgb(255,255,255)'
 
+
+        # TransferStatus {}, transfer.status
     Rows shrink: 0, style: style,
-      TransferStatus {}, transfer.status
-      TransferName   {}, transfer.name
-      TransferDeleteButton onClick: @delete
+      Link path: "/transfers/#{transfer.id}",
+        Text {}, transfer.name
+      progress value: transfer.percent_done, max: 100
+      SublteText {}, transfer.status_message
 
 
 TransferStatus = Block.extendStyledComponent 'TransferStatus',

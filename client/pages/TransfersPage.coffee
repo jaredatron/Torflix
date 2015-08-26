@@ -7,9 +7,6 @@ TransfersList = require '../components/TransfersList'
 
 module.exports = component 'TransfersPage',
 
-  # getDataBindings: ->
-  #   ['transfers']
-
   componentDidMount: ->
     @app.pub 'reload transfers'
 
@@ -20,10 +17,3 @@ module.exports = component 'TransfersPage',
       TransfersList
         width: '100%'
         transfers: transfers
-
-
-
-# Scrollbox = Box.extendStyledComponent 'Scrollbox',
-#   height: '100%'
-#   width: '100%'
-#   overflowY: 'auto'
