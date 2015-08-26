@@ -19,3 +19,6 @@ console.info('horizontalSize', App.get('horizontalSize'))
 
 
 DEBUG.App.pub('DEBUG:here')
+
+
+DEBUG.Block = require 'reactatron/Block'

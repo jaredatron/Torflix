@@ -59,7 +59,7 @@ Sidebar = component 'Sidebar',
       SidebarLink path: '/bookmarks', 'Bookmarks'
 
 
-SidebarLink = styledComponent Link,
+SidebarLink = styledComponent 'SidebarLink', Link,
   backgroundColor: 'orange'
   padding: '0.5em'
   textDecoration: 'none'
