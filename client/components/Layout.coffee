@@ -1,4 +1,5 @@
 component = require 'reactatron/component'
+styledComponent = require 'reactatron/styledComponent'
 Block     = require 'reactatron/Block'
 Layer     = require 'reactatron/Layer'
 Rows      = require 'reactatron/Rows'
@@ -53,9 +54,25 @@ Sidebar = component 'Sidebar',
 
   render: ->
     Rows @cloneProps(),
-      Link path: '/transfers', 'Transfers'
-      Link path: '/shows',     'Shows'
+      SidebarLink path: '/transfers', 'Transfers'
+      SidebarLink path: '/shows',     'Shows'
 
+
+SidebarLink = styledComponent Link,
+  backgroundColor: 'orange'
+  padding: '0.5em'
+  textDecoration: 'none'
+  ':hover':
+    backgroundColor: 'green'
+    color: 'blue'
+  ':focus':
+    backgroundColor: 'purple'
+    color: 'yellow'
+  ':mousedown':
+    fontWeight: 'bold'
+    outline: '10px dotted green'
+
+  # ':active':
 
       #   render: ->
       #     Layer {},

@@ -4,6 +4,7 @@ DEBUG.log = console.log.bind(console)
 DEBUG.React = require 'react'
 App = require './App'
 DEBUG.App = App
+DEBUG.Style = require 'reactatron/Style'
 
 # DEBUG.App.sub /.*/, (event, payload) ->
 #   console.log('Event', event, payload)
