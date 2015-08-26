@@ -7,10 +7,6 @@ Columns = require 'reactatron/Columns'
 Rows    = require 'reactatron/Rows'
 Link    = require 'reactatron/Link'
 
-
-
-
-
 # DELETE ME
 # ColumnContainer = require './ColumnContainer'
 # RowContainer = require './RowContainer'
@@ -21,38 +17,54 @@ module.exports = component 'TransfersList',
     transfers: component.PropTypes.any
 
   render: ->
-    Rows {}, @renderTransfers()
+    Rows @cloneProps(), @renderTransfers()
 
   renderTransfers: ->
-    (@props.transfers || []).map (transfer) ->
-      transfer = Object.clone(transfer)
-      transfer.key = transfer.id
-      Transfer(transfer)
+    (@props.transfers || []).map (transfer, index) ->
+      Transfer
+        index: index
+        key: transfer.id
+        transfer: transfer
 
 
-Transfer = component 'TransfersList.Transfer',
+
+Transfer = component 'Transfer',
 
   delete: ->
     @app.pub 'delete transfer', id: @props.id
 
   render: ->
-    Columns shrink: 0,
-      StatusColumn {}, @props.status
-      NameColumn {}, @props.name
-      DeleteTransferButton onClick: @delete
+    transfer = @props.transfer
+
+    style =
+      backgroundColor: if @props.index % 2 == 1 then 'grey' else 'lightgrey'
+
+    Rows shrink: 0, style: style,
+      TransferStatus {}, transfer.status
+      TransferName   {}, transfer.name
+      TransferDeleteButton onClick: @delete
 
 
-StatusColumn = styledComponent Block,
-  marginRight: '1em'
+TransferStatus = Block.extendStyledComponent 'TransferStatus',
+  background: 'green'
+  # padding: '0 0.25em'
+  # marginRight: '1em'
+  # flexBasis: '2em'
+  # flexShrink: 0
 
-NameColumn = styledComponent Block,
-  marginRight: '1em'
+TransferName = Block.extendStyledComponent 'TransferName',
+  background: 'yellow'
+  # padding: '0 0.25em'
+  # flexGrow: 1
 
 # DeleteColumn = (props={}) ->
 #   props.style = {}
 #   div(props, props.name)
 
-DeleteTransferButton = (props) ->
+TransferDeleteButton = (props) ->
+  # props.style =
+
+
   Link(props, 'X')
 # StringInput = require './StringInput'
 # ActionLink = require './ActionLink'
