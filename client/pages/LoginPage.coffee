@@ -4,7 +4,7 @@ component = require 'reactatron/component'
 module.exports = component 'LoginPage',
 
   addPutioAccessToken: ->
-    @app.set 'put_io_access_token', "LA0XFKMT"
+    @app.set put_io_access_token: "LA0XFKMT"
 
   render: ->
     div null,

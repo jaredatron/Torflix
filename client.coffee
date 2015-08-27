@@ -2,10 +2,10 @@ require 'stdlibjs/Object.assign'
 require 'stdlibjs/Array#find'
 require './client/debug'
 
-App = require './client/App'
+app = require './client/app'
 
 require('domready') ->
-  App.start()
+  app.start()
 
 # React = require 'react'
 # component = require 'reactatron/component'
