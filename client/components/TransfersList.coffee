@@ -8,6 +8,7 @@ Block   = require 'reactatron/Block'
 Columns = require 'reactatron/Columns'
 Rows    = require 'reactatron/Rows'
 Link    = require 'reactatron/Link'
+Button  = require 'reactatron/Button'
 
 {progress} = require 'reactatron/DOM'
 
@@ -50,7 +51,9 @@ Transfer = component 'Transfer',
     Rows shrink: 0, style: style,
       Link path: "/transfers/#{transfer.id}",
         Text {}, transfer.name
-      progress value: transfer.percent_done, max: 100
+      Columns {},
+        progress value: transfer.percent_done, max: 100, style: {flexGrow: 1}
+        Button onClick: @deleteTransfer, 'X'
       SublteText {}, transfer.status_message
 
 
