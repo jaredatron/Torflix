@@ -24,17 +24,18 @@ module.exports = component 'FilesPage',
 
 
 LoadFileMixin =
-  propTypes:
-    fileId: component.PropTypes.number.isRequired
 
-  loadFile: ->
-    @app.pub 'load file', @props.fileId
+  getFileId: ->
+    if @props.fileId? then @props.fileId else @props.file.id
 
   getFile: ->
-    @get("files/#{@props.fileId}")
+    @get "files/#{@getFileId()}"
+
+  loadFile: ->
+    @app.pub 'load file', @getFileId()
 
   setFile: (file) ->
-    @app.set "files/#{@props.fileId}": file
+    @app.set "files/#{@getFileId()}": file
 
   componentDidMount: ->
     @loadFile() unless @getFile()
@@ -44,45 +45,47 @@ File = component 'File',
 
   mixins: [LoadFileMixin]
 
-  # onClick: (event) ->
-
-
-  defaultStyle:
-    ':hover':
-      backgroundColor: 'rgb(218,218,218)'
-
-  toggle: (event) ->
-    event.preventDefault()
-    file = @getFile()
-    file.open = !file.open
-    @setFile(file)
-
-
   render: ->
     file = @getFile()
 
     if !file
       return Block @cloneProps(), Text({}, 'file not found or loading')
 
-    # if isDirectory(file) && file.open
-    #   contents = DirectoryContents
-    #     fileId: file.id
-    #     style:
-    #       marginLeft: '1em'
+    if file.isDirectory && open = @get("/files/#{file.id}/open")
+      directoryContents = DirectoryContents
+        file: file
+        style:
+            marginLeft: '1em'
 
     Rows @cloneProps(),
-      Columns {},
-        Column {}, FileIcon(file: file)
-        Column grow: 1,
-          Link
-            path: "/files/#{file.id}"
-            onClick: @toggle
-            file.name
-        # Column {}, FileIcon(file: file)
-        # Column {}, FileIcon(file: file)
-        # Column {}, FileIcon(file: file)
-        # Column {}, FileIcon(file: file)
-      # contents
+      FileRow file: file, open: false
+      directoryContents
+
+FileRow = component 'FileRow',
+
+  propTypes:
+    file: component.PropTypes.object.isRequired
+
+  defaultStyle:
+    ':hover':
+      backgroundColor: 'rgb(218,218,218)'
+
+  onClick: (event) ->
+    if @props.file.isDirectory
+      event.preventDefault()
+      key = "/files/#{@props.file.id}/open"
+      @app.set "#{key}": !@get(key)
+
+
+  render: ->
+    file = @props.file
+    Columns @cloneProps(),
+      Column {}, FileIcon(file: file)
+      Column grow: 1,
+        Link
+          path: "/files/#{file.id}"
+          onClick: @onClick
+          file.name
 
 
 Column = Block.extendStyledComponent 'Column',
@@ -90,24 +93,12 @@ Column = Block.extendStyledComponent 'Column',
 
 FileIcon = (props) ->
   switch
-    when isVideo(props.file)
+    when props.file.isVideo
       'V'
-    when isDirectory(props.file)
+    when props.file.isDirectory
       'D'
     else
       '?'
-
-# FileName = component 'FileName', ->
-#   file = @props.file
-#   switch
-#     when isVideo(file)
-
-#     when isDirectory(file)
-#       Link path: "/files/#{file.id}", file.name
-#     else
-#       Text({}, file.name)
-
-
 
 
 
@@ -120,21 +111,24 @@ DirectoryContents = component 'DirectoryContents',
 
   componentDidMount: ->
     file = @getFile()
-    if file && isDirectory(file) && !file.fileIds
-      @app.pub 'load directory contents', @props.fileId
+    if file && file.isDirectory && !file.fileIds
+      @app.pub 'load directory contents', file.id
 
   render: ->
+    fileId = @getFileId()
     file = @getFile()
-    if file && isDirectory(file) && file.fileIds
-      files = file.fileIds.first(999).map (fileId) ->
-        File key: fileId, fileId: fileId
+    loading = @get("files/#{fileId}/loading")
+
+    if !file || !file.fileIds
+      return if loading
+        Block {}, 'Loading...'
+      else
+        Block {}, 'empty'
+
+    files = file.fileIds.first(999).map (fileId) ->
+      File key: fileId, fileId: fileId
+
     Rows @cloneProps(), files
 
 
 
-
-isVideo = (file) ->
-  /\.(mkv|mp4|avi)$/.test file.name
-
-isDirectory = (file) ->
-  file.content_type == "application/x-directory"
