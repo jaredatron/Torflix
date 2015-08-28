@@ -5,6 +5,7 @@ DEBUG.React = require 'react/addons'
 DEBUG.ReactElement = require 'react/lib/ReactElement'
 app = require './app'
 DEBUG.app = app
+DEBUG.animator = require './animator'
 DEBUG.Style = require 'reactatron/Style'
 
 # DEBUG.app.sub /.*/, (event, payload) ->

@@ -42,7 +42,6 @@ module.exports = component 'Layout',
 
 MainContent = Box.extendStyledComponent 'MainContent',
   flexGrow: 1
-  backgroundColor: 'red'
   overflowY: 'auto'
 
 

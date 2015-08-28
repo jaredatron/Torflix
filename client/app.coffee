@@ -12,8 +12,6 @@ app.registerPlugin new ResponsiveSizePlugin
   window: global.window,
   widths: [480, 768, 992, 1200]
 
-app.stylesheet = require './stylesheet'
-
 app.Component = component 'Router',
 
   render: ->

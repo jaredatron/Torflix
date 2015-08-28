@@ -18,6 +18,8 @@ TransitionGroup = require 'reactatron/TransitionGroup'
 
 
 
+animator = require '../animator'
+
 animate = (node, name, done) ->
   node.style.animationDuration = '1s'
   node.style.animationFillMode = 'both'
@@ -26,56 +28,34 @@ animate = (node, name, done) ->
 # ReactTransitionEvents = require 'react/lib/ReactTransitionEvents'
 TestAnimator = component
   componentWillMount: ->
-    console.log('componentWillMount')
+    # console.log('componentWillMount')
 
   componentDidMount: ->
-    console.log('componentDidMount')
-    node = @getDOMNode()
-    node.style.position = 'relative'
-    # node.style.transition = 'left 500ms'
+    # console.log('componentDidMount')
 
   componentWillUnmount: ->
-    console.log('componentWillUnmount')
+    # console.log('componentWillUnmount')
 
   componentWillAppear: (done) ->
-    console.log('componentWillAppear')
+    # console.log('componentWillAppear')
     done()
-    # node = @getDOMNode()
-    # node.style.left = '-100%'
-    # node.style.transition = 'left 500ms'
-    # setTimeout ->
-    #   node.style.left = '-0%'
-    # setTimeout ->
-    #   node.style.transition = ''
-    #   done()
-    # , 500
 
   componentWillEnter: (done) ->
-    console.log('componentWillEnter')
-    # done()
-    node = @getDOMNode()
-    node.style.left = '-100%'
-    node.style.transition = 'left 500ms'
-    setTimeout ->
-      node.style.left = '-0%'
-    , 10
-    setTimeout ->
-      # node.style.transition = ''
-      done()
-    , 500
+    # console.log('componentWillEnter')
+    animator.animate
+      target: @getDOMNode()
+      name: 'bounceInLeft'
+      duration: '500ms'
+      done: done
 
   componentWillLeave: (done) ->
-    console.log('componentWillLeave')
-    # done()
-    node = @getDOMNode()
-    node.style.left = '-0%'
-    node.style.transition = 'left 500ms'
-    setTimeout ->
-      node.style.left = '-100%'
-    setTimeout ->
-      node.style.transition = ''
-      done()
-    , 500
+    # console.log('componentWillLeave')
+    animator.animate
+      target: @getDOMNode()
+      name: 'bounceOutLeft'
+      duration: '500ms'
+      done: done
+
 
   render: ->
     @props.children
@@ -118,7 +98,8 @@ Transfer = component 'Transfer',
 
     style =
       padding: '0.25em 0.5em'
-      backgroundColor: if @props.stripe then 'rgb(235,235,235)' else 'rgb(255,255,255)'
+      # backgroundColor: if @props.stripe then 'rgb(235,235,235)' else 'rgb(255,255,255)'
+      borderBottom: '1px solid rgb(235,235,235)'
 
 
         # TransferStatus {}, transfer.status
