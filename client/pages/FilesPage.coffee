@@ -3,6 +3,7 @@ Layout = require '../components/Layout'
 File = require '../components/File'
 
 module.exports = component 'FilesPage',
+
   render: ->
     if fileId = Number(@props.file_id)
       Layout {},

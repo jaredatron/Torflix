@@ -1,8 +1,12 @@
 module.exports = (app) ->
 
   app.sub 'reload transfers', ->
+    app.set "transfers/loading": true
+
     app.putio.transfers().then (transfers) ->
-      app.set transfers: transfers
+      app.set
+        'transfers/loading': false
+        transfers: transfers
 
   app.sub 'load transfer', (event, transfer_id) ->
     console.log('would load transfer', transfer_id)

@@ -11,34 +11,32 @@ Rows  = require 'reactatron/Rows'
 Block = require 'reactatron/Block'
 
 
-LoadFileMixin =
-
-  getFileId: ->
-    if @props.fileId? then @props.fileId else @props.file.id
-
-  getFile: ->
-    @get "files/#{@getFileId()}"
-
-  loadFile: ->
-    @app.pub 'load file', @getFileId()
-
-  componentDidMount: ->
-    @loadFile() unless @getFile()
-
-
 File = component 'File',
 
-  mixins: [LoadFileMixin]
+  # mixins: [LoadFileMixin]
+
+  propTypes:
+    fileId: component.PropTypes.number.isRequired
+
+  dataBindings: ->
+    file:    "files/#{@props.fileId}"
+    loading: "files/#{@props.fileId}/loading"
+    open:    "files/#{@props.fileId}/open"
+
+  componentWillReceiveProps: (nextProps) ->
+    if this.props.fileId != nextProps.fileId
+      debugger
 
   render: ->
-    file = @getFile()
+    file = @state.file
+    open = @state.open
 
     if !file
-      return Block @cloneProps(), Text({}, 'file not found or loading')
+      return Block @cloneProps(), 'file not found or loading'
 
-    if file.isDirectory && open = @get("/files/#{file.id}/open")
+    if file.isDirectory && open
       directoryContents = DirectoryContents
-        file: file
+        fileId: file.id
         style:
             marginLeft: '1em'
 
@@ -91,20 +89,27 @@ FileIcon = (props) ->
 
 DirectoryContents = component 'DirectoryContents',
 
-  mixins: [LoadFileMixin]
+  # mixins: [LoadFileMixin]
+
+  propTypes:
+    fileId: component.PropTypes.number.isRequired
+
+  dataBindings: ->
+    file:    "files/#{@props.fileId}"
+    loading: "files/#{@props.fileId}/loading"
 
   defaultStyle:
     width: '100%'
 
   componentDidMount: ->
-    file = @getFile()
-    if file && file.isDirectory && !file.fileIds
-      @app.pub 'load directory contents', file.id
+    file = @state.file
+    if !file || (file.isDirectory && !file.fileIds)
+      @app.pub 'load directory contents', @props.fileId
 
   render: ->
-    fileId = @getFileId()
-    file = @getFile()
-    loading = @get("files/#{fileId}/loading")
+    fileId = @props.fileId
+    file = @state.file
+    loading = @state.loading
 
     if !file || !file.fileIds
       return if loading

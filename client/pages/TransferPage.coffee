@@ -8,12 +8,15 @@ TransfersList = require '../components/TransfersList'
 
 module.exports = component 'TransferPage',
 
+  dataBindings: ->
+    transfer: ''
+
   componentDidMount: ->
-    if !@getTransfer()
-      @app.pub 'load transfer', @getTransferId()
+    if !@state.transfer
+      @app.pub('load transfer', @props.params.transfer_id)
 
   getTransferId: ->
-    @get('params').transfer_id
+    @props.params.transfer_id
 
   getTransfer: ->
     @get("transfers/#{@getTransferId()}")

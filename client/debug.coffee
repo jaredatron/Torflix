@@ -29,3 +29,8 @@ DEBUG.Block = require 'reactatron/Block'
 DEBUG.Rows = require 'reactatron/Rows'
 
 
+
+global.reset = ->
+  app.stop()
+  app.store.clear()
+  app.start()

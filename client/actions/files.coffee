@@ -15,7 +15,7 @@ module.exports = (app) ->
 
 
   app.sub 'toggle directory', (event, fileId) ->
-    key = "/files/#{fileId}/open"
+    key = "files/#{fileId}/open"
     app.set "#{key}": !app.get(key)
 
 

@@ -28,11 +28,16 @@ app.sub 'store:change:put_io_access_token', ->
   app.set loggedIn: app.get('put_io_access_token')?
 
 
-app.MainComponent = component 'MainComponent', ->
-  if @get('loggedIn')
-    app.RouteComponent()
-  else
-    require('./pages/LoginPage')()
+app.MainComponent = component 'MainComponent',
+
+  dataBindings: ['loggedIn']
+
+  render: ->
+    console.info('MainComponent render')
+    if @state.loggedIn
+      app.RouteComponent()
+    else
+      require('./pages/LoginPage')()
 
 
 

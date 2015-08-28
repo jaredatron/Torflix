@@ -7,13 +7,19 @@ TransfersList = require '../components/TransfersList'
 
 module.exports = component 'TransfersPage',
 
+  dataBindings: ->
+    transfers: 'transfers'
+    loading:   'transfers/loading'
+
   componentDidMount: ->
-    @app.pub 'reload transfers'
+    if !@state.transfers
+      @app.pub 'reload transfers'
 
   render: ->
-    transfers = @get('transfers')
+    if @state.transfers
+      return Layout null,
+        TransfersList
+          width: '100%'
+          transfers: @state.transfers
 
-    Layout null,
-      TransfersList
-        width: '100%'
-        transfers: transfers
+    Layout null, 'loading...'

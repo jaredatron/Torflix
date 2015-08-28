@@ -12,11 +12,13 @@ Link      = require 'reactatron/Link'
 
 module.exports = component 'Layout',
 
+  dataBindings: ['horizontalSize']
+
   defaultStyle:
     userSelect: 'none'
 
   render: ->
-    horizontalSize = @get('horizontalSize')
+    horizontalSize = @state.horizontalSize
 
     navbar = Navbar shrink: 0
 
