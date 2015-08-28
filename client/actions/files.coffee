@@ -14,6 +14,12 @@ module.exports = (app) ->
       app.set changes
 
 
+  app.sub 'toggle directory', (event, fileId) ->
+    key = "/files/#{fileId}/open"
+    app.set "#{key}": !app.get(key)
+
+
+
   amendFile = (file) ->
     file.isVideo = isVideo(file)
     file.isDirectory = isDirectory(file)

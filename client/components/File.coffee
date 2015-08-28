@@ -1,3 +1,5 @@
+require 'stdlibjs/Array#first'
+
 component = require 'reactatron/component'
 
 Block   = require 'reactatron/Block'
@@ -5,11 +7,26 @@ Rows    = require 'reactatron/Rows'
 Columns = require 'reactatron/Columns'
 Link    = require 'reactatron/Link'
 
-LoadFileMixin = require '../mixins/LoadFileMixin'
+Rows  = require 'reactatron/Rows'
+Block = require 'reactatron/Block'
 
-DirectoryContents = null
 
-module.exports = component 'File',
+LoadFileMixin =
+
+  getFileId: ->
+    if @props.fileId? then @props.fileId else @props.file.id
+
+  getFile: ->
+    @get "files/#{@getFileId()}"
+
+  loadFile: ->
+    @app.pub 'load file', @getFileId()
+
+  componentDidMount: ->
+    @loadFile() unless @getFile()
+
+
+File = component 'File',
 
   mixins: [LoadFileMixin]
 
@@ -20,7 +37,6 @@ module.exports = component 'File',
       return Block @cloneProps(), Text({}, 'file not found or loading')
 
     if file.isDirectory && open = @get("/files/#{file.id}/open")
-      DirectoryContents ||= require('./DirectoryContents')
       directoryContents = DirectoryContents
         file: file
         style:
@@ -42,9 +58,7 @@ FileRow = component 'FileRow',
   onClick: (event) ->
     if @props.file.isDirectory
       event.preventDefault()
-      key = "/files/#{@props.file.id}/open"
-      @app.set "#{key}": !@get(key)
-
+      @app.pub 'toggle directory', @props.file.id
 
   render: ->
     file = @props.file
@@ -68,3 +82,42 @@ FileIcon = (props) ->
       'D'
     else
       '?'
+
+
+
+
+
+
+
+DirectoryContents = component 'DirectoryContents',
+
+  mixins: [LoadFileMixin]
+
+  defaultStyle:
+    width: '100%'
+
+  componentDidMount: ->
+    file = @getFile()
+    if file && file.isDirectory && !file.fileIds
+      @app.pub 'load directory contents', file.id
+
+  render: ->
+    fileId = @getFileId()
+    file = @getFile()
+    loading = @get("files/#{fileId}/loading")
+
+    if !file || !file.fileIds
+      return if loading
+        Block {}, 'Loading...'
+      else
+        Block {}, 'empty'
+
+    files = file.fileIds.first(999).map (fileId) ->
+      File key: fileId, fileId: fileId
+
+    Rows @cloneProps(), files
+
+
+
+File.DirectoryContents = DirectoryContents
+module.exports = File

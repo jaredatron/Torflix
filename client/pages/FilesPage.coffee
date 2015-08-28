@@ -1,7 +1,6 @@
 component = require 'reactatron/component'
 Layout = require '../components/Layout'
 File = require '../components/File'
-DirectoryContents = require '../components/DirectoryContents'
 
 module.exports = component 'FilesPage',
   render: ->
@@ -13,7 +12,7 @@ module.exports = component 'FilesPage',
             padding: '1em'
     else
       Layout {},
-        DirectoryContents fileId: 0
+        File.DirectoryContents fileId: 0
 
 
 
