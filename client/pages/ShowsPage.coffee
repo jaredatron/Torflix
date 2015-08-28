@@ -6,7 +6,7 @@ Layout = require '../components/Layout'
 module.exports = component 'ShowsPage',
 
   render: ->
-    location = @get('location')
+    location = @app.get('location')
     Layout {},
       Rows grow: 1,
         Block {}, 'SHOWS PAGE'

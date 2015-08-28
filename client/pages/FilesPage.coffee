@@ -10,7 +10,7 @@ TransfersList = require '../components/TransfersList'
 
 module.exports = component 'FilesPage',
   render: ->
-    if fileId = @props.file_id
+    if fileId = Number(@props.file_id)
       Layout {},
         File
           fileId: fileId

@@ -16,8 +16,6 @@ module.exports = component 'Layout',
     userSelect: 'none'
 
   render: ->
-    console.count('Layout render')
-
     horizontalSize = @get('horizontalSize')
 
     navbar = Navbar shrink: 0

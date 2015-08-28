@@ -14,10 +14,12 @@ DEBUG.app.sub /.*/, (event, payload) ->
 # DEBUG.app.sub 'store:change:location', ->
 #   console.info('Location change', app.get('location'))
 
-app.sub 'store:change:horizontalSize', ->
-  console.info('horizontalSize', app.get('horizontalSize'))
 
-console.info('horizontalSize', app.get('horizontalSize'))
+
+# app.sub 'store:change:horizontalSize', ->
+#   console.info('horizontalSize', app.get('horizontalSize'))
+
+# console.info('horizontalSize', app.get('horizontalSize'))
 
 
 DEBUG.app.pub('DEBUG:here')
@@ -25,3 +27,5 @@ DEBUG.app.pub('DEBUG:here')
 
 DEBUG.Block = require 'reactatron/Block'
 DEBUG.Rows = require 'reactatron/Rows'
+
+
