@@ -12,27 +12,23 @@ app.registerPlugin new ResponsiveSizePlugin
   window: global.window,
   widths: [480, 768, 992, 1200]
 
+
+app.router = require './Router'
+
 app.Component = component 'Router',
 
   render: ->
 
+    route = if @get('put_io_access_token')
+      @app.router.routeFor(@get('location'))
+    else
+      require('./pages/LoginPage')
 
-    {path, params} = @get('location')
+    route.path
+    route.params
 
-    Component = switch
-      when !@get('put_io_access_token')
-        require('./pages/LoginPage')
+    route.page()
 
-      when path == '/shows'
-        require('./pages/ShowsPage')
-
-      when path == '/transfers'
-        require('./pages/TransfersPage')
-
-      else
-        require('./pages/NotFoundPage')
-
-    Component()
 
 
 
