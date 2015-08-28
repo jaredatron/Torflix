@@ -2,32 +2,37 @@ ReactatronApp = require('reactatron/App')
 component = require('reactatron/component')
 Putio = require('./Putio')
 ResponsiveSizePlugin = require 'reactatron/ResponsiveSizePlugin'
+RouterPlugin = require 'reactatron/RouterPlugin'
 
-app = new ReactatronApp
+module.exports = app = new ReactatronApp
 
-module.exports = app
+
+
 app.putio = new Putio(app)
 
 app.registerPlugin new ResponsiveSizePlugin
   window: global.window,
   widths: [480, 768, 992, 1200]
 
+app.registerPlugin new RouterPlugin ->
+  @match '/',                       @redirectTo('/transfers')
+  @match '/transfers',              require('./pages/TransfersPage')
+  # @match '/transfers/:transfer_id', require('./pages/TransferPage')
+  @match '/shows',                  require('./pages/ShowsPage')
+  @match '/*path',                  require('./pages/NotFoundPage')
 
-app.router = require './Router'
 
-app.Component = component 'Router',
+app.sub 'store:change:put_io_access_token', ->
+  app.set loggedIn: app.get('put_io_access_token')?
 
-  render: ->
 
-    route = if @get('put_io_access_token')
-      @app.router.routeFor(@get('location'))
-    else
-      require('./pages/LoginPage')
+app.MainComponent = component 'MainComponent',  ->
+  if @get('loggedIn')
+    app.RouteComponent()
+  else
+    require('./pages/LoginPage')()
 
-    route.path
-    route.params
 
-    route.page()
 
 
 

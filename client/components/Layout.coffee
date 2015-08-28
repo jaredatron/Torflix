@@ -12,10 +12,6 @@ Link      = require 'reactatron/Link'
 
 module.exports = component 'Layout',
 
-  # getDataBindings: ->
-  #   ['horizontalSize']
-
-
   render: ->
     console.count('Layout render')
 
