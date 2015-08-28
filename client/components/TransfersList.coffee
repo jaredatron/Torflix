@@ -1,16 +1,86 @@
-Putio = require '../Putio'
-component = require 'reactatron/component'
-styledComponent = require 'reactatron/styledComponent'
+React = require('react/addons')
+# ReactCSSTransitionGroup = React.createFactory(React.addons.CSSTransitionGroup)
+# ReactTransitionGroup = React.createFactory()
 
-Text    = require 'reactatron/Text'
-SublteText    = require 'reactatron/SublteText'
-Block   = require 'reactatron/Block'
+
+component = require 'reactatron/component'
+
+Text = require 'reactatron/Text'
+SublteText = require 'reactatron/SublteText'
 Columns = require 'reactatron/Columns'
-Rows    = require 'reactatron/Rows'
-Link    = require 'reactatron/Link'
-Button  = require 'reactatron/Button'
+Rows = require 'reactatron/Rows'
+Link = require 'reactatron/Link'
+Button = require 'reactatron/Button'
+
+TransitionGroup = require 'reactatron/TransitionGroup'
 
 {progress} = require 'reactatron/DOM'
+
+
+
+animate = (node, name, done) ->
+  node.style.animationDuration = '1s'
+  node.style.animationFillMode = 'both'
+
+
+# ReactTransitionEvents = require 'react/lib/ReactTransitionEvents'
+TestAnimator = component
+  componentWillMount: ->
+    console.log('componentWillMount')
+
+  componentDidMount: ->
+    console.log('componentDidMount')
+    node = @getDOMNode()
+    node.style.position = 'relative'
+    # node.style.transition = 'left 500ms'
+
+  componentWillUnmount: ->
+    console.log('componentWillUnmount')
+
+  componentWillAppear: (done) ->
+    console.log('componentWillAppear')
+    done()
+    # node = @getDOMNode()
+    # node.style.left = '-100%'
+    # node.style.transition = 'left 500ms'
+    # setTimeout ->
+    #   node.style.left = '-0%'
+    # setTimeout ->
+    #   node.style.transition = ''
+    #   done()
+    # , 500
+
+  componentWillEnter: (done) ->
+    console.log('componentWillEnter')
+    # done()
+    node = @getDOMNode()
+    node.style.left = '-100%'
+    node.style.transition = 'left 500ms'
+    setTimeout ->
+      node.style.left = '-0%'
+    , 10
+    setTimeout ->
+      # node.style.transition = ''
+      done()
+    , 500
+
+  componentWillLeave: (done) ->
+    console.log('componentWillLeave')
+    # done()
+    node = @getDOMNode()
+    node.style.left = '-0%'
+    node.style.transition = 'left 500ms'
+    setTimeout ->
+      node.style.left = '-100%'
+    setTimeout ->
+      node.style.transition = ''
+      done()
+    , 500
+
+  render: ->
+    @props.children
+
+
 
 module.exports = component 'TransfersList',
 
@@ -18,7 +88,18 @@ module.exports = component 'TransfersList',
     transfers: component.PropTypes.any
 
   render: ->
-    Rows @cloneProps(), @renderTransfers()
+    transfers = @renderTransfers()
+
+    # Rows @cloneProps(), transfers
+
+    TransitionGroup
+      component: Rows,
+      childFactory: @childFactory
+      style: width: '100%'
+      transfers
+
+  childFactory: (child) ->
+    TestAnimator {}, child
 
   renderTransfers: ->
     (@props.transfers || []).map (transfer, index) ->
