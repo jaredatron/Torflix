@@ -1,3 +1,5 @@
+require 'stdlibjs/Array#first'
+
 component = require 'reactatron/component'
 Rows = require 'reactatron/Rows'
 Columns = require 'reactatron/Columns'
@@ -62,11 +64,11 @@ File = component 'File',
     if !file
       return Block @cloneProps(), Text({}, 'file not found or loading')
 
-    if isDirectory(file) && file.open
-      contents = DirectoryContents
-        fileId: file.id
-        style:
-          marginLeft: '1em'
+    # if isDirectory(file) && file.open
+    #   contents = DirectoryContents
+    #     fileId: file.id
+    #     style:
+    #       marginLeft: '1em'
 
     Rows @cloneProps(),
       Columns {},
@@ -76,25 +78,24 @@ File = component 'File',
             path: "/files/#{file.id}"
             onClick: @toggle
             file.name
-        Column {}, FileIcon(file: file)
-        Column {}, FileIcon(file: file)
-        Column {}, FileIcon(file: file)
-        Column {}, FileIcon(file: file)
-      contents
+        # Column {}, FileIcon(file: file)
+        # Column {}, FileIcon(file: file)
+        # Column {}, FileIcon(file: file)
+        # Column {}, FileIcon(file: file)
+      # contents
 
 
 Column = Block.extendStyledComponent 'Column',
   padding: '0.25em'
 
-FileIcon = component 'FileName', ->
-  file = @props.file
+FileIcon = (props) ->
   switch
-    when isVideo(file)
-      Text({}, 'V')
-    when isDirectory(file)
-      Text({}, 'D')
+    when isVideo(props.file)
+      'V'
+    when isDirectory(props.file)
+      'D'
     else
-      Text({}, '?')
+      '?'
 
 # FileName = component 'FileName', ->
 #   file = @props.file
@@ -125,7 +126,7 @@ DirectoryContents = component 'DirectoryContents',
   render: ->
     file = @getFile()
     if file && isDirectory(file) && file.fileIds
-      files = file.fileIds.map (fileId) ->
+      files = file.fileIds.first(999).map (fileId) ->
         File key: fileId, fileId: fileId
     Rows @cloneProps(), files
 
