@@ -4,6 +4,9 @@ module.exports = (app) ->
     app.putio.transfers().then (transfers) ->
       app.set transfers: transfers
 
+  app.sub 'load transfer', (event, transfer_id) ->
+    console.log('would load transfer', transfer_id)
+
   app.sub 'delete transfer', (event, info) ->
 
     return unless info.id?

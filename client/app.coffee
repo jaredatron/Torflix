@@ -17,7 +17,7 @@ app.registerPlugin new ResponsiveSizePlugin
 app.registerPlugin new RouterPlugin ->
   @match '/',                       @redirectTo('/transfers')
   @match '/transfers',              require('./pages/TransfersPage')
-  # @match '/transfers/:transfer_id', require('./pages/TransferPage')
+  @match '/transfers/:transfer_id', require('./pages/TransferPage')
   @match '/shows',                  require('./pages/ShowsPage')
   @match '/*path',                  require('./pages/NotFoundPage')
 
