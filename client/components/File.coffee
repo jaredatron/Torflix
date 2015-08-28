@@ -1,95 +1,70 @@
-#= require 'mixins/DepthMixin'
+component = require 'reactatron/component'
 
-component 'File',
+Block   = require 'reactatron/Block'
+Rows    = require 'reactatron/Rows'
+Columns = require 'reactatron/Columns'
+Link    = require 'reactatron/Link'
 
-  mixins: [DepthMixin]
+LoadFileMixin = require '../mixins/LoadFileMixin'
+
+DirectoryContents = null
+
+module.exports = component 'File',
+
+  mixins: [LoadFileMixin]
+
+  render: ->
+    file = @getFile()
+
+    if !file
+      return Block @cloneProps(), Text({}, 'file not found or loading')
+
+    if file.isDirectory && open = @get("/files/#{file.id}/open")
+      DirectoryContents ||= require('./DirectoryContents')
+      directoryContents = DirectoryContents
+        file: file
+        style:
+            marginLeft: '1em'
+
+    Rows @cloneProps(),
+      FileRow file: file, open: false
+      directoryContents
+
+FileRow = component 'FileRow',
 
   propTypes:
-    file: React.PropTypes.object.isRequired
+    file: component.PropTypes.object.isRequired
 
-  isVideo: ->
-    /\.(mkv|mp4|avi)$/.test @props.file.name
+  defaultStyle:
+    ':hover':
+      backgroundColor: 'rgb(218,218,218)'
 
-  isNew: ->
-    !@props.file.first_accessed_at?
+  onClick: (event) ->
+    if @props.file.isDirectory
+      event.preventDefault()
+      key = "/files/#{@props.file.id}/open"
+      @app.set "#{key}": !@get(key)
 
-  newIcon: ->
-    if @isNew()
-      DOM.div
-        className: 'File-newIcon',
-        DOM.Glyphicon(glyph:'asterisk')
 
-  size: ->
-    DOM.div
-      className: 'File-size',
-      DOM.FileSize(size: @props.file.size)
+  render: ->
+    file = @props.file
+    Columns @cloneProps(),
+      Column {}, FileIcon(file: file)
+      Column grow: 1,
+        Link
+          path: "/files/#{file.id}"
+          onClick: @onClick
+          file.name
 
-  name: ->
-    if @isVideo()
-      PlayVideoLink(
-        className: 'File-name flex-spacer'
-        file: @props.file
-      )
+
+Column = Block.extendStyledComponent 'Column',
+  padding: '0.25em'
+
+FileIcon = (props) ->
+  switch
+    when props.file.isVideo
+      'V'
+    when props.file.isDirectory
+      'D'
     else
-      DOM.div(className: 'File-name flex-spacer',
-        DOM.Glyphicon(glyph:'file', className: 'File-icon'),
-        DOM.span(null, @props.file.name),
-      )
-
-  render: ->
-    {div} = DOM
-    div className: 'File',
-      div className: 'File-row flex-row',
-        div(style: @depthStyle())
-        @name()
-        @newIcon()
-        DownloadLink(file_id: @props.file.id, DOM.Glyphicon(glyph:'download'))
-        PutioLink(file: @props.file)
-        ChromecastLink(file_id: @props.file.id)
-        @size()
-        DOM.DeleteFileLink(file: @props.file)
-
-ChromecastLink = component
-  displayName: 'File-ChromecastLink',
-  render: ->
-    DOM.ExternalLink
-      href: "https://put.io/file/#{@props.file_id}/chromecast?subtitle=off"
-      className: 'File-ChromecastLink',
-      title: 'chromecast',
-      DOM.Glyphicon glyph: 'new-window'
-
-PutioLink = component
-  displayName: 'File-PutioLink',
-  render: ->
-    DOM.ExternalLink
-      href: "https://put.io/file/#{@props.file_id}"
-      className: 'File-PutioLink',
-      title: 'put.io',
-      DOM.Glyphicon glyph: 'new-window'
-
-DownloadLink = component
-  displayName: 'File-DownloadLink',
-  propTypes:
-    file_id: React.PropTypes.number.isRequired
-  render: ->
-    props = Object.assign({}, @props)
-    props.href = "https://put.io/v2/files/#{@props.file_id}/download"
-    props.className = 'File-DownloadLink'
-    DOM.DownloadLink(props)
-
-
-
-PlayVideoLink = component
-  displayName: 'File-PlayVideoLink',
-  propTypes:
-    file: React.PropTypes.object.isRequired
-  render: ->
-    DOM.LinkToPlayVideo(
-      className: @props.className,
-      file_id: @props.file.id,
-      DOM.Glyphicon(glyph:'facetime-video', className: 'File-icon'),
-      @props.file.name,
-    )
-
-
-
+      '?'
