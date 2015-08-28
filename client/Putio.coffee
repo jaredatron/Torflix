@@ -33,6 +33,14 @@ class Putio
     @get('/account/info').then (response) =>
       response.info
 
+  file: (id) ->
+    throw new Error('id required') unless id?
+    @get("/files/#{id}").then (response) =>
+      response.file
+
+  directoryContents: (id) ->
+    @get('/files/list', parent_id: id)
+
   #   @account = {}
   #   @account.info = new AccountInfo(this)
   #   @transfers    = new Transfers(this)

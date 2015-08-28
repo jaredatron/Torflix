@@ -6,7 +6,7 @@ Text = require 'reactatron/Text'
 Layout = require '../components/Layout'
 TransfersList = require '../components/TransfersList'
 
-module.exports = component 'TransfersPage',
+module.exports = component 'TransferPage',
 
   componentDidMount: ->
     if !@getTransfer()

@@ -17,7 +17,9 @@ app.registerPlugin new ResponsiveSizePlugin
 app.registerPlugin new RouterPlugin ->
   @match '/',                       @redirectTo('/transfers')
   @match '/transfers',              require('./pages/TransfersPage')
-  @match '/transfers/:transfer_id', require('./pages/TransferPage')
+  # @match '/transfers/:transfer_id', require('./pages/TransferPage')
+  @match '/files',                  require('./pages/FilesPage')
+  @match '/files/:file_id',         require('./pages/FilesPage')
   @match '/shows',                  require('./pages/ShowsPage')
   @match '/*path',                  require('./pages/NotFoundPage')
 
@@ -26,7 +28,7 @@ app.sub 'store:change:put_io_access_token', ->
   app.set loggedIn: app.get('put_io_access_token')?
 
 
-app.MainComponent = component 'MainComponent',  ->
+app.MainComponent = component 'MainComponent', ->
   if @get('loggedIn')
     app.RouteComponent()
   else
@@ -37,4 +39,5 @@ app.MainComponent = component 'MainComponent',  ->
 
 
 
-require('./actions/transferActions')(app)
+require('./actions/transfers')(app)
+require('./actions/files')(app)

@@ -104,7 +104,7 @@ Transfer = component 'Transfer',
 
         # TransferStatus {}, transfer.status
     Rows shrink: 0, style: style,
-      Link path: "/transfers/#{transfer.id}",
+      Link path: "/files/#{transfer.file_id}",
         Text {}, transfer.name
       Columns {},
         progress value: transfer.percent_done, max: 100, style: {flexGrow: 1, marginRight: '0.5em'}

@@ -12,6 +12,9 @@ Link      = require 'reactatron/Link'
 
 module.exports = component 'Layout',
 
+  defaultStyle:
+    userSelect: 'none'
+
   render: ->
     console.count('Layout render')
 
@@ -22,14 +25,14 @@ module.exports = component 'Layout',
     mainContent = MainContent {}, @props.children
 
     if horizontalSize >= 1
-      Layer {},
+      Layer @cloneProps(),
         Rows grow: 1,
           navbar
           Columns grow: 1, shrink: 1,
             Sidebar {}
             mainContent
     else
-      Layer {},
+      Layer @cloneProps(),
         Rows grow: 1,
           navbar
           Sidebar {}
