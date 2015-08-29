@@ -26,7 +26,7 @@ animate = (node, name, done) ->
 
 
 # ReactTransitionEvents = require 'react/lib/ReactTransitionEvents'
-TestAnimator = component
+TestAnimator = component 'TestAnimator',
   componentWillMount: ->
     # console.log('componentWillMount')
 
@@ -56,10 +56,8 @@ TestAnimator = component
       duration: '500ms'
       done: done
 
-
   render: ->
     @props.children
-
 
 
 module.exports = component 'TransfersList',
@@ -79,7 +77,8 @@ module.exports = component 'TransfersList',
       transfers
 
   childFactory: (child) ->
-    TestAnimator {}, child
+    # TestAnimator {}, child
+    child
 
   renderTransfers: ->
     (@props.transfers || []).map (transfer, index) ->

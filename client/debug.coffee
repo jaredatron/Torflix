@@ -25,6 +25,7 @@ DEBUG.app.sub /.*/, (event, payload) ->
 DEBUG.app.pub('DEBUG:here')
 
 
+DEBUG.Box = require 'reactatron/Box'
 DEBUG.Block = require 'reactatron/Block'
 DEBUG.Rows = require 'reactatron/Rows'
 

@@ -77,7 +77,7 @@ FileRow = component 'FileRow',
       Column {}, 'X'
 
 
-Column = Block.extendStyledComponent 'Column',
+Column = Block.withStyle 'Column',
   whiteSpace: 'nowrap'
   padding: '0.25em'
 
