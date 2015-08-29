@@ -30,6 +30,9 @@ DEBUG.Rows = require 'reactatron/Rows'
 
 
 
+global.clearStore = ->
+  app.store.clear()
+
 global.reset = ->
   app.stop()
   app.store.clear()

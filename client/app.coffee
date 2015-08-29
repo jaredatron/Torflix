@@ -24,6 +24,11 @@ app.registerPlugin new RouterPlugin ->
   @match '/*path',                  require('./pages/NotFoundPage')
 
 
+getPutioTokenFromHash = ->
+  if matches = location.hash.match(/^#access_token=(.*)$/)
+    App.session('put_io_access_token', matches[1])
+    window.location = location.toString().substring(0, location.href.indexOf('#'))
+
 app.sub 'store:change:put_io_access_token', ->
   app.set loggedIn: app.get('put_io_access_token')?
 
@@ -33,7 +38,7 @@ app.MainComponent = component 'MainComponent',
   dataBindings: ['loggedIn']
 
   render: ->
-    console.info('MainComponent render')
+    console.info('MainComponent render', @state)
     if @state.loggedIn
       app.RouteComponent()
     else

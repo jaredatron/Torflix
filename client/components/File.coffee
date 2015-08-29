@@ -29,10 +29,15 @@ File = component 'File',
 
   render: ->
     file = @state.file
-    open = @state.open
+    loading = !!@state.loading
+    open = !!@state.open
 
     if !file
-      return Block @cloneProps(), 'file not found or loading'
+      if loading
+        return Block @cloneProps(), 'loading...'
+      else
+        return Block @cloneProps(), 'file not found :('
+
 
     if file.isDirectory && open
       directoryContents = DirectoryContents
@@ -41,15 +46,17 @@ File = component 'File',
             marginLeft: '1em'
 
     Rows @cloneProps(),
-      FileRow file: file, open: false
+      FileRow file: file, open: open
       directoryContents
 
 FileRow = component 'FileRow',
 
   propTypes:
     file: component.PropTypes.object.isRequired
+    open: component.PropTypes.bool.isRequired
 
   defaultStyle:
+    maxWidth: '100%'
     ':hover':
       backgroundColor: 'rgb(218,218,218)'
 
@@ -61,23 +68,26 @@ FileRow = component 'FileRow',
   render: ->
     file = @props.file
     Columns @cloneProps(),
-      Column {}, FileIcon(file: file)
-      Column grow: 1,
+      Column {}, FileIcon(file: file, open: @props.open)
+      Column grow: 1, shrink: 1,
         Link
           path: "/files/#{file.id}"
           onClick: @onClick
+          style:
+            overflow: 'hidden'
+            textOverflow: 'ellipsis'
           file.name
 
-
 Column = Block.extendStyledComponent 'Column',
+  whiteSpace: 'nowrap'
   padding: '0.25em'
 
 FileIcon = (props) ->
   switch
     when props.file.isVideo
-      'V'
+      'X'
     when props.file.isDirectory
-      'D'
+      if props.open then 'V' else '>'
     else
       '?'
 
@@ -113,9 +123,9 @@ DirectoryContents = component 'DirectoryContents',
 
     if !file || !file.fileIds
       return if loading
-        Block {}, 'Loading...'
+        Block @cloneProps(), 'Loading...'
       else
-        Block {}, 'empty'
+        Block @cloneProps(), 'empty'
 
     files = file.fileIds.first(999).map (fileId) ->
       File key: fileId, fileId: fileId
