@@ -42,7 +42,7 @@ module.exports = component 'TransfersPage',
               margin: '0.5em'
               flexGrow: 1
               flexShrink: 1
-          Button onClick: @reloadTransfers, 'reload'
+          Button onClick: @reloadTransfers, tabIndex: -1, 'reload'
         TransfersList transfers: transfers
 
 
