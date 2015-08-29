@@ -16,6 +16,7 @@ module.exports = component 'Layout',
 
   defaultStyle:
     userSelect: 'none'
+    WebkitUserSelect: 'none'
 
   render: ->
     horizontalSize = @state.horizontalSize
@@ -41,6 +42,7 @@ module.exports = component 'Layout',
 
 MainContent = Box.extendStyledComponent 'MainContent',
   flexGrow: 1
+  flexShrink: 1
   overflowY: 'auto'
 
 

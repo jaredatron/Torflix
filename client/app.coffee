@@ -4,9 +4,12 @@ Putio = require('./Putio')
 ResponsiveSizePlugin = require 'reactatron/ResponsiveSizePlugin'
 RouterPlugin = require 'reactatron/RouterPlugin'
 
+
+require('./FontAwesome').load()
+
+
+
 module.exports = app = new ReactatronApp
-
-
 
 app.putio = new Putio(app)
 

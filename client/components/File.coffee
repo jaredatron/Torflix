@@ -10,6 +10,7 @@ Link    = require 'reactatron/Link'
 Rows  = require 'reactatron/Rows'
 Block = require 'reactatron/Block'
 
+Icon = require './Icon'
 
 File = component 'File',
 
@@ -68,31 +69,61 @@ FileRow = component 'FileRow',
   render: ->
     file = @props.file
     Columns @cloneProps(),
-      Column {}, FileIcon(file: file, open: @props.open)
       Column grow: 1, shrink: 1,
-        Link
-          path: "/files/#{file.id}"
+        Filelink
+          file: file,
+          open: @props.open
           onClick: @onClick
-          style:
-            overflow: 'hidden'
-            textOverflow: 'ellipsis'
-          file.name
+      Column {}, 'X'
+
 
 Column = Block.extendStyledComponent 'Column',
   whiteSpace: 'nowrap'
   padding: '0.25em'
 
-FileIcon = (props) ->
+Filelink = (props) ->
   switch
     when props.file.isVideo
-      'X'
+      PlayVideoLink(props)
     when props.file.isDirectory
-      if props.open then 'V' else '>'
+      DirectoryToggleLink(props)
     else
-      '?'
+      DownloadFileLink(props)
 
 
 
+IconLink = (props, children...) ->
+  component.mergeStyle props,
+    overflow: 'hidden'
+    textOverflow: 'ellipsis'
+
+  Link props,
+    Icon glyph: props.glyph, fixedWidth: true
+    children...
+
+
+LinkToFile = (props) ->
+  props.path  ||= "/files/#{props.file.id}"
+  props.glyph ||= 'file'
+  IconLink(props, props.file.name)
+
+PlayVideoLink = (props) ->
+  props.path  ||= "/play/#{props.file.id}"
+  props.glyph ||= 'play'
+  IconLink props, props.file.name
+
+DirectoryToggleLink = (props) ->
+  props.glyph = props.open and 'chevron-down' or 'chevron-right'
+  LinkToFile props
+
+DownloadFileLink = (props) ->
+  LinkToFile(props)
+  # path: "/files/#{props.fileId}"
+  # onClick: @onClick
+  # style:
+  #   overflow: 'hidden'
+  #   textOverflow: 'ellipsis'
+  # file.name
 
 
 
