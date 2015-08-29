@@ -108,7 +108,7 @@ LinkToFile = (props) ->
   IconLink(props, props.file.name)
 
 PlayVideoLink = (props) ->
-  props.path  ||= "/play/#{props.file.id}"
+  props.path  ||= "/video/#{props.file.id}"
   props.glyph ||= 'play'
   IconLink props, props.file.name
 

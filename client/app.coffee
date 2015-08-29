@@ -22,7 +22,8 @@ app.registerPlugin new RouterPlugin ->
   @match '/transfers',              require('./pages/TransfersPage')
   # @match '/transfers/:transfer_id', require('./pages/TransferPage')
   @match '/files',                  require('./pages/FilesPage')
-  @match '/files/:file_id',         require('./pages/FilesPage')
+  @match '/files/:fileId',          require('./pages/FilesPage')
+  @match '/video/:fileId',          require('./pages/VideoPage')
   @match '/shows',                  require('./pages/ShowsPage')
   @match '/*path',                  require('./pages/NotFoundPage')
 

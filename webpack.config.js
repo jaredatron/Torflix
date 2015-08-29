@@ -27,7 +27,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ["", ".coffee", ".js"]
+    extensions: ["", ".coffee", ".js", ".css"]
   }
 };
 

@@ -1,32 +1,44 @@
-#= require 'ReactPromptMixin'
+component = require 'reactatron/component'
+Layout = require '../components/Layout'
+Rows = require 'reactatron/Rows'
+Block = require 'reactatron/Block'
+VideoPlayer = require '../components/VideoPlayer'
 
-component 'VideoPage',
+module.exports = component 'VideoPage',
+
+  dataBindings: ->
+    file:    "files/#{@props.fileId}"
+    loading: "files/#{@props.fileId}/loading"
 
   render: ->
-    DOM.div
-      className: 'VideoPage'
+    if @state.file
+      VideoPlayer file: @state.file
+    else
+      Layout null, 'loading...'
+  #   DOM.div
+  #     className: 'VideoPage'
 
-      PromiseStateMachine
-        promise: App.putio.files.get(Location.params.file_id)
-        loading: =>
-          DOM.div(null, 'loading...')
-        loaded: @renderLoaded
+  #     PromiseStateMachine
+  #       promise: App.putio.files.get(Location.params.file_id)
+  #       loading: =>
+  #         DOM.div(null, 'loading...')
+  #       loaded: @renderLoaded
 
 
-  renderLoaded: (file) ->
-    {div, h4, VideoPlayer, ExternalLink, DownloadLink} = DOM
+  # renderLoaded: (file) ->
 
-    div
-      className: 'flex-column flex-grow'
 
-      h4 null, file.name
+  #   div
+  #     className: 'flex-column flex-grow'
 
-      VideoPlayer(className: 'flex-grow', file: file)
+  #     h4 null, file.name
 
-      div
-        className: 'flex-row flex-space-around'
-        ExternalLink href: file.put_io_url,     'put.io'
-        DownloadLink href: file.download_url,   'download'
-        ExternalLink href: file.stream_url,     'stream'
-        ExternalLink href: file.playlist_url,   'playlist'
-        ExternalLink href: file.chromecast_url, 'chromecast'
+  #     VideoPlayer(className: 'flex-grow', file: file)
+
+  #     div
+  #       className: 'flex-row flex-space-around'
+  #       ExternalLink href: file.put_io_url,     'put.io'
+  #       DownloadLink href: file.download_url,   'download'
+  #       ExternalLink href: file.stream_url,     'stream'
+  #       ExternalLink href: file.playlist_url,   'playlist'
+  #       ExternalLink href: file.chromecast_url, 'chromecast'

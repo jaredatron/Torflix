@@ -5,7 +5,7 @@ File = require '../components/File'
 module.exports = component 'FilesPage',
 
   render: ->
-    if fileId = Number(@props.file_id)
+    if fileId = Number(@props.fileId)
       Layout {},
         File
           fileId: fileId
