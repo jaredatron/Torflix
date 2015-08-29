@@ -5,6 +5,7 @@ Text       = require 'reactatron/Text'
 SublteText = require 'reactatron/SublteText'
 Columns    = require 'reactatron/Columns'
 Rows       = require 'reactatron/Rows'
+Block      = require 'reactatron/Block'
 Link       = require './Link'
 Button     = require './Button'
 
@@ -52,6 +53,8 @@ Transfer = component 'Transfer',
     padding: '0.5em 0.5em'
     alignItems: 'center'
     borderTop: '1px solid rgb(235,235,235)'
+    ':hover':
+      backgroundColor: '#DFEBFF'
 
   render: ->
     transfer = @props.transfer
@@ -62,7 +65,8 @@ Transfer = component 'Transfer',
           marginRight: '0.5em'
           flexGrow: 1
           flexShrink: 1
-        Link path: "/files/#{transfer.file_id}", transfer.name
+        Block {},
+          Link path: "/files/#{transfer.file_id}", transfer.name
         progress
           value: transfer.percent_done
           max: 100

@@ -1,6 +1,6 @@
 component = require 'reactatron/component'
 Block     = require 'reactatron/Block'
-Box     = require 'reactatron/Box'
+Box       = require 'reactatron/Box'
 Layer     = require 'reactatron/Layer'
 Rows      = require 'reactatron/Rows'
 Columns   = require 'reactatron/Columns'
@@ -53,9 +53,16 @@ module.exports = component 'Layout',
 
     if horizontalSize >= 1
       Layer props,
-        Rows grow: 1,
+        Rows
+          style:
+            flexGrow: 1
+            overflow: 'hidden'
           navbar
-          Columns grow: 1, shrink: 1,
+          Columns
+            style:
+              flexGrow: 1
+              flexShrink: 1
+              overflow: 'hidden'
             sidebar
             mainContent
     else
@@ -66,7 +73,7 @@ module.exports = component 'Layout',
           mainContent
 
 
-MainContent = Box.withStyle 'MainContent',
+MainContent = Block.withStyle 'MainContent',
   flexGrow: 1
   flexShrink: 1
   overflowY: 'auto'
