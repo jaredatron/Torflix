@@ -1,11 +1,13 @@
 component = require 'reactatron/component'
-Rows = require 'reactatron/Rows'
-Box = require 'reactatron/Box'
-Block = require 'reactatron/Block'
-Layout = require '../components/Layout'
-TransfersList = require '../components/TransfersList'
+Rows      = require 'reactatron/Rows'
+Columns   = require 'reactatron/Columns'
+
+Layout           = require '../components/Layout'
+TransfersList    = require '../components/TransfersList'
 TorrentSeachForm = require '../components/TorrentSeachForm'
-SearchForm = require '../components/SearchForm'
+SearchForm       = require '../components/SearchForm'
+Button           = require '../components/Button'
+
 
 module.exports = component 'TransfersPage',
 
@@ -31,9 +33,14 @@ module.exports = component 'TransfersPage',
 
     Layout null,
       Rows style: width: '100%',
-        FilterForm
-          onChange: @setFilter
-          style: margin: '0.5em'
+        Columns {},
+          FilterForm
+            onChange: @setFilter
+            style:
+              margin: '0.5em'
+              flexGrow: 1
+              flexShrink: 1
+          Button {}, 'reload'
         TransfersList transfers: transfers
 
 

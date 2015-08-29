@@ -48,23 +48,29 @@ Transfer = component 'Transfer',
   deleteTransfer: ->
     @app.pub 'delete transfer', @props.transfer
 
+  defaultStyle:
+    padding: '0.5em 0.5em'
+    alignItems: 'center'
+    borderTop: '1px solid rgb(235,235,235)'
+
   render: ->
     transfer = @props.transfer
 
-    style =
-      padding: '0.25em 0.5em'
-      # backgroundColor: if @props.stripe then 'rgb(235,235,235)' else 'rgb(255,255,255)'
-      borderTop: '1px solid rgb(235,235,235)'
-
-
-        # TransferStatus {}, transfer.status
-    Rows shrink: 0, style: style,
-      Link path: "/files/#{transfer.file_id}",
-        Text {}, transfer.name
-      Columns {},
-        progress value: transfer.percent_done, max: 100, style: {flexGrow: 1, marginRight: '0.5em'}
-        Button onClick: @deleteTransfer, 'X'
-      SublteText {}, transfer.status_message
+    Columns @cloneProps(),
+      Rows
+        style:
+          marginRight: '0.5em'
+          flexGrow: 1
+          flexShrink: 1
+        Link path: "/files/#{transfer.file_id}",
+          Text {}, transfer.name
+        progress
+          value: transfer.percent_done
+          max: 100
+          style:
+            width: '100%'
+        SublteText {}, transfer.status_message
+      Button onClick: @deleteTransfer, 'X'
 
 
 

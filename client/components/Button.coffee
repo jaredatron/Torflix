@@ -1,23 +1,14 @@
-component = require 'reactatron/component'
-Style = require 'reactatron/Style'
-
 Button = require 'reactatron/Button'
 
-module.exports = component 'Button',
-
-  defaultStyle:
-    cursor: 'pointer'
-    border: '1px solid blue'
-    backgroundColor: 'red'
-    ':hover':
-      border: '1px solid blue'
-      backgroundColor: 'red'
-    ':disabled':
-      opacity: 0.5
-      cursor: 'default'
-
-  render: ->
-
-
-
-
+module.exports = Button.withStyle 'Button',
+  cursor: 'pointer'
+  alignSelf: 'center'
+  # padding: '6px 12px'
+  # border: '1px solid '
+  # backgroundColor: 'red'
+  # ':hover':
+  #   border: '1px solid green'
+  #   backgroundColor: 'orange'
+  # ':disabled':
+  #   opacity: 0.5
+  #   cursor: 'default'
