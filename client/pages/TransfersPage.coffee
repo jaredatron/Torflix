@@ -22,14 +22,16 @@ module.exports = component 'TransfersPage',
     @setState filter: filter
 
   componentDidMount: ->
-    if !@state.transfers
-      @app.pub 'reload transfers'
+    @reloadTransfers() if !@state.transfers
+
+  reloadTransfers: ->
+    @setState transfers: null
+    @app.pub 'reload transfers'
 
   render: ->
     Layout null, 'loading...' unless @state.transfers?
 
     transfers = filter(@state.transfers, @state.filter)
-    console.log('RENDER', @state.filter, transfers.length)
 
     Layout null,
       Rows style: width: '100%',
@@ -40,7 +42,7 @@ module.exports = component 'TransfersPage',
               margin: '0.5em'
               flexGrow: 1
               flexShrink: 1
-          Button {}, 'reload'
+          Button onClick: @reloadTransfers, 'reload'
         TransfersList transfers: transfers
 
 

@@ -5,8 +5,8 @@ Text       = require 'reactatron/Text'
 SublteText = require 'reactatron/SublteText'
 Columns    = require 'reactatron/Columns'
 Rows       = require 'reactatron/Rows'
-Link       = require 'reactatron/Link'
-Button     = require 'reactatron/Button'
+Link       = require './Link'
+Button     = require './Button'
 
 {progress} = require 'reactatron/DOM'
 
@@ -62,8 +62,7 @@ Transfer = component 'Transfer',
           marginRight: '0.5em'
           flexGrow: 1
           flexShrink: 1
-        Link path: "/files/#{transfer.file_id}",
-          Text {}, transfer.name
+        Link path: "/files/#{transfer.file_id}", transfer.name
         progress
           value: transfer.percent_done
           max: 100
