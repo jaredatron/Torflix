@@ -8,7 +8,7 @@ DEBUG.app = app
 DEBUG.animator = require './animator'
 DEBUG.Style = require 'reactatron/Style'
 
-DEBUG.app.sub /.*/, (event, payload) ->
+DEBUG.app.sub '*', (event, payload) ->
   console.log('Event', event, payload)
 
 # DEBUG.app.sub 'store:change:location', ->

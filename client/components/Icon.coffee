@@ -33,7 +33,6 @@ module.exports = component 'Icon',
     if @props.fixedWidth
       props.style.update
         width: '1em'
-        marginRight: '0.5em'
         textAlign: 'center'
 
     i props, glyph

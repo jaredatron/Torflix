@@ -5,14 +5,14 @@ component = require 'reactatron/component'
 Block   = require 'reactatron/Block'
 Rows    = require 'reactatron/Rows'
 Columns = require 'reactatron/Columns'
-Link    = require 'reactatron/Link'
 Space   = require 'reactatron/Space'
 RemainingSpace   = require 'reactatron/RemainingSpace'
 
 Rows  = require 'reactatron/Rows'
 Block = require 'reactatron/Block'
 
-Icon = require './Icon'
+Link     = require './Link'
+Icon     = require './Icon'
 FileSize = require './FileSize'
 
 File = component 'File',
@@ -55,7 +55,35 @@ File = component 'File',
 
 
 
+ActiveMixin =
+  getInitialState: ->
+    active: false
+
+  componentDidMount: ->
+    node = @getDOMNode()
+    node.addEventListener 'focusin', @activate
+    node.addEventListener 'focusout', @deactivate
+    # node.addEventListener 'mouseenter', @activate
+    # node.addEventListener 'mouseleave', @deactivate
+
+  componentWillUnmount: ->
+    node = @getDOMNode()
+    node.removeEventListener 'focusin', @activate
+    node.removeEventListener 'focusout', @deactivate
+    # node.removeEventListener 'mouseenter', @activate
+    # node.removeEventListener 'mouseleave', @deactivate
+
+  activate: ->
+    @setState active: true
+
+  deactivate: ->
+    @setState active: false
+
+
+
 FileRow = component 'FileRow',
+
+  mixins: [ActiveMixin]
 
   propTypes:
     file: component.PropTypes.object.isRequired
@@ -64,28 +92,44 @@ FileRow = component 'FileRow',
   defaultStyle:
     whiteSpace: 'nowrap'
     padding: '0.25em 0.5em'
-    # maxWidth: '100%'
     ':hover':
-      backgroundColor: 'rgb(218,218,218)'
+      backgroundColor: '#DFEBFF'
+    ':active':
+      backgroundColor: '#DFEBFF'
 
   onClick: (event) ->
     if @props.file.isDirectory
       event.preventDefault()
-      @app.pub 'toggle directory', @props.file.id
+      if event.altKey
+        @app.setLocation "/files/#{@props.file.id}"
+      else
+        @app.pub 'toggle directory', @props.file.id
+
+
+
 
   render: ->
     file = @props.file
-    Columns @cloneProps(),
+    props = @cloneProps()
+    if @state.active
+      props.style.update props.style[':active']
+    Columns props,
       Filelink
         file: file,
         open: @props.open
         onClick: @onClick
+        style:
+          overflow: 'hidden'
+          textOverflow: 'ellipsis'
+
       RemainingSpace {}
-      DownloadFileLink file: file
+      DownloadFileLink file: file, tabIndex: -1
       Space(2)
-      LinkToFileOnPutio file: file
+      LinkToFileOnPutio file: file, tabIndex: -1
       Space(2)
-      FileSize size: file.size, style:{width: '4em'}
+      FileSize size: file.size, style:{width: '4em'}, tabIndex: -1
+      Space(2)
+      DeleteFileLink file: file, tabIndex: -1
 
 
   Link onClick: (-> ), Icon(glyph:'download')
@@ -103,15 +147,23 @@ Filelink = (props) ->
 
 
 
-IconLink = (props, children...) ->
-  component.mergeStyle props,
-    overflow: 'hidden'
-    textOverflow: 'ellipsis'
+IconLink = component (props) ->
+  props.style.update
+    # flexGrow: 1
+    flexShrink: 10
+    # overflow: 'hidden'
+    # textOverflow: 'ellipsis'
 
-  Link props,
-    Icon glyph: props.glyph, fixedWidth: true
-    children...
+  icon = Icon
+    glyph: props.glyph,
+    fixedWidth: true,
+    style:
+      marginRight: '0.5em'
 
+  props.children ||= []
+  props.children.unshift icon
+
+  Link(props)
 
 LinkToFile = (props) ->
   props.path  ||= "/files/#{props.file.id}"
@@ -141,6 +193,20 @@ DownloadFileLink = (props, children...) ->
   props.title ||= 'download'
   props.href = "https://put.io/v2/files/#{props.file.id}/download"
   IconLink(props, children...)
+
+
+DeleteFileLink = component 'DeleteFileLink',
+  defaultStyle:
+    opacity: 0.2
+    ':hover':
+      opacity: 1
+      color: 'blue'
+  onClick: (event) ->
+    event.preventDefault()
+    console.log('would delete', @props.file)
+  render: ->
+    Link @extendProps(onClick: @onClick),
+      Icon(glyph: 'trash-o')
 
 
 DirectoryContents = component 'DirectoryContents',

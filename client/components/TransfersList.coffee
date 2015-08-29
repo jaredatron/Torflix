@@ -6,6 +6,7 @@ Text       = require 'reactatron/Text'
 SublteText = require 'reactatron/SublteText'
 Columns    = require 'reactatron/Columns'
 Rows       = require 'reactatron/Rows'
+Box        = require 'reactatron/Box'
 Block      = require 'reactatron/Block'
 RemainingSpace      = require 'reactatron/RemainingSpace'
 Link       = require './Link'
@@ -69,26 +70,113 @@ Transfer = component 'Transfer',
           marginRight: '0.5em'
           flexGrow: 1
           flexShrink: 1
+          overflow: 'hidden'
         Columns {},
-          LinkToTransfer(transfer)
+          Block
+            style:
+              flexShrink: 1
+              overflow: 'hidden'
+              textOverflow: 'ellipsis'
+              whiteSpace: 'nowrap'
+
+            LinkToTransferFiles(transfer)
           Space()
           LinkToTransferMagnetLink(transfer)
           Space()
           LinkToDownloadTransfer(transfer)
-          RemainingSpace {}
-          FileSize size: transfer.size, style: SublteText.style
+          RemainingSpace {} #style: {flexGrow: 1, flexShrink: 2}
+          Space()
+          Block style: {width: '3em'},
+            FileSize size: transfer.size, style: SublteText.style
 
         progress
           value: transfer.percent_done
           max: 100
           style:
             width: '100%'
-        SublteText {}, transfer.status_message
-      Button onClick: @deleteTransfer, Icon(glyph: 'trash-o')
+        SublteText
+          style:
+            overflow: 'hidden'
+            textOverflow: 'ellipsis'
+            whiteSpace: 'nowrap'
+          transfer.status_message
+      DeleteTransferButton onConfirmation: @deleteTransfer
 
 
-LinkToTransfer = (transfer) ->
-  Link path: "/files/#{transfer.file_id}", transfer.name
+
+DeleteTransferButton = component 'DeleteTransferButton',
+
+  propTypes:
+    onConfirmation: component.PropTypes.func.isRequired
+
+  getInitialState: ->
+    confirming: false
+
+  confirm: ->
+    @setState confirming: true
+
+  reset: ->
+    @setState confirming: false
+
+  confirmAndFocus: ->
+    @confirm()
+    @focus()
+
+  resetAndFocus: ->
+    @reset()
+    @focus()
+
+  focus: ->
+    return if @focusSetTimeout?
+    @focusSetTimeout = setTimeout =>
+      delete @focusSetTimeout
+      (@refs.abort || @refs.trash).getDOMNode().focus()
+
+  scheduleReset: ->
+    return if @resetTimeout
+    @resetTimeout = setTimeout @reset
+
+  unscheduleReset: ->
+    clearTimeout(@resetTimeout) if @resetTimeout?
+    delete @resetTimeout
+
+  render: ->
+    if @state.confirming
+      props = @extendProps
+        onFocusOut: @scheduleReset
+        onFocusIn: @unscheduleReset
+      Columns props,
+        Button
+          ref: 'confirm'
+          onClick: @props.onConfirmation
+          style:
+            borderTopRightRadius: 0
+            borderBottomRightRadius: 0
+          Icon glyph: 'check'
+        Button
+          ref: 'abort',
+          onClick: @resetAndFocus,
+          style:
+            borderLeftWidth: 0
+            borderTopLeftRadius: 0
+            borderBottomLeftRadius: 0
+          Icon glyph: 'times'
+    else
+      props = @extendProps
+        ref: 'trash'
+        onClick: @confirmAndFocus
+      Button props, Icon(glyph: 'trash-o')
+
+
+
+LinkToTransferFiles = (transfer) ->
+  Link
+    path: "/files/#{transfer.file_id}",
+    style:
+      textOverflow: 'ellipsis'
+      whiteSpace: 'nowrap'
+      overflow: 'hidden'
+    transfer.name
 
 LinkToTransferMagnetLink = (transfer) ->
   Link href: transfer.magneturi,
