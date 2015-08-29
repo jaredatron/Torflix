@@ -16,7 +16,7 @@ module.exports = component 'Icon',
   defaultStyle:
     display:             'inline-block'
     font:                'normal normal normal 14px/1 FontAwesome'
-    fontSize:            '85%'
+    # fontSize:            '85%'
     textRendering:       'auto'
     WebkitFontSmoothing: 'antialiased'
     MozOsxFontSmoothing: 'grayscale'

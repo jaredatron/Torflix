@@ -7,7 +7,6 @@ Block     = require 'reactatron/Block'
 
 Layout           = require '../components/Layout'
 TransfersList    = require '../components/TransfersList'
-TorrentSeachForm = require '../components/TorrentSeachForm'
 SearchForm       = require '../components/SearchForm'
 Button           = require '../components/Button'
 
@@ -36,18 +35,13 @@ module.exports = component 'TransfersPage',
       transfers = filter(@state.transfers, @state.filter)
       transfersList = TransfersList transfers: transfers
     else
-      Box
-        style:
-          textAlign: 'center'
-          fontSize: '200%'
-          padding: '1em'
-        'Loading...'
+      LoadingBox {}, 'Loading...'
 
 
 
 
     Layout null,
-      Rows style: width: '100%',
+      Rows style: {overflowY: 'scroll'},
         Columns style: {margin: '0.5em'},
           FilterForm
             onChange: @setFilter
@@ -57,6 +51,12 @@ module.exports = component 'TransfersPage',
           Space(2)
           Button onClick: @reloadTransfers, tabIndex: -1, 'reload'
         transfersList
+
+
+LoadingBox = Box.withStyle 'LoadingBox',
+  textAlign: 'center'
+  fontSize: '200%'
+  padding: '1em'
 
 
 FilterForm = component 'FilterForm',

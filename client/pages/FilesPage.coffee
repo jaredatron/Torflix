@@ -12,9 +12,10 @@ module.exports = component 'FilesPage',
   render: ->
     fileId = Number(@props.fileId || 0)
     if file = @app.get("files/#{fileId}")
-      title = Header {}, file.name
+      title = fileId == 0 && 'All Files' || file.name
+      title = Header {}, title
     Layout {},
-      Rows style: padding: '1em', width: '100%',
+      Rows style: {padding: '0.5em', overflowY: 'scroll'},
         title
         File.DirectoryContents key: fileId, fileId: fileId
 

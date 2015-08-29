@@ -84,7 +84,7 @@ Transfer = component 'Transfer',
           style:
             width: '100%'
         SublteText {}, transfer.status_message
-      Button onClick: @deleteTransfer, 'X'
+      Button onClick: @deleteTransfer, Icon(glyph: 'trash-o')
 
 
 LinkToTransfer = (transfer) ->

@@ -1,3 +1,5 @@
+React = require 'react'
+Style = require 'reactatron/Style'
 component = require 'reactatron/component'
 Block     = require 'reactatron/Block'
 Box       = require 'reactatron/Box'
@@ -9,22 +11,6 @@ Link      = require 'reactatron/Link'
 
 {div} = require 'reactatron/DOM'
 
-# Sidebar = require './Sidebar'
-
-
-MagicBox = Block.withStyle 'MagicBox',
-  height: '100px'
-  width: '100px'
-  background: 'teal'
-  color: 'black'
-  ':hover':
-    background: 'orange'
-    color: 'purple'
-  ':mousedown':
-    background: 'yellow'
-    color: 'red'
-
-
 module.exports = component 'Layout',
 
   dataBindings: ['horizontalSize']
@@ -32,24 +18,33 @@ module.exports = component 'Layout',
   defaultStyle:
     userSelect: 'none'
     WebkitUserSelect: 'none'
+    fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: '15px'
 
   render: ->
     props = @extendProps
       children: undefined
-
-    # return Layer props,
-    #   Columns grow: 1,
-    #     MagicBox {}, 'LOVE ME'
-    #     MagicBox {}, 'SHOES'
-    #     MagicBox {}, 'Life'
-    #     MagicBox {}, 'COWS'
 
     horizontalSize = @state.horizontalSize
 
     navbar = Navbar shrink: 0
     sidebar = Sidebar {}
 
-    mainContent = MainContent {}, @props.children
+
+    child = @props.children[0]
+    child.props.style = new Style(child.props.style)
+    child.props.style.update
+      position: 'absolute'
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+      # overflowY: 'scroll'
+
+
+    # child = React.addons.cloneWithProps(child, {style: {color: 'blue'}});
+
+    mainContent = MainContent {}, child
 
     if horizontalSize >= 1
       Layer props,
@@ -74,9 +69,10 @@ module.exports = component 'Layout',
 
 
 MainContent = Block.withStyle 'MainContent',
+  position: 'relative'
   flexGrow: 1
   flexShrink: 1
-  overflowY: 'auto'
+  # overflowY: 'auto'
 
 
 Navbar = component 'Navbar',

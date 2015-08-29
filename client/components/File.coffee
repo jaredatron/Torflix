@@ -6,11 +6,14 @@ Block   = require 'reactatron/Block'
 Rows    = require 'reactatron/Rows'
 Columns = require 'reactatron/Columns'
 Link    = require 'reactatron/Link'
+Space   = require 'reactatron/Space'
+RemainingSpace   = require 'reactatron/RemainingSpace'
 
 Rows  = require 'reactatron/Rows'
 Block = require 'reactatron/Block'
 
 Icon = require './Icon'
+FileSize = require './FileSize'
 
 File = component 'File',
 
@@ -50,6 +53,8 @@ File = component 'File',
       FileRow file: file, open: open
       directoryContents
 
+
+
 FileRow = component 'FileRow',
 
   propTypes:
@@ -57,7 +62,9 @@ FileRow = component 'FileRow',
     open: component.PropTypes.bool.isRequired
 
   defaultStyle:
-    maxWidth: '100%'
+    whiteSpace: 'nowrap'
+    padding: '0.25em 0.5em'
+    # maxWidth: '100%'
     ':hover':
       backgroundColor: 'rgb(218,218,218)'
 
@@ -69,17 +76,21 @@ FileRow = component 'FileRow',
   render: ->
     file = @props.file
     Columns @cloneProps(),
-      Column grow: 1, shrink: 1,
-        Filelink
-          file: file,
-          open: @props.open
-          onClick: @onClick
-      Column {}, 'X'
+      Filelink
+        file: file,
+        open: @props.open
+        onClick: @onClick
+      RemainingSpace {}
+      DownloadFileLink file: file
+      Space(2)
+      LinkToFileOnPutio file: file
+      Space(2)
+      FileSize size: file.size, style:{width: '4em'}
 
 
-Column = Block.withStyle 'Column',
-  whiteSpace: 'nowrap'
-  padding: '0.25em'
+  Link onClick: (-> ), Icon(glyph:'download')
+
+
 
 Filelink = (props) ->
   switch
@@ -88,7 +99,7 @@ Filelink = (props) ->
     when props.file.isDirectory
       DirectoryToggleLink(props)
     else
-      DownloadFileLink(props)
+      DownloadFileLink(props, props.file.name)
 
 
 
@@ -107,6 +118,15 @@ LinkToFile = (props) ->
   props.glyph ||= 'file'
   IconLink(props, props.file.name)
 
+LinkToFileOnPutio = (props) ->
+  props.href = if props.file.isVideo
+    "https://put.io/file/#{props.file.id}"
+  else
+    "https://put.io/your-files/#{props.file.id}"
+  props.glyph ||= 'circle'
+  props.title ||= 'open at put.io'
+  IconLink(props)
+
 PlayVideoLink = (props) ->
   props.path  ||= "/video/#{props.file.id}"
   props.glyph ||= 'play'
@@ -116,16 +136,11 @@ DirectoryToggleLink = (props) ->
   props.glyph = props.open and 'chevron-down' or 'chevron-right'
   LinkToFile props
 
-DownloadFileLink = (props) ->
-  LinkToFile(props)
-  # path: "/files/#{props.fileId}"
-  # onClick: @onClick
-  # style:
-  #   overflow: 'hidden'
-  #   textOverflow: 'ellipsis'
-  # file.name
-
-
+DownloadFileLink = (props, children...) ->
+  props.glyph ||= 'download'
+  props.title ||= 'download'
+  props.href = "https://put.io/v2/files/#{props.file.id}/download"
+  IconLink(props, children...)
 
 
 DirectoryContents = component 'DirectoryContents',
@@ -139,8 +154,8 @@ DirectoryContents = component 'DirectoryContents',
     file:    "files/#{@props.fileId}"
     loading: "files/#{@props.fileId}/loading"
 
-  defaultStyle:
-    width: '100%'
+  # defaultStyle:
+    # width: '100%'
 
   componentDidMount: ->
     file = @state.file
