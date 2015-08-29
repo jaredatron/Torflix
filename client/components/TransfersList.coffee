@@ -1,13 +1,17 @@
 TransitionGroup = require 'reactatron/TransitionGroup'
 
 component  = require 'reactatron/component'
+Space      = require 'reactatron/Space'
 Text       = require 'reactatron/Text'
 SublteText = require 'reactatron/SublteText'
 Columns    = require 'reactatron/Columns'
 Rows       = require 'reactatron/Rows'
 Block      = require 'reactatron/Block'
+RemainingSpace      = require 'reactatron/RemainingSpace'
 Link       = require './Link'
 Button     = require './Button'
+Icon       = require './Icon'
+FileSize   = require './FileSize'
 
 {progress} = require 'reactatron/DOM'
 
@@ -65,8 +69,15 @@ Transfer = component 'Transfer',
           marginRight: '0.5em'
           flexGrow: 1
           flexShrink: 1
-        Block {},
-          Link path: "/files/#{transfer.file_id}", transfer.name
+        Columns {},
+          LinkToTransfer(transfer)
+          Space()
+          LinkToTransferMagnetLink(transfer)
+          Space()
+          LinkToDownloadTransfer(transfer)
+          RemainingSpace {}
+          FileSize size: transfer.size, style: SublteText.style
+
         progress
           value: transfer.percent_done
           max: 100
@@ -76,7 +87,18 @@ Transfer = component 'Transfer',
       Button onClick: @deleteTransfer, 'X'
 
 
+LinkToTransfer = (transfer) ->
+  Link path: "/files/#{transfer.file_id}", transfer.name
 
+LinkToTransferMagnetLink = (transfer) ->
+  Link href: transfer.magneturi,
+    Icon glyph: 'link'
+
+LinkToDownloadTransfer = (transfer) ->
+  onClick = (event) ->
+    event.preventDefault()
+    console.log('would download', transfer)
+  Link onClick: onClick, Icon(glyph: 'download')
 
 
 

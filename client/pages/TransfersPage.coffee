@@ -1,6 +1,9 @@
 component = require 'reactatron/component'
+Box       = require 'reactatron/Box'
 Rows      = require 'reactatron/Rows'
 Columns   = require 'reactatron/Columns'
+Space     = require 'reactatron/Space'
+Block     = require 'reactatron/Block'
 
 Layout           = require '../components/Layout'
 TransfersList    = require '../components/TransfersList'
@@ -29,21 +32,31 @@ module.exports = component 'TransfersPage',
     @app.pub 'reload transfers'
 
   render: ->
-    Layout null, 'loading...' unless @state.transfers?
+    transfersList = if @state.transfers?
+      transfers = filter(@state.transfers, @state.filter)
+      transfersList = TransfersList transfers: transfers
+    else
+      Box
+        style:
+          textAlign: 'center'
+          fontSize: '200%'
+          padding: '1em'
+        'Loading...'
 
-    transfers = filter(@state.transfers, @state.filter)
+
+
 
     Layout null,
       Rows style: width: '100%',
-        Columns {},
+        Columns style: {margin: '0.5em'},
           FilterForm
             onChange: @setFilter
             style:
-              margin: '0.5em'
               flexGrow: 1
               flexShrink: 1
+          Space(2)
           Button onClick: @reloadTransfers, tabIndex: -1, 'reload'
-        TransfersList transfers: transfers
+        transfersList
 
 
 FilterForm = component 'FilterForm',
