@@ -16,6 +16,9 @@ module.exports = component 'TransfersList',
   propTypes:
     transfers: component.PropTypes.any
 
+  # shouldComponentUpdate: (nextProps, nextState) ->
+  #   if @props.transfers? && @nextProps.nextProps?
+
   childFactory: (child) ->
     child
     # TestAnimator {}, child
@@ -30,9 +33,13 @@ module.exports = component 'TransfersList',
   render: ->
     transfers = @renderTransfers()
 
-    TransitionGroup
-      component: Rows,
-      childFactory: @childFactory
+    # TransitionGroup
+    #   component: Rows,
+    #   childFactory: @childFactory
+    #   style: width: '100%'
+    #   transfers
+
+    Rows
       style: width: '100%'
       transfers
 

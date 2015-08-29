@@ -14,7 +14,7 @@ Icon = require './Icon'
 module.exports = component 'SearchForm',
 
   propTypes:
-    onSearch:       component.PropTypes.func.isRequired
+    onSearch:       component.PropTypes.func
     value:          component.PropTypes.string
     defaultValue:   component.PropTypes.string
     collectionName: component.PropTypes.string
