@@ -22,6 +22,7 @@ module.exports = (app) ->
 
 
 
+  app.sub 'download torrent', (event, magnetLink) ->
 
 
 

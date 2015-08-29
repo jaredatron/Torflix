@@ -47,7 +47,7 @@ Transfer = component 'Transfer',
     style =
       padding: '0.25em 0.5em'
       # backgroundColor: if @props.stripe then 'rgb(235,235,235)' else 'rgb(255,255,255)'
-      borderBottom: '1px solid rgb(235,235,235)'
+      borderTop: '1px solid rgb(235,235,235)'
 
 
         # TransferStatus {}, transfer.status

@@ -9,8 +9,8 @@ component 'TorrentSearchForm',
 
   render: ->
     DOM.SearchForm
+      defaultValue:    @props.defaultValue
       collectionName: 'torrents'
-      className:      'TorrentSearchForm'
       onSearch:        @onSearch
 
 isMagnetLink = (string) ->

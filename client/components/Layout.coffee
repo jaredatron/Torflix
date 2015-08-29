@@ -90,10 +90,10 @@ Sidebar = component 'Sidebar',
 
   render: ->
     Rows @cloneProps(),
-      SidebarLink path: '/transfers', 'Transfers'
-      SidebarLink path: '/shows',     'Shows'
-      SidebarLink path: '/files',     'Files'
-      SidebarLink path: '/bookmarks', 'Bookmarks'
+      SidebarLink path: '/transfers', params: {}, 'Transfers'
+      SidebarLink path: '/shows',     params: {}, 'Shows'
+      SidebarLink path: '/files',     params: {}, 'Files'
+      SidebarLink path: '/bookmarks', params: {}, 'Bookmarks'
 
 
 SidebarLink = Link.withStyle 'SidebarLink',

@@ -4,6 +4,7 @@ Box = require 'reactatron/Box'
 Block = require 'reactatron/Block'
 Layout = require '../components/Layout'
 TransfersList = require '../components/TransfersList'
+TorrentSeachForm = require '../components/TorrentSeachForm'
 
 module.exports = component 'TransfersPage',
 
@@ -16,10 +17,12 @@ module.exports = component 'TransfersPage',
       @app.pub 'reload transfers'
 
   render: ->
-    if @state.transfers
-      return Layout null,
-        TransfersList
-          width: '100%'
-          transfers: @state.transfers
+    Layout null, 'loading...' unless @state.transfers?
 
-    Layout null, 'loading...'
+    Layout null,
+      Rows style: width: '100%',
+        TorrentSeachForm
+          style:
+            margin: '0.5em'
+
+        TransfersList transfers: @state.transfers
