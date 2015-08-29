@@ -32,14 +32,13 @@ module.exports = component 'Layout',
 
 
     child = @props.children[0]
-    child.props.style = new Style(child.props.style)
-    child.props.style.update
+    style = new Style(child.props.style).merge
       position: 'absolute'
       top: 0
       left: 0
       bottom: 0
       right: 0
-      # overflowY: 'scroll'
+    child = React.cloneElement(child, style: style)
 
 
     # child = React.addons.cloneWithProps(child, {style: {color: 'blue'}});
