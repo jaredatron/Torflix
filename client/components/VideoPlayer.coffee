@@ -12,25 +12,27 @@ module.exports = component 'VideoPlayer',
     file: component.PropTypes.object.isRequired
 
   componentDidMount: ->
-    $(document).on('dblclick', @onDblclick)
-    $(document).on('keydown', @onKeydown)
+    node = @getDOMNode()
+    $(node).on('dblclick', @onDblclick)
+    $(node.ownerDocument).on('keydown', @onKeydown)
     @initializePlayer()
 
   componentWillUnmount: ->
-    $(document).off('dblclick', @onDblclick)
-    $(document).off('keydown', @onKeydown)
+    node = @getDOMNode()
+    $(node).off('dblclick', @onDblclick)
+    $(node.ownerDocument).off('keydown', @onKeydown)
 
   initializePlayer: ->
-    # videoNode = @getDOMNode().getElementsByTagName('video')[0]
-    # component = this
-    # videojs videoNode, {}, ->
-    #   component.player = new Player(this)
-    #   window.DEBUG_PLAYER = component.player
-    #   this.play()
+    videoNode = @getDOMNode().getElementsByTagName('video')[0]
+    component = this
+    videojs videoNode, {}, ->
+      component.player = new Player(this)
+      window.DEBUG_PLAYER = component.player
+      this.play()
 
   onDblclick: (event) ->
     event.preventDefault()
-    @player.requestFullscreen()
+    @player.toggleFullscreen()
 
   onKeydown: (event) ->
     console.log('keydown', event)
@@ -50,7 +52,7 @@ module.exports = component 'VideoPlayer',
       when 37 # left arrow
         @player.skipBackward(event.shiftKey)
       when 70 # f
-        @player.requestFullscreen()
+        @player.toggleFullscreen()
       when 65 # a
         @player.toggleAspectRatio()
 
@@ -68,13 +70,17 @@ module.exports = component 'VideoPlayer',
       preload: 'auto'
       loop: false
       poster: file.screenshot
-      height: 'auto'
+      height: '100%'
       width: '100%'
+      style:
+        position: 'fixed'
+        height: '100%'
+        width: '100%'
       source
         src: "https://put.io/v2/files/#{file.id}/stream"
         type: file.content_type
       source
-        src: "https://put.io/v2/files/#{file.tid}/mp4/stream"
+        src: "https://put.io/v2/files/#{file.id}/mp4/stream"
         type: 'video/mp4'
       # track
       #   kind: "captions"
@@ -86,13 +92,6 @@ module.exports = component 'VideoPlayer',
       #   src: "demo.captions.vtt"
       #   srclang: "en"
       #   label: "English"
-
-    # @put_io_url     = "https://put.io/file/#{@id}"
-    # @download_url   = "https://put.io/v2/files/#{@id}/download"
-    # @mp4_stream_url = "https://put.io/v2/files/#{@id}/mp4/stream"
-    # @stream_url     = "https://put.io/v2/files/#{@id}/stream?token=#{@STREAM_AUTH_TOKEN}"
-    # @playlist_url   = "https://put.io/v2/files/#{@id}/xspf"
-    # @chromecast_url = "https://put.io/file/#{@id}/chromecast"
 
 
 class Player
@@ -119,7 +118,13 @@ class Player
       @player.pause()
 
   requestFullscreen: ->
-    @player.requestFullscreen()
+
+
+  toggleFullscreen: ->
+    if @player.isFullscreen()
+      @player.exitFullscreen()
+    else
+      @player.requestFullscreen()
 
   SKIP_LENGTH: 10
 
