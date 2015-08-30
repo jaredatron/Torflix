@@ -44,3 +44,30 @@ global.reset = ->
 
 # window.addEventListener "beforeunload", (event) ->
 #   event.returnValue = "Should this have been a page unload?"
+
+
+
+
+
+
+prevStats = Object.clone(app.stats)
+timeLastFrameEnded = Date.now()
+logStats = ->
+  now = Date.now()
+  setTimeout(logStats)
+  currStats = app.stats
+  changes = {}
+  for key, value of currStats
+    delta = currStats[key] - prevStats[key]
+    changes[key] = delta if delta > 0
+  if Object.keys(changes).length > 0
+    prevStats = Object.clone(currStats)
+    console.info('FRAME STATS:', "#{now-timeLastFrameEnded}ms", changes)
+  timeLastFrameEnded = now
+
+setTimeout(logStats)
+
+
+
+
+
