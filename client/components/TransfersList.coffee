@@ -13,6 +13,7 @@ Link       = require './Link'
 Button     = require './Button'
 Icon       = require './Icon'
 FileSize   = require './FileSize'
+SafetyButton   = require './SafetyButton'
 
 {progress} = require 'reactatron/DOM'
 
@@ -100,74 +101,29 @@ Transfer = component 'Transfer',
             textOverflow: 'ellipsis'
             whiteSpace: 'nowrap'
           transfer.status_message
-      DeleteTransferButton onConfirmation: @deleteTransfer
+      DeleteTransferButton onClick: @deleteTransfer
 
 
 
-DeleteTransferButton = component 'DeleteTransferButton',
+DeleteTransferButton = component 'DeleteTransferButton', (props) ->
+  SafetyButton
 
-  propTypes:
-    onConfirmation: component.PropTypes.func.isRequired
+    default:
+      Button {}, Icon(glyph: 'trash-o')
 
-  getInitialState: ->
-    confirming: false
+    confirm:
+      Button
+        onClick: props.onClick
+        style:
+          borderRadius: '4px 0 0 4px'
+        Icon glyph: 'check'
 
-  confirm: ->
-    return unless @isMounted()
-    @setState confirming: true
-
-  reset: ->
-    return unless @isMounted()
-    @setState confirming: false
-
-  confirmAndFocus: ->
-    @confirm()
-    @focus()
-
-  resetAndFocus: ->
-    @reset()
-    @focus()
-
-  focus: ->
-    return if @focusSetTimeout?
-    @focusSetTimeout = setTimeout =>
-      delete @focusSetTimeout
-      (@refs.abort || @refs.trash).getDOMNode().focus()
-
-  scheduleReset: ->
-    return if @resetTimeout
-    @resetTimeout = setTimeout @reset
-
-  unscheduleReset: ->
-    clearTimeout(@resetTimeout) if @resetTimeout?
-    delete @resetTimeout
-
-  render: ->
-    if @state.confirming
-      props = @extendProps
-        onFocusOut: @scheduleReset
-        onFocusIn: @unscheduleReset
-      Columns props,
-        Button
-          ref: 'confirm'
-          onClick: @props.onConfirmation
-          style:
-            borderTopRightRadius: 0
-            borderBottomRightRadius: 0
-          Icon glyph: 'check'
-        Button
-          ref: 'abort',
-          onClick: @resetAndFocus,
-          style:
-            borderLeftWidth: 0
-            borderTopLeftRadius: 0
-            borderBottomLeftRadius: 0
-          Icon glyph: 'times'
-    else
-      props = @extendProps
-        ref: 'trash'
-        onClick: @confirmAndFocus
-      Button props, Icon(glyph: 'trash-o')
+    abort:
+      Button
+        style:
+          borderWidth: '1px 1px 1px 0'
+          borderRadius: '0 4px 4px 0'
+        Icon glyph: 'times'
 
 
 
