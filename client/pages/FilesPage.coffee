@@ -23,7 +23,7 @@ module.exports = component 'FilesPage',
         Columns {},
           title
           RemainingSpace {}
-          ReloadButton {}
+          ReloadButton fileId: fileId
         File.DirectoryContents key: fileId, fileId: fileId
 
 

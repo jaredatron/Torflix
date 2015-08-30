@@ -28,17 +28,15 @@ File = component 'File',
 
   render: ->
     file = @state.file
-    loading = !!@state.loading
-    open = !!@state.open
 
     if !file
-      if loading
-        return Block @cloneProps(), 'loading...'
-      else
-        return Block @cloneProps(), 'file not found :('
+      return Block @cloneProps(), ':S ????'
+
+    if file.loading
+      return Block @cloneProps(), 'Loading...'
 
 
-    if file.isDirectory && open
+    if file.isDirectory && file.open
       directoryContents = DirectoryContents
         fileId: file.id
         style:
@@ -47,6 +45,41 @@ File = component 'File',
     Rows @cloneProps(),
       FileRow file: file, open: open
       directoryContents
+
+
+DirectoryContents = component 'DirectoryContents',
+
+  # mixins: [LoadFileMixin]
+
+  propTypes:
+    fileId: component.PropTypes.number.isRequired
+
+  dataBindings: ->
+    file: "files/#{@props.fileId}"
+
+  componentDidMount: ->
+    file = @state.file
+    if !file || file.needsLoading
+      @app.pub 'load file', @props.fileId
+
+  render: ->
+    fileId = @props.fileId
+    file = @state.file
+    loading = @state.loading
+
+    if !file || file.loading
+      return Block @cloneProps(), 'Loading...'
+
+    if file.fileIds && file.fileIds.length == 0
+      return Block @cloneProps(), 'empty'
+
+    files = file.fileIds.map (fileId) ->
+      File key: fileId, fileId: fileId
+
+    Rows @cloneProps(), files
+
+
+
 
 
 
@@ -82,7 +115,6 @@ FileRow = component 'FileRow',
 
   propTypes:
     file: component.PropTypes.object.isRequired
-    open: component.PropTypes.bool.isRequired
 
   defaultStyle:
     whiteSpace: 'nowrap'
@@ -106,12 +138,13 @@ FileRow = component 'FileRow',
   render: ->
     file = @props.file
     props = @cloneProps()
+    props.style.marginLeft = "#{file.depth}em"
     if @state.active
       props.style.update props.style[':active']
     Columns props,
       Filelink
         file: file,
-        open: @props.open
+        open: file.open
         onClick: @onClick
         style:
           overflow: 'hidden'
@@ -204,46 +237,6 @@ DeleteFileLink = component 'DeleteFileLink',
       Icon(glyph: 'trash-o')
 
 
-DirectoryContents = component 'DirectoryContents',
-
-  # mixins: [LoadFileMixin]
-
-  propTypes:
-    fileId: component.PropTypes.number.isRequired
-
-  dataBindings: ->
-    file = @state? and @state.file
-    dataBindings =
-      file: "files/#{@props.fileId}"
-    if file && file.fileIds
-      for file in flattenFilesTree(@app, file.fileIds)
-        dataBindings[file.id] = "files/#{file.id}"
-    dataBindings
-
-  componentDidMount: ->
-    file = @state.file
-    if !file || (file.isDirectory && !file.fileIds)
-      @app.pub 'load file', @props.fileId
-
-  render: ->
-    console.log('DirectoryContents render', @state)
-    fileId = @props.fileId
-    file = @state.file
-    loading = @state.loading
-
-    if !file || !file.fileIds
-      return if loading
-        Block @cloneProps(), 'Loading...'
-      else
-        Block @cloneProps(), 'empty'
-
-    files = flattenFilesTree(@app, file.fileIds)
-
-    files = files.map (file) ->
-      FlatFile key: file.id, file: file
-
-    Rows @cloneProps(), files
-
 
 
 File.DirectoryContents = DirectoryContents
@@ -262,28 +255,4 @@ flattenFilesTree = (app, fileIds, depth=0) ->
     if file.open
       files.push flattenFilesTree(app, file.fileIds, depth+1)...
   files
-
-
-FlatFile = component 'FlatFile',
-  onClick: ->
-    @app.pub 'toggle directory', @props.file.id
-
-  defaultStyle:
-    border: '1px solid grey'
-    ':hover':
-      backgroundColor: 'lightgrey'
-
-  render: ->
-    file = @props.file
-    props = @cloneProps()
-    props.onClick = @onClick
-    props.style.update
-      paddingLeft: "#{file.depth}em"
-    Block props,
-      (file.open && 'V' || '>')
-      Space(2)
-      file.depth
-      Space(2)
-      file.name
-
 
