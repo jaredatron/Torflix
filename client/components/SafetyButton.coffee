@@ -1,4 +1,4 @@
-require 'stdlibjs/Array#first'
+require 'stdlibjs/Array#last'
 
 React = require 'react'
 cloneWithProps = React.addons.cloneWithProps
@@ -31,11 +31,16 @@ module.exports = component 'SafetyButton',
     @reset()
     @focus()
 
+  resetAndCallOnClick: (event) ->
+    @reset()
+    @props.onClick(event)
+
   focus: ->
     return if @focusSetTimeout?
     @focusSetTimeout = setTimeout =>
+      return unless @isMounted()
       delete @focusSetTimeout
-      (@refs.abort || @refs.main).getDOMNode().focus()
+      # @getDOMNode().childNodes[0].focus()
 
   scheduleReset: ->
     return if @resetTimeout
@@ -52,30 +57,26 @@ module.exports = component 'SafetyButton',
       props = @extendProps
         onFocusOut: @scheduleReset
         onFocusIn: @unscheduleReset
-
-      confrimButton = cloneWithProps confrimButton,
-        ref: 'confirm'
-        onClick: @props.onClick
         style:
-          borderTopRightRadius: 0
-          borderBottomRightRadius: 0
+          flexDirection: 'row-reverse'
 
-      abortButton = cloneWithProps abortButton,
-        ref: 'abort'
+       confrimButton = React.cloneElement confrimButton,
+        key: 'confirm'
+        onClick: @resetAndCallOnClick
+
+       abortButton = React.cloneElement abortButton,
+        key: 'main'
         onClick: @resetAndFocus
-        style:
-          borderLeftWidth: 0
-          borderTopLeftRadius: 0
-          borderBottomLeftRadius: 0
 
       children = [abortButton, confrimButton]
     else
       props = @extendProps()
 
-      button = cloneWithProps button,
-        ref: 'main'
+      button = React.cloneElement button,
+        key: 'main'
         onClick: @confirmAndFocus
 
       children = [button]
 
+    delete props.children
     Columns(props, children)
