@@ -1,36 +1,53 @@
 module.exports = (app) ->
 
-  app.sub ['load file','load directory contents'], (event, fileId) ->
-    app.set "files/#{fileId}/loading": true
+  STREAM_AUTH_TOKEN = 'WE NEED TO GET THIS FROM THE API???'
+  OAUTH_TOKEN = ''
+
+  get = (fileId) -> app.get "files/#{fileId}"
+  set = (file)   -> app.set "files/#{file.id}": file
+
+  update = (updates) ->
+    file = get(updates.id)
+    set file and Object.assign(file, updates) or file = updates
+
+  loadFile = (fileId) ->
+    update id: fileId, loading: true
 
     app.putio.directoryContents(fileId).then (response) ->
       {parent, files} = response
-      parent.fileIds = files.map (file) -> file.id
-      changes = {}
-      changes["files/#{fileId}/loading"] = undefined
-      changes["files/#{fileId}"] = amendFile(parent)
+      parent.fileIds = files.map(pluckId)
+      files.unshift parent
       for file in files
-        changes["files/#{file.id}"] = amendFile(file)
-      app.set changes
+        file.loading = false
+        updateAndAmmend(file)
 
+
+  # files loaded as directory contents to not have
+  # directory contents
+  filesLoaded = (file) ->
+    return file.isDirectory && file.fileIds
+
+
+
+# actions
+
+  app.sub 'load file', (event, fileId) ->
+    loadFile(fileId)
 
   app.sub 'toggle directory', (event, fileId) ->
-    key = "files/#{fileId}/open"
-    app.set "#{key}": !app.get(key)
+    return unless file = get(fileId) && file.isDirectory
+    if file.open
+      delete file.open
+    else
+      file.open = true
+      loadFile file.id if file.needsLoading
+    set(file)
 
 
 
-  amendFile = (file) ->
-    file.isVideo = isVideo(file)
-    file.isDirectory = isDirectory(file)
-    file
 
 
+# statics
 
-
-  isVideo = (file) ->
-    /\.(mkv|mp4|avi)$/.test file.name
-
-  isDirectory = (file) ->
-    file.content_type == "application/x-directory"
+pluckId = (f) -> f.id
 

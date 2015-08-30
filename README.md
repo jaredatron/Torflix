@@ -48,3 +48,8 @@ PUT_IO_OAUTH_TOKEN=
 PUT_IO_REDIRECT_URI=http://torflix.dev/
 THETVDB_API_KEY=
 ```
+
+
+## TODO
+
+- make sure two versions of react are not being injectes into the packed js

@@ -4,6 +4,11 @@ var nodeModulesPath = path.resolve(__dirname, 'node_modules');
 var assetsPath = path.resolve(__dirname, 'public', 'assets');
 var clientPath = path.resolve(__dirname, 'client');
 
+var ENV = require('./ENV')
+for (var key in ENV){
+  ENV[key] = JSON.stringify(ENV[key])
+}
+
 module.exports = {
   // Makes sure errors in console map to the correct file
   // and line number
@@ -28,6 +33,15 @@ module.exports = {
 
   resolve: {
     extensions: ["", ".coffee", ".js", ".css"]
-  }
+  },
+
+  plugins: [
+    new Webpack.DefinePlugin({
+      "process.env": ENV
+    }),
+  ]
 };
 
+
+
+// process.env.NODE_ENV)

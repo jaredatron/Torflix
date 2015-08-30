@@ -11,8 +11,6 @@ require('./FontAwesome').load()
 
 module.exports = app = new ReactatronApp
 
-app.putio = new Putio(app)
-
 app.registerPlugin new ResponsiveSizePlugin
   window: global.window,
   widths: [480, 768, 992, 1200]
@@ -29,10 +27,8 @@ app.registerPlugin new RouterPlugin ->
   @match '/*path',                  require('./pages/NotFoundPage')
 
 
-getPutioTokenFromHash = ->
-  if matches = location.hash.match(/^#access_token=(.*)$/)
-    App.session('put_io_access_token', matches[1])
-    window.location = location.toString().substring(0, location.href.indexOf('#'))
+app.logout = ->
+  app.set put_io_access_token: undefined
 
 app.sub 'store:change:put_io_access_token', ->
   app.set loggedIn: app.get('put_io_access_token')?
@@ -54,5 +50,6 @@ app.MainComponent = component 'MainComponent',
 
 
 
+require('./actions/putio')(app)
 require('./actions/transfers')(app)
 require('./actions/files')(app)

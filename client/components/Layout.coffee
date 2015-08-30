@@ -90,12 +90,17 @@ Sidebar = component 'Sidebar',
     backgroundColor: 'black'
     color: 'white'
 
+  logout: (event) ->
+    # event.preventDefault()
+    @app.logout()
+
   render: ->
     Rows @cloneProps(),
       SidebarLink path: '/transfers', params: {}, tabIndex: -1, 'Transfers'
       SidebarLink path: '/shows',     params: {}, tabIndex: -1, 'Shows'
       SidebarLink path: '/files',     params: {}, tabIndex: -1, 'Files'
       SidebarLink path: '/bookmarks', params: {}, tabIndex: -1, 'Bookmarks'
+      SidebarLink onClick: @logout, tabIndex: -1, 'Logout'
 
 
 SidebarLink = Link.withStyle 'SidebarLink',

@@ -1,8 +1,12 @@
 component = require 'reactatron/component'
 Block = require 'reactatron/Block'
 Rows = require 'reactatron/Rows'
+Columns = require 'reactatron/Columns'
+RemainingSpace = require 'reactatron/RemainingSpace'
 Layout = require '../components/Layout'
 File = require '../components/File'
+Button = require '../components/Button'
+Icon = require '../components/Icon'
 
 module.exports = component 'FilesPage',
 
@@ -16,7 +20,10 @@ module.exports = component 'FilesPage',
       title = Header {}, title
     Layout {},
       Rows style: {padding: '0.5em', overflowY: 'scroll'},
-        title
+        Columns {},
+          title
+          RemainingSpace {}
+          ReloadButton fileId: fileId
         File.DirectoryContents key: fileId, fileId: fileId
 
 
@@ -25,3 +32,10 @@ module.exports = component 'FilesPage',
 Header = Block.withStyle 'Header',
   fontSize: '150%'
   marginBottom: '0.75em'
+
+
+ReloadButton = component 'ReloadButton', (props) ->
+  props.onClick = =>
+    @app.pub 'load file', props.fileId
+
+  Button props, 'reload'

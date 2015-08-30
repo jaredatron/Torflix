@@ -18,3 +18,10 @@ module.exports = (method, url, params, options={}) ->
       error = new Error('Request failed: '+textStatus+' / '+errorThrown)
       error.xhr = xhr
       reject(error)
+
+
+module.exports.get = (path, params) ->
+  @('get', path, params)
+
+module.exports.post = (path, params) ->
+  @('post', path, params)

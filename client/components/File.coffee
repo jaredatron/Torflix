@@ -217,8 +217,16 @@ DirectoryContents = component 'DirectoryContents',
     fileId: component.PropTypes.number.isRequired
 
   dataBindings: ->
-    file:    "files/#{@props.fileId}"
-    loading: "files/#{@props.fileId}/loading"
+    dataBindings =
+      file:    "files/#{@props.fileId}"
+      loading: "files/#{@props.fileId}/loading"
+    # flattenFilesTree(@app, file.fileIds)
+    dataBindings
+
+  # eventBindings: ->
+  #   'toggle directory': (event, payload) ->
+
+  # DOMEventBindings:
 
   # defaultStyle:
     # width: '100%'
@@ -226,7 +234,7 @@ DirectoryContents = component 'DirectoryContents',
   componentDidMount: ->
     file = @state.file
     if !file || (file.isDirectory && !file.fileIds)
-      @app.pub 'load directory contents', @props.fileId
+      @app.pub 'load file', @props.fileId
 
   render: ->
     fileId = @props.fileId
@@ -239,8 +247,10 @@ DirectoryContents = component 'DirectoryContents',
       else
         Block @cloneProps(), 'empty'
 
-    files = file.fileIds.first(999).map (fileId) ->
-      File key: fileId, fileId: fileId
+    files = flattenFilesTree(@app, file.fileIds)
+
+    files = files.map ({file,depth}) ->
+      FlatFile key: file.id, file: file, depth: depth
 
     Rows @cloneProps(), files
 
@@ -248,3 +258,36 @@ DirectoryContents = component 'DirectoryContents',
 
 File.DirectoryContents = DirectoryContents
 module.exports = File
+
+
+
+
+
+flattenFilesTree = (app, fileIds, depth=0) ->
+  files = []
+  fileIds and fileIds.forEach (fileId) ->
+    file = app.get("files/#{fileId}")
+    files.push file: file, depth: depth
+    files.push flattenFilesTree(app, file.fileIds, depth+1)...
+  files
+
+
+FlatFile = component 'FlatFile',
+  onClick: ->
+    @app.pub 'toggle directory', @props.file.id
+
+  defaultStyle:
+    border: '1px solid grey'
+    ':hover':
+      backgroundColor: 'lightgrey'
+
+  render: ->
+    props = @cloneProps()
+    props.onClick = @onClick
+    props.style.update
+      paddingLeft: "#{@props.depth}em"
+    Block props,
+      @props.depth
+      @props.file.name
+
+

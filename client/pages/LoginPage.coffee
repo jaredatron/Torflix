@@ -1,5 +1,8 @@
 component = require 'reactatron/component'
-{div, button} = require 'reactatron/DOM'
+Layer = require 'reactatron/Layer'
+Rows = require 'reactatron/Rows'
+Block = require 'reactatron/Block'
+LoginButton = require '../components/LoginButton'
 
 module.exports = component 'LoginPage',
 
@@ -7,11 +10,8 @@ module.exports = component 'LoginPage',
     @app.set put_io_access_token: "LA0XFKMT"
 
   render: ->
-    div null,
-      div null, 'LoginPage'
-      button
-        onClick: @addPutioAccessToken
-        'Login'
 
-
-
+    Layer {},
+      Rows {},
+        Block {}, 'LoginPage'
+        LoginButton {}

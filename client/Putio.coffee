@@ -1,45 +1,60 @@
+URI = require 'URIjs'
 request = require './request'
+
+CLIENT_ID = process.env.PUT_IO_CLIENT_ID
+REDIRECT_URI = process.env.PUT_IO_REDIRECT_URI || location.origin
 
 class Putio
 
-  ENDPOINT: 'https://api.put.io/v2'
+  ENDPOINT:     'https://put.io'
+  API_ENDPOINT: 'https://api.put.io/v2'
 
-  constructor: (app) ->
-    @app = app
-    # @transfers = new Transfers(this)
+  setToken: (token) ->
+    @TOKEN = token
 
-  token: ->
-    @app.get('put_io_access_token')
+  URI: (path, query={}) ->
+    query.oauth_token ||= @TOKEN # ???
+    URI(@ENDPOINT)
+      .query(query)
+      .path(path)
+      .toString()
 
-  url: (path) ->
-    "#{@ENDPOINT}#{path}?oauth_token=#{@token()}"
+  apiURI: (path, query={}) ->
+    query.oauth_token ||= @TOKEN
+    URI(@API_ENDPOINT)
+      .query(query)
+      .path(path)
+      .toString()
 
-  get: (path, params) ->
-    # console.info('PUTIO GET', path, params)
-    @request('get', path, params)
 
-  post: (path, params) ->
-    # console.info('PUTIO POST', path, params)
-    @request('post', path, params)
+  generateLoginURI: ->
+    # "https://api.put.io/v2/oauth2/authenticate?client_id=#{client_id}&response_type=token&redirect_uri=#{redirect_uri}",
+    @apiURI '/v2/oauth2/authenticate',
+      client_id: CLIENT_ID
+      response_type: 'token'
+      redirect_uri: REDIRECT_URI
 
+  ###*
+  # Make an HTTP request
+  #
+  # @internal
+  # @param {object} element
+  ###
   request: (method, path, params) ->
-    request(method, @url(path), params)
+    request(method, @apiURI(path), params)
 
   transfers: ->
-    @get('/transfers/list').then (response) =>
-      response.transfers
+    @request('get', '/v2/transfers/list').then(pluck('transfers'))
 
   accountInfo: ->
-    @get('/account/info').then (response) =>
-      response.info
+    @request('get', '/v2/account/info').then(pluck('info'))
 
   file: (id) ->
     throw new Error('id required') unless id?
-    @get("/files/#{id}").then (response) =>
-      response.file
+    @request('get', "/files/#{id}").then(pluck('file'))
 
   directoryContents: (id) ->
-    @get('/files/list', parent_id: id)
+    @request('get', '/v2/files/list', parent_id: id)
 
   #   @account = {}
   #   @account.info = new AccountInfo(this)
@@ -47,5 +62,24 @@ class Putio
   #   @files        = new Files(this)
 
 
+  IS_VIDEO_REGEXP = /\.(mkv|mp4|avi)$/
 
+  amendFile: (file) ->
+    file.isVideo       = IS_VIDEO_REGEXP.test(file.name)
+    file.isDirectory   = "application/x-directory" == file.content_type
+    file.needsLoading  = file.isDirectory && !file.fileIds
+    file.putioUrl = @URI "/file/#{file.id}"
+    if file.isVideo
+      file.downloadUrl   = @apiURI "/v2/files/#{file.id}/download"
+      file.mp4StreamUrl  = @apiURI "/v2/files/#{file.id}/mp4/stream"
+      file.streamUrl     = @apiURI "/v2/files/#{file.id}/stream"
+      file.playlistUrl   = @apiURI "/v2/files/#{file.id}/xspf"
+      file.chromecastUrl = @URI "/file/#{file.id}/chromecast"
+    file
+
+
+
+pluck = (key) ->
+  (o) -> o[key]
 module.exports = Putio
+
