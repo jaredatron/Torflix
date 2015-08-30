@@ -23,8 +23,8 @@ File = component 'File',
   propTypes:
     fileId: component.PropTypes.number.isRequired
 
-  dataBindings: ->
-    file: "files/#{@props.fileId}"
+  dataBindings: (props) ->
+    file: "files/#{props.fileId}"
 
   render: ->
     file = @state.file
@@ -38,7 +38,7 @@ File = component 'File',
 
     if file.isDirectory && file.open
       directoryContents = DirectoryContents
-        fileId: file.id
+        file: file
         style:
             marginLeft: '1em'
 
@@ -52,22 +52,12 @@ DirectoryContents = component 'DirectoryContents',
   # mixins: [LoadFileMixin]
 
   propTypes:
-    fileId: component.PropTypes.number.isRequired
-
-  dataBindings: ->
-    file: "files/#{@props.fileId}"
-
-  componentDidMount: ->
-    file = @state.file
-    if !file || file.needsLoading
-      @app.pub 'load file', @props.fileId
+    file: component.PropTypes.object.isRequired
 
   render: ->
-    fileId = @props.fileId
-    file = @state.file
-    loading = @state.loading
+    file = @props.file
 
-    if !file || file.loading
+    if !file || file.loading || file.needsLoading
       return Block @cloneProps(), 'Loading...'
 
     if file.fileIds && file.fileIds.length == 0

@@ -13,18 +13,34 @@ module.exports = component 'FilesPage',
   propTypes:
     fileId: component.PropTypes.string
 
+  getFileId: ->
+
+  dataBindings: (props) ->
+    file: "files/#{props.fileId || 0}"
+
+  componentDidMount: ->
+    file = @state.file
+    if !file? || file.needsLoading
+      @app.pub('load file', @props.fileId || 0)
+
   render: ->
-    fileId = Number(@props.fileId || 0)
-    if file = @app.get("files/#{fileId}")
-      title = fileId == 0 && 'All Files' || file.name
-      title = Header {}, title
+    fileId = @props.fileId || 0
+    file = @state.file
+    console.log('FilesPage render', fileId, file)
+    if !file?
+      return Layout {},
+        Block {}, 'Loading...'
+
+
+    title = file.id == 0 && 'All Files' || file.name
     Layout {},
       Rows style: {padding: '0.5em', overflowY: 'scroll'},
         Columns {},
-          title
+          Header {}, title
           RemainingSpace {}
-          ReloadButton fileId: fileId
-        File.DirectoryContents key: fileId, fileId: fileId
+          ReloadButton fileId: file.id
+
+        File.DirectoryContents key: file.id, file: file
 
 
 

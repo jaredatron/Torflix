@@ -11,7 +11,7 @@ module.exports = (app) ->
     set file and Object.assign(file, updates) or file = updates
 
   loadFile = (fileId) ->
-    update id: fileId, loading: true
+    update id: fileId, loading: true, needsLoading: true
 
     app.putio.directoryContents(fileId).then ({parent, files}) ->
       files.unshift parent
