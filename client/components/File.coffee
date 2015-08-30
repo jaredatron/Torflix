@@ -15,6 +15,8 @@ Space = require 'reactatron/Space'
 Link     = require './Link'
 Icon     = require './Icon'
 FileSize = require './FileSize'
+Button = require './Button'
+SafetyButton = require './SafetyButton'
 
 File = component 'File',
 
@@ -156,7 +158,7 @@ FileRow = component 'FileRow',
       Space(2)
       FileSize size: file.size, style:{width: '4em'}, tabIndex: -1
       Space(2)
-      DeleteFileLink file: file, tabIndex: -1
+      DeleteFileButton file: file, tabIndex: -1
 
 
   Link onClick: (-> ), Icon(glyph:'download')
@@ -222,7 +224,7 @@ DownloadFileLink = (props, children...) ->
   IconLink(props, children...)
 
 
-DeleteFileLink = component 'DeleteFileLink',
+DeleteFileButton = component 'DeleteFileButton',
   defaultStyle:
     opacity: 0.2
     ':hover':
@@ -232,8 +234,10 @@ DeleteFileLink = component 'DeleteFileLink',
     event.preventDefault()
     console.log('would delete', @props.file)
   render: ->
-    Link @extendProps(onClick: @onClick),
-      Icon(glyph: 'trash-o')
+    SafetyButton @extendProps(onClick: @onClick),
+      Button {}, Icon(glyph: 'trash-o')
+      Button {}, 'Y'
+      Button {}, 'X'
 
 
 
