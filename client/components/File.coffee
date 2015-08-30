@@ -26,6 +26,15 @@ File = component 'File',
   dataBindings: (props) ->
     file: "files/#{props.fileId}"
 
+  componentDidMount: ->
+    return unless @props.autoload
+    @app.pub('load file', @props.fileId || 0)
+
+  componentWillReceiveProps: (nextProps) ->
+    return unless @props.autoload
+    nextFileId = nextProps.fileId || 0
+    @app.pub('load file', nextFileId) if @props.fileId != nextFileId
+
   render: ->
     file = @state.file
 
@@ -43,7 +52,7 @@ File = component 'File',
             marginLeft: '1em'
 
     Rows @cloneProps(),
-      FileRow file: file, open: open
+      FileRow file: file, open: file.open
       directoryContents
 
 

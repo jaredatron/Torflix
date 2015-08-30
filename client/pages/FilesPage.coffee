@@ -19,14 +19,16 @@ module.exports = component 'FilesPage',
     file: "files/#{props.fileId || 0}"
 
   componentDidMount: ->
-    file = @state.file
-    if !file? || file.needsLoading
-      @app.pub('load file', @props.fileId || 0)
+    @app.pub('load file', @props.fileId || 0)
+
+  componentWillReceiveProps: (nextProps) ->
+    nextFileId = nextProps.fileId || 0
+    @app.pub('load file', nextFileId) if @props.fileId != nextFileId
 
   render: ->
     fileId = @props.fileId || 0
     file = @state.file
-    console.log('FilesPage render', fileId, file)
+    # console.log('FilesPage render', fileId, file)
     if !file?
       return Layout {},
         Block {}, 'Loading...'
