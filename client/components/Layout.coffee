@@ -13,7 +13,8 @@ Link      = require 'reactatron/Link'
 
 module.exports = component 'Layout',
 
-  dataBindings: ['horizontalSize']
+  dataBindings: ->
+    horizontalSize: 'horizontalSize'
 
   defaultStyle:
     userSelect: 'none'

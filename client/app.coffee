@@ -36,7 +36,8 @@ app.sub 'store:change:put_io_access_token', ->
 
 app.MainComponent = component 'MainComponent',
 
-  dataBindings: ['loggedIn']
+  dataBindings: ->
+    loggedIn: 'loggedIn'
 
   render: ->
     console.info('MainComponent render', @state)
