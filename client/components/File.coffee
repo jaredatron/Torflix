@@ -10,6 +10,7 @@ RemainingSpace   = require 'reactatron/RemainingSpace'
 
 Rows  = require 'reactatron/Rows'
 Block = require 'reactatron/Block'
+Space = require 'reactatron/Space'
 
 Link     = require './Link'
 Icon     = require './Icon'
@@ -23,13 +24,7 @@ File = component 'File',
     fileId: component.PropTypes.number.isRequired
 
   dataBindings: ->
-    file:    "files/#{@props.fileId}"
-    loading: "files/#{@props.fileId}/loading"
-    open:    "files/#{@props.fileId}/open"
-
-  componentWillReceiveProps: (nextProps) ->
-    if this.props.fileId != nextProps.fileId
-      debugger
+    file: "files/#{@props.fileId}"
 
   render: ->
     file = @state.file
@@ -217,19 +212,13 @@ DirectoryContents = component 'DirectoryContents',
     fileId: component.PropTypes.number.isRequired
 
   dataBindings: ->
+    file = @state? and @state.file
     dataBindings =
-      file:    "files/#{@props.fileId}"
-      loading: "files/#{@props.fileId}/loading"
-    # flattenFilesTree(@app, file.fileIds)
+      file: "files/#{@props.fileId}"
+    if file && file.fileIds
+      for file in flattenFilesTree(@app, file.fileIds)
+        dataBindings[file.id] = "files/#{file.id}"
     dataBindings
-
-  # eventBindings: ->
-  #   'toggle directory': (event, payload) ->
-
-  # DOMEventBindings:
-
-  # defaultStyle:
-    # width: '100%'
 
   componentDidMount: ->
     file = @state.file
@@ -237,6 +226,7 @@ DirectoryContents = component 'DirectoryContents',
       @app.pub 'load file', @props.fileId
 
   render: ->
+    console.log('DirectoryContents render', @state)
     fileId = @props.fileId
     file = @state.file
     loading = @state.loading
@@ -249,8 +239,8 @@ DirectoryContents = component 'DirectoryContents',
 
     files = flattenFilesTree(@app, file.fileIds)
 
-    files = files.map ({file,depth}) ->
-      FlatFile key: file.id, file: file, depth: depth
+    files = files.map (file) ->
+      FlatFile key: file.id, file: file
 
     Rows @cloneProps(), files
 
@@ -266,9 +256,11 @@ module.exports = File
 flattenFilesTree = (app, fileIds, depth=0) ->
   files = []
   fileIds and fileIds.forEach (fileId) ->
-    file = app.get("files/#{fileId}")
-    files.push file: file, depth: depth
-    files.push flattenFilesTree(app, file.fileIds, depth+1)...
+    file = app.get("files/#{fileId}") || {}
+    file.depth = depth
+    files.push file
+    if file.open
+      files.push flattenFilesTree(app, file.fileIds, depth+1)...
   files
 
 
@@ -282,12 +274,16 @@ FlatFile = component 'FlatFile',
       backgroundColor: 'lightgrey'
 
   render: ->
+    file = @props.file
     props = @cloneProps()
     props.onClick = @onClick
     props.style.update
-      paddingLeft: "#{@props.depth}em"
+      paddingLeft: "#{file.depth}em"
     Block props,
-      @props.depth
-      @props.file.name
+      (file.open && 'V' || '>')
+      Space(2)
+      file.depth
+      Space(2)
+      file.name
 
 

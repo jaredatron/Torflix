@@ -12,7 +12,6 @@ module.exports = (app) ->
     console.log('would load transfer', transfer_id)
 
   app.sub 'delete transfer', (event, info) ->
-
     return unless info.id?
     transfers = app.get 'transfers'
     transfers = transfers.filter (transfer) ->

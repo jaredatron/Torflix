@@ -1,3 +1,5 @@
+require 'stdlibjs/Object.bindAll'
+
 URI = require 'URIjs'
 request = require './request'
 
@@ -8,6 +10,9 @@ class Putio
 
   ENDPOINT:     'https://put.io'
   API_ENDPOINT: 'https://api.put.io/v2'
+
+  constructor: ->
+    Object.bindAll(this)
 
   setToken: (token) ->
     @TOKEN = token
@@ -54,7 +59,11 @@ class Putio
     @request('get', "/files/#{id}").then(pluck('file'))
 
   directoryContents: (id) ->
-    @request('get', '/v2/files/list', parent_id: id)
+    amendFile = @amendFile
+    @request('get', '/v2/files/list', parent_id: id).then ({parent, files}) ->
+      parent.fileIds = files.map(pluckId)
+      files.concat([parent]).forEach(amendFile)
+      {parent, files}
 
   #   @account = {}
   #   @account.info = new AccountInfo(this)
@@ -67,7 +76,7 @@ class Putio
   amendFile: (file) ->
     file.isVideo       = IS_VIDEO_REGEXP.test(file.name)
     file.isDirectory   = "application/x-directory" == file.content_type
-    file.needsLoading  = file.isDirectory && !file.fileIds
+    file.needsLoading  = file.isDirectory && !file.fileIds?
     file.putioUrl = @URI "/file/#{file.id}"
     if file.isVideo
       file.downloadUrl   = @apiURI "/v2/files/#{file.id}/download"
@@ -82,4 +91,9 @@ class Putio
 pluck = (key) ->
   (o) -> o[key]
 module.exports = Putio
+
+
+# statics
+
+pluckId = pluck('id')
 

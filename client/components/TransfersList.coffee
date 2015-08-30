@@ -113,9 +113,11 @@ DeleteTransferButton = component 'DeleteTransferButton',
     confirming: false
 
   confirm: ->
+    return unless @isMounted()
     @setState confirming: true
 
   reset: ->
+    return unless @isMounted()
     @setState confirming: false
 
   confirmAndFocus: ->

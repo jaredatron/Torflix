@@ -13,13 +13,11 @@ module.exports = (app) ->
   loadFile = (fileId) ->
     update id: fileId, loading: true
 
-    app.putio.directoryContents(fileId).then (response) ->
-      {parent, files} = response
-      parent.fileIds = files.map(pluckId)
+    app.putio.directoryContents(fileId).then ({parent, files}) ->
       files.unshift parent
       for file in files
         file.loading = false
-        updateAndAmmend(file)
+        update(file)
 
 
   # files loaded as directory contents to not have
@@ -34,20 +32,20 @@ module.exports = (app) ->
   app.sub 'load file', (event, fileId) ->
     loadFile(fileId)
 
+  app.sub 'reload file', (event, fileId) ->
+    set id: fileId, loading: true, fileIds: undefined
+    loadFile(fileId)
+
   app.sub 'toggle directory', (event, fileId) ->
-    return unless file = get(fileId) && file.isDirectory
+    file = get(fileId)
+    return if !file? || !file.isDirectory
     if file.open
       delete file.open
     else
       file.open = true
-      loadFile file.id if file.needsLoading
+      loadFile(file.id) if file.needsLoading
     set(file)
 
 
 
-
-
-# statics
-
-pluckId = (f) -> f.id
 

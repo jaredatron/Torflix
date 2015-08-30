@@ -23,7 +23,7 @@ module.exports = component 'FilesPage',
         Columns {},
           title
           RemainingSpace {}
-          ReloadButton fileId: fileId
+          ReloadButton {}
         File.DirectoryContents key: fileId, fileId: fileId
 
 
@@ -36,6 +36,6 @@ Header = Block.withStyle 'Header',
 
 ReloadButton = component 'ReloadButton', (props) ->
   props.onClick = =>
-    @app.pub 'load file', props.fileId
+    @app.pub 'reload file', props.fileId
 
   Button props, 'reload'
