@@ -229,30 +229,24 @@ DeleteFileButton = component 'DeleteFileButton',
     opacity: 0.2
     ':hover':
       opacity: 1
-      color: 'blue'
+    ':focus':
+      opacity: 1
   deleteFile: (event) ->
     event.preventDefault() if event?
     console.log('would delete', @props.file)
   render: ->
-    SafetyButton @extendProps(onClick: @deleteFile),
-      Button {}, 'O'
-      Button
-        style:
-          borderTopRightRadius: 0
-          borderBottomRightRadius: 0
-        'Y'
-      Button
-        style:
-          borderLeftWidth: 0
-          borderTopLeftRadius: 0
-          borderBottomLeftRadius: 0
-        'X'
-    # SafetyButton
-    #   @extendProps
-    #     onClick: @onClick
-    #     default: Button {}, Icon(glyph: 'trash-o')
-    #     confirm: Button onClick: @deleteFile, 'Y'
-    #     abort:   Button {}, 'X'
+    SafetyButton @extendProps
+      default:
+        Link {}, Icon(glyph: 'trash-o')
+      abort:
+        Link {}, Icon(glyph: 'ban')
+      confirm:
+        Link
+          onClick: @deleteFile
+          style:
+            color: 'red'
+            marginRight: '0.5em'
+          Icon(glyph: 'trash-o')
 
 
 

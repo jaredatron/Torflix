@@ -10,73 +10,36 @@ Columns = require 'reactatron/Columns'
 module.exports = component 'SafetyButton',
 
   propTypes:
-    onClick: component.PropTypes.func.isRequired
+    default: component.PropTypes.any.isRequired
+    abort:   component.PropTypes.any.isRequired
+    confirm: component.PropTypes.any.isRequired
 
   getInitialState: ->
     confirming: false
-
-  confirm: ->
-    return unless @isMounted()
-    @setState confirming: true
-
-  reset: ->
-    return unless @isMounted()
-    @setState confirming: false
-
-  confirmAndFocus: ->
-    @confirm()
-    @focus()
-
-  resetAndFocus: ->
-    @reset()
-    @focus()
-
-  resetAndCallOnClick: (event) ->
-    @reset()
-    @props.onClick(event)
 
   focus: ->
     return if @focusSetTimeout?
     @focusSetTimeout = setTimeout =>
       return unless @isMounted()
       delete @focusSetTimeout
-      # @getDOMNode().childNodes[0].focus()
+      @getDOMNode().childNodes[0].focus()
 
-  scheduleReset: ->
-    return if @resetTimeout
-    @resetTimeout = setTimeout @reset
-
-  unscheduleReset: ->
-    clearTimeout(@resetTimeout) if @resetTimeout?
-    delete @resetTimeout
+  onClick: (event) ->
+    @setState confirming: !@state.confirming
+    @focus()
 
   render: ->
-    [button, confrimButton, abortButton] = @props.children
+    props = @extendProps
+      children:   undefined
+      default:    undefined
+      abort:      undefined
+      confirm:    undefined
+      onClick:    @onClick
 
     if @state.confirming
-      props = @extendProps
-        onFocusOut: @scheduleReset
-        onFocusIn: @unscheduleReset
-        style:
-          flexDirection: 'row-reverse'
-
-       confrimButton = React.cloneElement confrimButton,
-        key: 'confirm'
-        onClick: @resetAndCallOnClick
-
-       abortButton = React.cloneElement abortButton,
-        key: 'main'
-        onClick: @resetAndFocus
-
-      children = [abortButton, confrimButton]
+      props.style.flexDirection = 'row-reverse'
+      children = [@props.abort, @props.confirm]
     else
-      props = @extendProps()
+      children = [@props.default]
 
-      button = React.cloneElement button,
-        key: 'main'
-        onClick: @confirmAndFocus
-
-      children = [button]
-
-    delete props.children
     Columns(props, children)

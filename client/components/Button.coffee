@@ -20,13 +20,14 @@ module.exports = Button.withStyle 'Button',
   MsUserSelect: 'none'
   userSelect: 'none'
   backgroundImage: 'none'
-  border: '1px solid transparent'
+  borderWidth: '1px'
+  borderStyle: 'solid'
+  borderColor: 'transparent'
   borderRadius: '4px'
 
   color: '#333'
   backgroundColor: '#fff'
   borderColor: '#ccc'
-
 
   ':hover':
     color: '#333'
@@ -35,9 +36,15 @@ module.exports = Button.withStyle 'Button',
 
   # ':active': ???
   ':mousedown':
-    zIndex: 2
-    boxShadow: '0px 0px 5px 7px rgba(0,85,255,0.5)'
+    # zIndex: 2
+    # boxShadow: '0px 0px 5px 7px rgba(0,85,255,0.5)'
+    transform: 'scale(0.9, 0.9)'
 
   ':focus':
-    zIndex: 2
-    boxShadow: '0px 0px 2px 3px rgba(0,85,255,0.5)'
+    # zIndex: 2
+    # boxShadow: '0px 0px 2px 3px rgba(0,85,255,0.5)'
+    # outline: '1px dotted rgba(0,85,255,0.5)'
+    color: '#333'
+    backgroundColor: '#e6e6e6'
+    borderColor: '#adadad'
+
