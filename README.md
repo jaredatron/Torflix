@@ -53,3 +53,8 @@ THETVDB_API_KEY=
 ## TODO
 
 - make sure two versions of react are not being injectes into the packed js
+- require React and STDLIBJS from Reactatron to prevent web packing the same code twice
+
+
+
+warnBeforePageUnload

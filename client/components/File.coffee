@@ -1,4 +1,5 @@
 require 'stdlibjs/Array#first'
+toArray = require 'stdlibjs/toArray'
 
 component = require 'reactatron/component'
 
@@ -139,9 +140,10 @@ FileRow = component 'FileRow',
   render: ->
     file = @props.file
     props = @cloneProps()
-    props.style.marginLeft = "#{file.depth}em"
-    if @state.active
-      props.style.update props.style[':active']
+    props.extendStyle
+      marginLeft: "#{file.depth}em"
+    props.extendStyle(props.style[':active']) if @state.active
+
     Columns props,
       Filelink
         file: file,
@@ -161,7 +163,7 @@ FileRow = component 'FileRow',
       DeleteFileButton file: file, tabIndex: -1
 
 
-  Link onClick: (-> ), Icon(glyph:'download')
+  # Link onClick: (-> ), Icon(glyph:'download')
 
 
 
@@ -177,7 +179,7 @@ Filelink = (props) ->
 
 
 IconLink = component (props) ->
-  props.style.update
+  props.extendStyle
     # flexGrow: 1
     flexShrink: 10
     # overflow: 'hidden'
@@ -189,7 +191,7 @@ IconLink = component (props) ->
     style:
       marginRight: '0.5em'
 
-  props.children ||= []
+  props.children = toArray(props.children)
   props.children.unshift icon
 
   Link(props)

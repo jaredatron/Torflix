@@ -37,7 +37,7 @@ module.exports = component 'SafetyButton',
       onClick:    @onClick
 
     if @state.confirming
-      props.style.flexDirection = 'row-reverse'
+      props.extendStyle flexDirection: 'row-reverse'
       children = [@props.abort, @props.confirm]
     else
       children = [@props.default]

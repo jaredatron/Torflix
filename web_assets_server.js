@@ -4,7 +4,7 @@ var webpackConfig = require('./webpack.config.js');
 
 webAssetsServer = {};
 
-webAssetsServer.port = 8080;
+webAssetsServer.port = 3024;
 
 webAssetsServer.start = function () {
 

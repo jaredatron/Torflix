@@ -11,6 +11,13 @@ Link      = require 'reactatron/Link'
 
 {div} = require 'reactatron/DOM'
 
+StyleAbsolute = new Style
+  position: 'absolute'
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+
 module.exports = component 'Layout',
 
   dataBindings: ->
@@ -31,18 +38,9 @@ module.exports = component 'Layout',
     navbar = Navbar shrink: 0
     sidebar = Sidebar {}
 
-
-    child = @props.children[0]
-    style = new Style(child.props.style).merge
-      position: 'absolute'
-      top: 0
-      left: 0
-      bottom: 0
-      right: 0
+    child = @props.children
+    style = new Style(child.props.style).merge(StyleAbsolute)
     child = React.cloneElement(child, style: style)
-
-
-    # child = React.addons.cloneWithProps(child, {style: {color: 'blue'}});
 
     mainContent = MainContent {}, child
 
@@ -97,18 +95,20 @@ Sidebar = component 'Sidebar',
 
   render: ->
     Rows @cloneProps(),
-      SidebarLink path: '/transfers', params: {}, tabIndex: -1, 'Transfers'
-      SidebarLink path: '/shows',     params: {}, tabIndex: -1, 'Shows'
-      SidebarLink path: '/files',     params: {}, tabIndex: -1, 'Files'
-      SidebarLink path: '/bookmarks', params: {}, tabIndex: -1, 'Bookmarks'
-      SidebarLink onClick: @logout, tabIndex: -1, 'Logout'
+      SidebarLink path: '/transfers', params: {}, 'Transfers'
+      SidebarLink path: '/search',    params: {}, 'Search'
+      SidebarLink path: '/shows',     params: {}, 'Shows'
+      SidebarLink path: '/files',     params: {}, 'Files'
+      SidebarLink path: '/bookmarks', params: {}, 'Bookmarks'
+      SidebarLink onClick: @logout,   'Logout'
 
 
-SidebarLink = Link.withStyle 'SidebarLink',
-  backgroundColor: 'rgb(0, 59, 95)'
-  padding: '0.5em'
-  ':hover':
-    backgroundColor: 'rgb(0, 73, 117)'
-  ':focus':
-    backgroundColor: 'rgb(0, 73, 117)'
-
+SidebarLink = Link.withDefaultProps
+  tabIndex: -1
+  style:
+    backgroundColor: 'rgb(0, 59, 95)'
+    padding: '0.5em'
+    ':hover':
+      backgroundColor: 'rgb(0, 73, 117)'
+    ':focus':
+      backgroundColor: 'rgb(0, 73, 117)'

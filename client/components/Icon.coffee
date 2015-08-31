@@ -31,7 +31,7 @@ module.exports = component 'Icon',
 
     props = @cloneProps()
     if @props.fixedWidth
-      props.style.update
+      props.extendStyle
         width: '1em'
         textAlign: 'center'
 

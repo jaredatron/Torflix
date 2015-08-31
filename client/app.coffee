@@ -18,7 +18,6 @@ app.registerPlugin new ResponsiveSizePlugin
 app.registerPlugin new RouterPlugin ->
   @match '/',                       @redirectTo('/transfers')
   @match '/transfers',              require('./pages/TransfersPage')
-  # @match '/transfers/:transfer_id', require('./pages/TransferPage')
   @match '/files',                  require('./pages/FilesPage')
   @match '/files/:fileId',          require('./pages/FilesPage')
   @match '/video/:fileId',          require('./pages/VideoPage')

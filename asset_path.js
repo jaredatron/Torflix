@@ -6,7 +6,7 @@ var asset_path;
 
 if ('development' === process.env.NODE_ENV){
   asset_path = function(asset){
-    return 'http://localhost:8080'+path.join('/webpack-dev-server/', asset);
+    return 'http://localhost:3024'+path.join('/webpack-dev-server/', asset);
   };
 }else{
   asset_path = function(asset){
