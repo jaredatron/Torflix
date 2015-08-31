@@ -58,40 +58,38 @@ module.exports = component 'VideoPlayer',
 
 
   render: ->
-    console.dir(@props.file)
-    div dangerouslySetInnerHTML: {__html: @renderHTML()}
+    div dangerouslySetInnerHTML: {__html: videoHTML(@props.file)}
 
 
-  renderHTML: ->
-    file = @props.file
-    React.renderToStaticMarkup video
-      className: "video-js vjs-default-skin"
-      controls: true
-      preload: 'auto'
-      loop: false
-      poster: file.screenshot
+videoHTML = (file) ->
+  React.renderToStaticMarkup React.createElement 'video',
+    className: "video-js vjs-default-skin"
+    controls: true
+    preload: 'auto'
+    loop: false
+    poster: file.screenshot
+    height: '100%'
+    width: '100%'
+    style:
+      position: 'fixed'
       height: '100%'
       width: '100%'
-      style:
-        position: 'fixed'
-        height: '100%'
-        width: '100%'
-      source
-        src: "https://put.io/v2/files/#{file.id}/stream"
-        type: file.content_type
-      source
-        src: "https://put.io/v2/files/#{file.id}/mp4/stream"
-        type: 'video/mp4'
-      # track
-      #   kind: "captions"
-      #   src: "demo.captions.vtt"
-      #   srclang: "en"
-      #   label: "English"
-      # track
-      #   kind: "subtitles"
-      #   src: "demo.captions.vtt"
-      #   srclang: "en"
-      #   label: "English"
+    React.createElement 'source',
+      src: "https://put.io/v2/files/#{file.id}/stream"
+      type: file.content_type
+    React.createElement 'source',
+      src: "https://put.io/v2/files/#{file.id}/mp4/stream"
+      type: 'video/mp4'
+    # track
+    #   kind: "captions"
+    #   src: "demo.captions.vtt"
+    #   srclang: "en"
+    #   label: "English"
+    # track
+    #   kind: "subtitles"
+    #   src: "demo.captions.vtt"
+    #   srclang: "en"
+    #   label: "English"
 
 
 class Player
