@@ -49,7 +49,7 @@ File = component 'File',
       (a.needsLoading && !b.needsLoading)
     )
     @app.stats.fileRerenders++ if x
-    x
+
 
   render: ->
     file = @state.file
@@ -185,7 +185,7 @@ FileRow = component 'FileRow',
       Filelink
         file: file,
         open: file.open
-        onClick: @onClick
+        onClick: @
         style:
           overflow: 'hidden'
           textOverflow: 'ellipsis'

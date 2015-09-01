@@ -81,7 +81,6 @@ DEBUG.isCompositeComponentElementWithType = React.addons.TestUtils.isCompositeCo
 DEBUG.reset                = reset
 DEBUG.clearLocalStorage    = clearLocalStorage
 DEBUG.warnBeforePageUnload = warnBeforePageUnload
-DEBUG.logEvent             = logEvent
 DEBUG.logAllEvents         = logAllEvents
 DEBUG.stopLoggingAllEvents = stopLoggingAllEvents
 
