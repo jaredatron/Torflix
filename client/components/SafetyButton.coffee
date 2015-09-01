@@ -6,7 +6,6 @@ cloneWithProps = React.addons.cloneWithProps
 component = require 'reactatron/component'
 
 Columns = require 'reactatron/Columns'
-withStyle = require 'reactatron/withStyle'
 
 module.exports = component 'SafetyButton',
 
@@ -18,52 +17,28 @@ module.exports = component 'SafetyButton',
   getInitialState: ->
     confirming: false
 
-  # focus: ->
-  #   return if @focusSetTimeout?
-  #   @focusSetTimeout = setTimeout =>
-  #     return unless @isMounted()
-  #     delete @focusSetTimeout
-
   focus: ->
-    console.log('@props.confirming', @props.confirming)
-    [defaultButton, abortButton, confirmButton] = @getDOMNode().childNodes
-    if @state.confirming
-      console.log('focusing abort')
-      abortButton.focus()
-    else
-      console.log('focusing default')
-      defaultButton.focus()
+    return if @focusSetTimeout?
+    @focusSetTimeout = setTimeout =>
+      return unless @isMounted()
+      delete @focusSetTimeout
+      @getDOMNode().childNodes[0].focus()
 
   onClick: (event) ->
     @setState confirming: !@state.confirming
-    # @focus()
-
-  componentDidUpdate: (prevProps, prevStats) ->
-    @focus() if @state.confirming != prevStats.confirming
+    @focus()
 
   render: ->
     props = @extendProps
-      defaultButton: undefined
-      abortButton:   undefined
-      confirmButton: undefined
-      onClick:       @onClick
+      onClick: @onClick
+      defaultButton:    undefined
+      abortButton:      undefined
+      confirmButton:    undefined
 
     if @state.confirming
-      Columns props,
-        hidden  @props.defaultButton
-        visible @props.abortButton
-        visible @props.confirmButton
+      props.extendStyle flexDirection: 'row-reverse'
+      children = [@props.abortButton, @props.confirmButton]
     else
-      Columns props,
-        visible @props.defaultButton
-        hidden  @props.abortButton
-        hidden  @props.confirmButton
+      children = [@props.defaultButton]
 
-
-hidden = (element) ->
-  withStyle display:'none', element
-
-visible = (element) ->
-  element
-
-
+    Columns(props, children)

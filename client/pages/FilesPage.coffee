@@ -4,7 +4,6 @@ Rows = require 'reactatron/Rows'
 Columns = require 'reactatron/Columns'
 RemainingSpace = require 'reactatron/RemainingSpace'
 Layout = require '../components/Layout'
-File = require '../components/File'
 Directory = require '../components/Directory'
 Button = require '../components/Button'
 Icon = require '../components/Icon'
@@ -45,7 +44,7 @@ module.exports = component 'FilesPage',
 
         # File.DirectoryContents key: file.id, file: file
         if file.isDirectory
-          Directory key: fileId, file: file
+          Directory file: file
         else
           Block {}, "hey look a file show page :D #{file.id}"
 

@@ -14,6 +14,7 @@ Button     = require './Button'
 Icon       = require './Icon'
 FileSize   = require './FileSize'
 SafetyButton   = require './SafetyButton'
+DeleteButton   = require './DeleteButton'
 
 {progress} = require 'reactatron/DOM'
 
@@ -85,6 +86,8 @@ Transfer = component 'Transfer',
           LinkToTransferMagnetLink(transfer)
           Space()
           LinkToDownloadTransfer(transfer)
+          Space()
+          DeleteButton onClick: -> console.log('78787878787878')
           RemainingSpace {} #style: {flexGrow: 1, flexShrink: 2}
           Space()
           Block style: {width: '3em'},

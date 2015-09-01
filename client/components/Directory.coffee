@@ -20,12 +20,16 @@ Link     = require './Link'
 Icon     = require './Icon'
 FileSize = require './FileSize'
 Button = require './Button'
-SafetyButton = require './SafetyButton'
+DeleteButton = require './DeleteButton'
 
 
 
 
 IconLink = require './IconLink'
+
+
+RENDER_CHUNK_SIZE = 10
+INITIAL_CHUNK_SIZE = RENDER_CHUNK_SIZE
 
 module.exports = component 'Directory',
 
@@ -39,33 +43,65 @@ module.exports = component 'Directory',
     toggleDirectory: @toggleDirectory
 
   getInitialState: ->
-    max: 0
+    max: INITIAL_CHUNK_SIZE
     files: @getFiles()
 
-  getFiles: ->
-    flattenFilesTree(@app, @props.file)
 
-  reload: ->
-    @setState @getInitialState()
+  ###
+    Rect Events
+  ###
+
+  componentDidMount: ->
+    @app.sub 'toggle directory', @onToggleDirectory
+    @grow()
+
+
+  componentWillReceiveProps: (nextProps) ->
+    console.log('Directory componentWillReceiveProps', this)
+    @reload(nextProps.file) if @props.file.id != nextProps.file.id
+
+
+  componentDidUpdate: ->
+    @grow()
+
+
+  componentWillUnmount: ->
+    @app.unsub 'toggle directory', @onToggleDirectory
+
+  ###
+    Custom Events
+  ###
+
+  onToggleDirectory: (event, fileId) ->
+    ids = @state.files.map (f) -> f.id
+    console.log('¨¨', event, fileId, ids.includes(fileId))
+    @reload()
+
+
+  ###
+    Actions
+  ###
+
+  reload: (file) ->
+    files = @getFiles(file)
+    max = @state.max
+    max = files.length if max > files.length
+    console.warn('reload', @state.max, max, files.length)
+    @setState max: max, files: files
+
+
+  getFiles: (file)->
+    flattenFilesTree(@app, file || @props.file)
 
   toggleDirectory: (file) ->
-    # instead of doing this with the context callback cant we just listen to any 'toggle directory' event?
-    # reloading should be fast
-    @app.onNext "store:change:files/#{file.id}", @rerender
     @app.pub 'toggle directory', file.id
-
-
-
 
   increaseMax: ->
     return unless @isMounted
-    @setState max: @state.max + 10
+    @setState max: @state.max + RENDER_CHUNK_SIZE
 
   grow: ->
     setTimeout(@increaseMax, 200) if @needsToGrow()
-
-
-
 
   isLoading: ->
     {file} = @props
@@ -79,29 +115,30 @@ module.exports = component 'Directory',
 
 
 
-  componentWillReceiveProps: (nextProps) ->
-    @reload() if @props.file.id != nextProps.file.id
-
-  componentDidMount: ->
-    @grow()
-
-  componentDidUpdate: ->
-    @grow()
-
-  renderFiles: (file, index) ->
-    max = @state.max
-    @state.files.map (file, index) ->
-      File
-        key: file.id
-        file: file
-        shim: index+1>max
-        toggleDirectory: @toggleDirectory
+  ###
+    Render
+  ###
 
   render: ->
     {file} = @props
     if @isLoading() then return Block @cloneProps(), 'Loading...'
     if @isEmpty()   then return Block @cloneProps(), 'empty'
-    Rows @cloneProps(), @renderFiles()
+
+
+    max = @state.max
+    files = @state.files.map (file, index) ->
+      File
+        file: file
+        shim: index+1>max
+        toggleDirectory: @toggleDirectory
+
+    Rows @cloneProps(), files
+
+
+
+
+
+
 
 File = component 'File',
 
@@ -205,6 +242,7 @@ DownloadFileLink = (props, children...) ->
   props.glyph ||= 'download'
   props.title ||= 'download'
   props.href  ||= "https://put.io/v2/files/#{props.file.id}/download"
+  # props.target ||= '_blank'
   IconLink(props, children...)
 
 
@@ -218,49 +256,11 @@ LinkToFileOnPutio = (props) ->
   IconLink(props)
 
 
-DeleteFileButton = component 'DeleteFileButton',
-  propTypes:
-    file: component.PropTypes.object.isRequired
-
-  defaultStyle:
-    flexDirection: 'row-reverse'
-
-  deleteFile: (event) ->
+DeleteFileButton = (props) ->
+  props.onClick = (event) ->
     event.preventDefault() if event?
-    console.log('would delete', @props.file)
-
-  render: ->
-    SafetyButton @extendProps
-      defaultButton:
-        Link
-          key: 'default'
-          style: HoverOpacityStyle
-          Icon(glyph: 'trash-o')
-      abortButton:
-        Link
-          key: 'abort'
-          style: HoverOpacityStyle
-          Icon(glyph: 'ban')
-      confirmButton:
-        Link
-          key: 'confirm'
-          onClick: @deleteFile
-          style: HoverOpacityStyle.merge
-            color: 'red'
-            marginRight: '0.5em'
-          Icon(glyph: 'trash-o')
-
-
-
-HoverOpacityStyle = new Style
-  opacity: 0.2
-  ':hover':
-    opacity: 0.76
-    color:' purple'
-  ':focus':
-    opacity: 1
-    color:' orange'
-
+    console.log('would delete', props.file)
+  DeleteButton(props)
 
 
 
