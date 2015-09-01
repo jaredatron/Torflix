@@ -95,8 +95,13 @@ File = component 'File',
         marginLeft: "#{file.depth}em"
     FileRow props,
 
-      Block style:{ flexShrink: 1, overflow:'hidden', },
-        FileLink file: file, style:{ overflow:'hidden', width: '100%', textOverflow: 'ellipsis'}
+      Block style:{ flexShrink: 1, overflow:'hidden' },
+        FileLink
+          file: file
+          style:
+            overflow:'hidden'
+            width: '100%'
+            textOverflow: 'ellipsis'
 
       RemainingSpace style:{ marginLeft: '1em'}
 
@@ -106,7 +111,7 @@ File = component 'File',
       withSyle flexBasis: '20px',
         LinkToFileOnPutio file: file, tabIndex: -1
 
-      withSyle flexBasis: '30px',
+      withSyle flexBasis: '4em', overflow: 'hidden', textOverflow: 'ellipsis',
         FileSize size: file.size, tabIndex: -1
       # Space(2)
       # DeleteFileButton file: file, tabIndex: -1
