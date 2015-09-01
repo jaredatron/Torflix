@@ -1,0 +1,17 @@
+{
+  "name": "Torflix",
+  "version": "0.0.0",
+  "homepage": "https://github.com/deadlyicon/Torflix",
+  "authors": [
+    "Jared Grippe <jared@deadlyicon.com>"
+  ],
+  "main": "main.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
