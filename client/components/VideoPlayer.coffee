@@ -1,41 +1,36 @@
-$ = require 'jquery'
-React = require 'react'
+React = require 'reactatron/React'
 component = require 'reactatron/component'
-{div, video, source} = require 'reactatron/DOM'
-
-VideoJS = require '../vendor/video'
-
+VideoPlayer = require '../VideoPlayer'
 
 module.exports = component 'VideoPlayer',
 
   propTypes:
     file: component.PropTypes.object.isRequired
 
+  shouldComponentUpdate: -> false
+
+  componentWillReceiveProps: ({file}) ->
+    debugger
+
   componentDidMount: ->
     node = @getDOMNode()
-    $(node).on('dblclick', @onDblclick)
-    $(node.ownerDocument).on('keydown', @onKeydown)
-    @initializePlayer()
+    node.addEventListener('dblclick', @onDblclick)
+    node.ownerDocument.addEventListener('keydown', @onKeydown)
+    @player = new VideoPlayer
+      app:     @app
+      DOMNode: @getDOMNode().getElementsByTagName('video')[0]
 
   componentWillUnmount: ->
+    @player.saveCurrentTime()
     node = @getDOMNode()
-    $(node).off('dblclick', @onDblclick)
-    $(node.ownerDocument).off('keydown', @onKeydown)
-
-  initializePlayer: ->
-    videoNode = @getDOMNode().getElementsByTagName('video')[0]
-    component = this
-    videojs videoNode, {}, ->
-      component.player = new Player(this)
-      window.DEBUG_PLAYER = component.player
-      this.play()
+    node.removeEventListener('dblclick', @onDblclick)
+    node.ownerDocument.removeEventListener('keydown', @onKeydown)
 
   onDblclick: (event) ->
     event.preventDefault()
     @player.toggleFullscreen()
 
   onKeydown: (event) ->
-    console.log('keydown', event)
     switch event.keyCode
       when 32 # space
         @player.pauseOrPlay()
@@ -58,7 +53,7 @@ module.exports = component 'VideoPlayer',
 
 
   render: ->
-    div dangerouslySetInnerHTML: {__html: videoHTML(@props.file)}
+    React.createElement 'div', dangerouslySetInnerHTML: {__html: videoHTML(@props.file)}
 
 
 videoHTML = (file) ->
@@ -90,60 +85,3 @@ videoHTML = (file) ->
     #   src: "demo.captions.vtt"
     #   srclang: "en"
     #   label: "English"
-
-
-class Player
-  constructor: (player) ->
-    @player = player
-
-  volumeUp: ->
-    @volume 0.1
-
-  volumeDown: ->
-    @volume -0.1
-
-  volume: (delta) ->
-    volume = @player.volume()
-    volume = volume + delta
-    volume = 1 if volume > 1
-    volume = 0 if volume < 0
-    @player.volume(volume)
-
-  pauseOrPlay: ->
-    if @player.paused()
-      @player.play()
-    else
-      @player.pause()
-
-  requestFullscreen: ->
-
-
-  toggleFullscreen: ->
-    if @player.isFullscreen()
-      @player.exitFullscreen()
-    else
-      @player.requestFullscreen()
-
-  SKIP_LENGTH: 10
-
-  skipLength: (large=false) ->
-    if large then @SKIP_LENGTH * 2 else @SKIP_LENGTH
-
-  currentTime: (delta) ->
-    @player.currentTime @player.currentTime() + delta
-
-  skipForward: (large) ->
-    @currentTime(@skipLength(large))
-
-  skipBackward: (large=false) ->
-    @currentTime(@skipLength(large) * -1)
-
-  ASPECT_RATIO_RANGE: [0.8, 1.4]
-  toggleAspectRatio: ->
-    @aspect_ratio ||= 1
-    @aspect_ratio += 0.1
-    @aspect_ratio = @ASPECT_RATIO_RANGE[0] if @aspect_ratio > @ASPECT_RATIO_RANGE[1]
-    $(@player.tag).css("-webkit-transform","scaleY(#{@aspect_ratio})")
-
-
-
