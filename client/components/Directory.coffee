@@ -66,6 +66,12 @@ module.exports = component 'Directory',
 
 
 
+React = require 'reactatron/React'
+Style = require 'reactatron/Style'
+withSyle = (style, element) ->
+  React.cloneElement element,
+    style: Style(element.props.style).extend(style)
+
 
 
 File = component 'File',
@@ -76,8 +82,22 @@ File = component 'File',
       style:
         marginLeft: "#{file.depth}em"
     FileRow props,
-      FileLink file: file
-      Block {}, file.name
+
+      Block style:{ flexShrink: 1, overflow:'hidden', },
+        FileLink file: file, style:{ overflow:'hidden', width: '100%', textOverflow: 'ellipsis'}
+
+      RemainingSpace style:{ marginLeft: '1em'}
+
+      withSyle flexBasis: '20px',
+        DownloadFileLink file: file, tabIndex: -1
+
+      withSyle flexBasis: '20px',
+        LinkToFileOnPutio file: file, tabIndex: -1
+
+      withSyle flexBasis: '30px',
+        FileSize size: file.size, tabIndex: -1
+      # Space(2)
+      # DeleteFileButton file: file, tabIndex: -1
 
 
 
@@ -139,7 +159,14 @@ DownloadFileLink = (props, children...) ->
   IconLink(props, children...)
 
 
-
+LinkToFileOnPutio = (props) ->
+  props.href = if props.file.isVideo
+    "https://put.io/file/#{props.file.id}"
+  else
+    "https://put.io/your-files/#{props.file.id}"
+  props.glyph ||= 'circle'
+  props.title ||= 'open at put.io'
+  IconLink(props)
 
 
 
