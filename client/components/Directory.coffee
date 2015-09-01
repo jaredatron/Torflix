@@ -173,16 +173,16 @@ File = component 'File',
 
       RemainingSpace style:{ marginLeft: '1em'}
 
-      withStyle flexBasis: '20px', marginRight: '0.5em',
+      withStyle minWidth: '20px', flexBasis: '20px', marginRight: '0.5em',
         DownloadFileLink file: file, tabIndex: -1
 
-      withStyle flexBasis: '20px', marginRight: '0.5em',
+      withStyle minWidth: '20px', flexBasis: '20px', marginRight: '0.5em',
         LinkToFileOnPutio file: file, tabIndex: -1
 
-      withStyle flexBasis: '4em', overflow: 'hidden', textOverflow: 'ellipsis', textAlign: 'right',
+      withStyle minWidth: '60px', flexBasis: '60px', overflow: 'hidden', textOverflow: 'ellipsis', textAlign: 'right',
         FileSize size: file.size, tabIndex: -1
 
-      withStyle flexBasis: '2em', marginLeft: '0.5em',
+      withStyle minWidth: '2em', flexBasis: '2em', marginLeft: '0.5em',
         DeleteFileButton file: file, tabIndex: -1
 
 

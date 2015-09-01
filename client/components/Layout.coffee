@@ -33,38 +33,25 @@ module.exports = component 'Layout',
     fontSize: '15px'
 
   render: ->
-    props = @extendProps
-      children: undefined
-
     horizontalSize = @state.horizontalSize
 
-    navbar = Navbar shrink: 0
     sidebar = Sidebar {}
 
-    mainContent = MainContent {},
+    mainContent = MainContent
+      key: 'MainContent'
       withStyle StyleAbsolute, @props.children
 
-    if horizontalSize >= 1
-      Layer props,
-        Rows
-          style:
-            flexGrow: 1
-            overflow: 'hidden'
-          navbar
-          Columns
-            style:
-              flexGrow: 1
-              flexShrink: 1
-              overflow: 'hidden'
-            sidebar
-            mainContent
-    else
-      Layer props,
-        Rows grow: 1,
-          navbar
-          sidebar
-          mainContent
+    Layer @props,
+      MainContentWrapper
+        style:
+          flexDirection: if horizontalSize >= 1 then 'row' else 'column'
+        sidebar
+        mainContent
 
+
+MainContentWrapper = Rows.withStyle 'MainContentWrapper',
+  flexGrow: 1
+  overflow: 'hidden'
 
 MainContent = Block.withStyle 'MainContent',
   position: 'relative'
