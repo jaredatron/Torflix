@@ -45,7 +45,7 @@ module.exports = component 'FilesPage',
 
         # File.DirectoryContents key: file.id, file: file
         if file.isDirectory
-          Directory key: file.id, file: file
+          Directory key: fileId, file: file
         else
           Block {}, "hey look a file show page :D #{file.id}"
 

@@ -76,6 +76,18 @@ withSyle = (style, element) ->
 
 File = component 'File',
 
+  shouldComponentUpdate: (nextProps, nextState) ->
+    a = @props.file
+    b = nextProps.file
+    return false if (
+      a.id           == b.id            &&
+      a.open         == b.open          &&
+      b.loading      == b.loading       &&
+      b.needsLoading == b.needsLoading
+    )
+    @app.stats.fileRerenders++
+    true
+
   render: ->
     {file} = @props
     props = @extendProps
