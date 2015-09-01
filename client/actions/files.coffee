@@ -8,34 +8,38 @@ module.exports = (app) ->
 
   update = (updates) ->
     file = get(updates.id)
-    set file and Object.assign(file, updates) or file = updates
+    file = if file?
+      Object.assign(file, updates)
+    else
+      updates
+
+    amendFile(file)
+    set(file)
+
+
+  amendFile = (file) ->
+    file.needsLoading = file.isDirectory && !file.fileIds
+
 
   loadFile = (fileId) ->
     update id: fileId, loading: true
     app.putio.directoryContents(fileId).then ({parent, files}) ->
+      parent.needsLoading = false
       files.unshift parent
       for file in files
         file.loading = false
         update(file)
 
-  reloadFile = (fileId) ->
-
-    loadFile(fileId)
-  # files loaded as directory contents to not have
-  # directory contents
-  filesLoaded = (file) ->
-    return file.isDirectory && file.fileIds
-
-
-
 # actions
 
   app.sub 'load file', (event, fileId) ->
     file = get(fileId)
+    console.log('load file', file)
     if !file? || (file.needsLoading && !file.loading)
       loadFile(fileId)
 
   app.sub 'reload file', (event, fileId) ->
+    console.log('reload file', fileId)
     update id: fileId, loading: true
     loadFile(fileId)
 

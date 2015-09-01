@@ -76,7 +76,6 @@ class Putio
   amendFile: (file) ->
     file.isVideo       = IS_VIDEO_REGEXP.test(file.name)
     file.isDirectory   = "application/x-directory" == file.content_type
-    file.needsLoading  = file.isDirectory && !file.fileIds?
     file.putioUrl = @URI "/file/#{file.id}"
     if file.isVideo
       file.downloadUrl   = @apiURI "/v2/files/#{file.id}/download"

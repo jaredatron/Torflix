@@ -37,7 +37,8 @@ startLoggingStatChanges = ->
       changes[key] = delta if delta > 0
     if Object.keys(changes).length > 0
       prevStats = Object.clone(currStats)
-      console.info('FRAME STATS:', "#{now-timeLastFrameEnded}ms", changes)
+      noeop = document.body.querySelectorAll('*').length
+      console.info('FRAME STATS:', "#{now-timeLastFrameEnded}ms", noeop, changes)
     timeLastFrameEnded = now
 
   setTimeout(logStats)
@@ -89,3 +90,6 @@ DEBUG.stopLoggingAllEvents = stopLoggingAllEvents
 global.DEBUG = DEBUG
 global.log  = console.log.bind(console)
 global.warn = console.warn.bind(console)
+
+
+startLoggingStatChanges()

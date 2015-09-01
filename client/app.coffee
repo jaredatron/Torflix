@@ -11,6 +11,8 @@ require('./FontAwesome').load()
 
 module.exports = app = new ReactatronApp
 
+app.stats.fileRerenders = 0
+
 app.registerPlugin new ResponsiveSizePlugin
   window: global.window,
   widths: [480, 768, 992, 1200]

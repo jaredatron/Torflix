@@ -25,6 +25,8 @@ File = component 'File',
 
   propTypes:
     fileId: component.PropTypes.number.isRequired
+    autoload: component.PropTypes.bool
+    empty:    component.PropTypes.bool
 
   dataBindings: (props) ->
     file: "files/#{props.fileId}"
@@ -37,6 +39,17 @@ File = component 'File',
     return unless @props.autoload
     nextFileId = nextProps.fileId || 0
     @app.pub('load file', nextFileId) if @props.fileId != nextFileId
+
+  shouldComponentUpdate: (nextProps, nextState) ->
+    a = @state.file
+    b = nextState.file
+    x = (
+      @props.empty != nextProps.empty ||
+      a.open != b.open ||
+      (a.needsLoading && !b.needsLoading)
+    )
+    @app.stats.fileRerenders++ if x
+    x
 
   render: ->
     file = @state.file
@@ -54,9 +67,11 @@ File = component 'File',
         style:
             marginLeft: '1em'
 
-    Rows @cloneProps(),
+    fileRow = if @props.empty
+      EmptyFileRow()
+    else
       FileRow file: file, open: file.open
-      directoryContents
+    Rows @cloneProps(), fileRow, directoryContents
 
 
 DirectoryContents = component 'DirectoryContents',
@@ -66,19 +81,42 @@ DirectoryContents = component 'DirectoryContents',
   propTypes:
     file: component.PropTypes.object.isRequired
 
-  render: ->
-    file = @props.file
+  getInitialState: ->
+    max: 10
 
-    if !file || file.loading || file.needsLoading
+  increaseMax: ->
+    return unless @isMounted
+    @setState max: @state.max + 10
+
+  grow: ->
+    setTimeout(@increaseMax, 200) if @needsToGrow()
+
+  isLoading: ->
+    {file} = @props
+    !file || file.loading || file.needsLoading
+
+  isEmpty: ->
+    @props.file.fileIds.length == 0
+
+  renderFiles: ->
+    @grow()
+    max = @state.max
+    @props.file.fileIds.map (fileId, index) ->
+      File key: fileId, fileId: fileId, empty: (index+1>max)
+
+  needsToGrow: ->
+    !@isLoading() && @props.file.fileIds.length > @state.max
+
+  render: ->
+    {file} = @props
+
+    if @isLoading()
       return Block @cloneProps(), 'Loading...'
 
-    if file.fileIds && file.fileIds.length == 0
+    if @isEmpty()
       return Block @cloneProps(), 'empty'
 
-    files = file.fileIds.map (fileId) ->
-      File key: fileId, fileId: fileId
-
-    Rows @cloneProps(), files
+    Rows @cloneProps(), @renderFiles()
 
 
 
@@ -110,6 +148,16 @@ ActiveMixin =
     @setState active: false
 
 
+EmptyFileRow = Columns.withStyle 'EmptyFileRow',
+  minHeight: '24px'
+  whiteSpace: 'nowrap'
+  padding: '0.25em 0.5em'
+  ':hover':
+    backgroundColor: '#DFEBFF'
+  ':active':
+    backgroundColor: '#DFEBFF'
+
+
 
 FileRow = component 'FileRow',
 
@@ -117,14 +165,6 @@ FileRow = component 'FileRow',
 
   propTypes:
     file: component.PropTypes.object.isRequired
-
-  defaultStyle:
-    whiteSpace: 'nowrap'
-    padding: '0.25em 0.5em'
-    ':hover':
-      backgroundColor: '#DFEBFF'
-    ':active':
-      backgroundColor: '#DFEBFF'
 
   onClick: (event) ->
     if @props.file.isDirectory
@@ -134,9 +174,6 @@ FileRow = component 'FileRow',
       else
         @app.pub 'toggle directory', @props.file.id
 
-
-
-
   render: ->
     file = @props.file
     props = @cloneProps()
@@ -144,7 +181,7 @@ FileRow = component 'FileRow',
       marginLeft: "#{file.depth}em"
     props.extendStyle(props.style[':active']) if @state.active
 
-    Columns props,
+    EmptyFileRow props,
       Filelink
         file: file,
         open: file.open
