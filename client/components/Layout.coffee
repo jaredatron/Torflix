@@ -11,6 +11,9 @@ Link      = require 'reactatron/Link'
 
 {div} = require 'reactatron/DOM'
 
+
+withStyle = require 'reactatron/withStyle'
+
 StyleAbsolute = new Style
   position: 'absolute'
   top: 0
@@ -38,11 +41,8 @@ module.exports = component 'Layout',
     navbar = Navbar shrink: 0
     sidebar = Sidebar {}
 
-    child = @props.children
-    style = new Style(child.props.style).merge(StyleAbsolute)
-    child = React.cloneElement(child, style: style)
-
-    mainContent = MainContent {}, child
+    mainContent = MainContent {},
+      withStyle StyleAbsolute, @props.children
 
     if horizontalSize >= 1
       Layer props,
@@ -70,7 +70,6 @@ MainContent = Block.withStyle 'MainContent',
   position: 'relative'
   flexGrow: 1
   flexShrink: 1
-  # overflowY: 'auto'
 
 
 Navbar = component 'Navbar',
