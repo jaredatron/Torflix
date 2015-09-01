@@ -3,6 +3,8 @@ toArray = require 'stdlibjs/toArray'
 
 component = require 'reactatron/component'
 
+withStyle = require 'reactatron/withStyle'
+
 Block   = require 'reactatron/Block'
 Rows    = require 'reactatron/Rows'
 Columns = require 'reactatron/Columns'
@@ -64,16 +66,6 @@ module.exports = component 'Directory',
 
     Rows @cloneProps(), files.map(@renderFile)
 
-
-
-React = require 'reactatron/React'
-Style = require 'reactatron/Style'
-withSyle = (style, element) ->
-  React.cloneElement element,
-    style: Style(element.props.style).extend(style)
-
-
-
 File = component 'File',
 
   shouldComponentUpdate: (nextProps, nextState) ->
@@ -105,13 +97,13 @@ File = component 'File',
 
       RemainingSpace style:{ marginLeft: '1em'}
 
-      withSyle flexBasis: '20px',
+      withStyle flexBasis: '20px',
         DownloadFileLink file: file, tabIndex: -1
 
-      withSyle flexBasis: '20px',
+      withStyle flexBasis: '20px',
         LinkToFileOnPutio file: file, tabIndex: -1
 
-      withSyle flexBasis: '4em', overflow: 'hidden', textOverflow: 'ellipsis',
+      withStyle flexBasis: '4em', overflow: 'hidden', textOverflow: 'ellipsis',
         FileSize size: file.size, tabIndex: -1
       # Space(2)
       # DeleteFileButton file: file, tabIndex: -1
