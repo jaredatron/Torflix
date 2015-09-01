@@ -1,9 +1,0 @@
-component 'LoginButton',
-  render: ->
-    client_id = '<%= ENV['PUT_IO_CLIENT_ID'] %>';
-    redirect_uri = encodeURIComponent('<%= ENV['PUT_IO_REDIRECT_URI'] %>');
-
-    DOM.a(
-      href: "https://api.put.io/v2/oauth2/authenticate?client_id=#{client_id}&response_type=token&redirect_uri=#{redirect_uri}",
-      'Click here to sign in :O'
-    )

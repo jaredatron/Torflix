@@ -6,18 +6,21 @@ module.exports = (app) ->
   get = (fileId) -> app.get "files/#{fileId}"
   set = (file)   -> app.set "files/#{file.id}": file
 
-  update = (updates) ->
+  extend = (updates) ->
     file = get(updates.id)
     file = if file?
       Object.assign(file, updates)
     else
       updates
 
+  update = (updates) ->
+    file = extend(updates)
     amendFile(file)
     set(file)
 
 
   amendFile = (file) ->
+    file.loadedAt = Date.now()
     file.needsLoading = file.isDirectory && !file.fileIds
 
 

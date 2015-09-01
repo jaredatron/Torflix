@@ -1,5 +1,0 @@
-@FindArtFor =
-
-  show: (name) ->
-    Request.get("http://squaredtvart.tumblr.com/search/#{encodeURIComponent(name)}").then (document) ->
-      $('.ThePhoto img', document).first().attr('src')

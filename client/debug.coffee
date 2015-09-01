@@ -21,16 +21,19 @@ warnBeforePageUnload = ->
     event.returnValue = "Should this have been a page unload?"
 
 
+getStats = ->
+  Object.assign({}, app.stats, app.store.stats)
+
 loggingStatChanges = false
 startLoggingStatChanges = ->
   loggingStatChanges = true
-  prevStats = Object.clone(app.stats)
+  prevStats = getStats()
   timeLastFrameEnded = Date.now()
   logStats = ->
     return unless loggingStatChanges
     now = Date.now()
     setTimeout(logStats)
-    currStats = app.stats
+    currStats = getStats()
     changes = {}
     for key, value of currStats
       delta = currStats[key] - prevStats[key]
