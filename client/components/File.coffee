@@ -275,11 +275,11 @@ DeleteFileButton = component 'DeleteFileButton',
     console.log('would delete', @props.file)
   render: ->
     SafetyButton @extendProps
-      default:
+      defaultButton:
         Link {}, Icon(glyph: 'trash-o')
-      abort:
+      abortButton:
         Link {}, Icon(glyph: 'ban')
-      confirm:
+      confirmButton:
         Link
           onClick: @deleteFile
           style:

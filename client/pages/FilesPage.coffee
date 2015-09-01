@@ -37,8 +37,8 @@ module.exports = component 'FilesPage',
 
     title = file.id == 0 && 'All Files' || file.name
     Layout {},
-      Rows style: {padding: '0.5em', overflowY: 'scroll'},
-        Columns {},
+      Rows style: {overflowY: 'scroll'},
+        Columns style: {padding:'0.5em'},
           Header {}, title
           RemainingSpace {}
           ReloadButton fileId: file.id

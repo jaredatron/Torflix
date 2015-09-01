@@ -5,6 +5,7 @@ component = require 'reactatron/component'
 
 withStyle = require 'reactatron/withStyle'
 
+Style   = require 'reactatron/Style'
 Block   = require 'reactatron/Block'
 Rows    = require 'reactatron/Rows'
 Columns = require 'reactatron/Columns'
@@ -37,9 +38,34 @@ module.exports = component 'Directory',
   getChildContext: ->
     toggleDirectory: @toggleDirectory
 
+  getInitialState: ->
+    max: 0
+    files: @getFiles()
+
+  getFiles: ->
+    flattenFilesTree(@app, @props.file)
+
+  reload: ->
+    @setState @getInitialState()
+
   toggleDirectory: (file) ->
+    # instead of doing this with the context callback cant we just listen to any 'toggle directory' event?
+    # reloading should be fast
     @app.onNext "store:change:files/#{file.id}", @rerender
     @app.pub 'toggle directory', file.id
+
+
+
+
+  increaseMax: ->
+    return unless @isMounted
+    @setState max: @state.max + 10
+
+  grow: ->
+    setTimeout(@increaseMax, 200) if @needsToGrow()
+
+
+
 
   isLoading: ->
     {file} = @props
@@ -48,23 +74,34 @@ module.exports = component 'Directory',
   isEmpty: ->
     @props.file.fileIds.length == 0
 
-  renderFile: (file) ->
-    File key: file.id, file: file, toggleDirectory: @toggleDirectory
+  needsToGrow: ->
+    !@isLoading() && @state.files.length > @state.max
+
+
+
+  componentWillReceiveProps: (nextProps) ->
+    @reload() if @props.file.id != nextProps.file.id
+
+  componentDidMount: ->
+    @grow()
+
+  componentDidUpdate: ->
+    @grow()
+
+  renderFiles: (file, index) ->
+    max = @state.max
+    @state.files.map (file, index) ->
+      File
+        key: file.id
+        file: file
+        shim: index+1>max
+        toggleDirectory: @toggleDirectory
 
   render: ->
-
     {file} = @props
-
-    if @isLoading()
-      return Block @cloneProps(), 'Loading...'
-
-    if @isEmpty()
-      return Block @cloneProps(), 'empty'
-
-
-    files = flattenFilesTree(@app, @props.file)
-
-    Rows @cloneProps(), files.map(@renderFile)
+    if @isLoading() then return Block @cloneProps(), 'Loading...'
+    if @isEmpty()   then return Block @cloneProps(), 'empty'
+    Rows @cloneProps(), @renderFiles()
 
 File = component 'File',
 
@@ -72,6 +109,7 @@ File = component 'File',
     a = @props.file
     b = nextProps.file
     return false if (
+      @props.shim    == nextProps.shim  &&
       a.id           == b.id            &&
       a.open         == b.open          &&
       b.loading      == b.loading       &&
@@ -81,6 +119,7 @@ File = component 'File',
     true
 
   render: ->
+    return FileRow() if @props.shim
     {file} = @props
     props = @extendProps
       style:
@@ -97,16 +136,17 @@ File = component 'File',
 
       RemainingSpace style:{ marginLeft: '1em'}
 
-      withStyle flexBasis: '20px',
+      withStyle flexBasis: '20px', marginRight: '0.5em',
         DownloadFileLink file: file, tabIndex: -1
 
-      withStyle flexBasis: '20px',
+      withStyle flexBasis: '20px', marginRight: '0.5em',
         LinkToFileOnPutio file: file, tabIndex: -1
 
-      withStyle flexBasis: '4em', overflow: 'hidden', textOverflow: 'ellipsis',
+      withStyle flexBasis: '4em', overflow: 'hidden', textOverflow: 'ellipsis', textAlign: 'right',
         FileSize size: file.size, tabIndex: -1
-      # Space(2)
-      # DeleteFileButton file: file, tabIndex: -1
+
+      withStyle flexBasis: '2em', marginLeft: '0.5em',
+        DeleteFileButton file: file, tabIndex: -1
 
 
 
@@ -178,11 +218,48 @@ LinkToFileOnPutio = (props) ->
   IconLink(props)
 
 
+DeleteFileButton = component 'DeleteFileButton',
+  propTypes:
+    file: component.PropTypes.object.isRequired
+
+  defaultStyle:
+    flexDirection: 'row-reverse'
+
+  deleteFile: (event) ->
+    event.preventDefault() if event?
+    console.log('would delete', @props.file)
+
+  render: ->
+    SafetyButton @extendProps
+      defaultButton:
+        Link
+          key: 'default'
+          style: HoverOpacityStyle
+          Icon(glyph: 'trash-o')
+      abortButton:
+        Link
+          key: 'abort'
+          style: HoverOpacityStyle
+          Icon(glyph: 'ban')
+      confirmButton:
+        Link
+          key: 'confirm'
+          onClick: @deleteFile
+          style: HoverOpacityStyle.merge
+            color: 'red'
+            marginRight: '0.5em'
+          Icon(glyph: 'trash-o')
 
 
 
-
-
+HoverOpacityStyle = new Style
+  opacity: 0.2
+  ':hover':
+    opacity: 0.76
+    color:' purple'
+  ':focus':
+    opacity: 1
+    color:' orange'
 
 
 
@@ -190,6 +267,7 @@ LinkToFileOnPutio = (props) ->
 
 flattenFilesTree = (app, file, depth=0) ->
   files = []
+  return files if !file?
   if file.isDirectory
     file.fileIds?.forEach (fileId) ->
       file = app.get("files/#{fileId}") || {}

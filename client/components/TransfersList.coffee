@@ -108,17 +108,17 @@ Transfer = component 'Transfer',
 DeleteTransferButton = component 'DeleteTransferButton', (props) ->
   SafetyButton
 
-    default:
+    defaultButton:
       Button {}, Icon(glyph: 'trash-o')
 
-    confirm:
+    confirmButton:
       Button
         onClick: props.onClick
         style:
           borderRadius: '4px 0 0 4px'
         Icon glyph: 'check'
 
-    abort:
+    abortButton:
       Button
         style:
           borderWidth: '1px 1px 1px 0'

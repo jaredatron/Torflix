@@ -37,8 +37,16 @@ startLoggingStatChanges = ->
       changes[key] = delta if delta > 0
     if Object.keys(changes).length > 0
       prevStats = Object.clone(currStats)
-      noeop = document.body.querySelectorAll('*').length
-      console.info('FRAME STATS:', "#{now-timeLastFrameEnded}ms", noeop, changes)
+      changes.numberOfDomNodes = document.body.querySelectorAll('*').length
+      duration = now-timeLastFrameEnded
+      args = ["FRAME: #{duration}ms", changes]
+      switch
+        when duration > 1000
+          console.error(args...)
+        when duration > 500
+          console.warn(args...)
+        else
+          console.info(args...)
     timeLastFrameEnded = now
 
   setTimeout(logStats)
