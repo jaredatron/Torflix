@@ -46,22 +46,45 @@ logFrameData = ->
     for key, value of currStats
       delta = currStats[key] - prevStats[key]
       changes[key] = delta if delta > 0
+
     if Object.keys(changes).length > 0
       prevStats = Object.clone(currStats)
       changes.numberOfDomNodes = document.body.querySelectorAll('*').length
+
+      rendered = (
+        'componentsInitialized' of changes ||
+        'componentsMounted'     of changes ||
+        'componentsUnmounted'   of changes ||
+        'componentsUpdated'     of changes
+      )
+
+
       duration = now-timeLastFrameEnded
-      args = ["FRAME: #{duration}ms", changes]
 
-      # TODO styled logs! :D
-      # console.log("%cThis will be formatted with large, blue text", "color: blue; font-size: x-large");
 
-      switch
-        when duration > 1000
-          console.error(args...)
-        when duration > 500
-          console.warn(args...)
-        else
-          console.info(args...)
+      # if rendered
+      #   color = switch
+      #     when duration > 1000 then 'red'
+      #     when duration > 500  then 'orange'
+      #     when duration > 200  then 'black'
+      #     else                      'green'
+      #   console.log "%cRENDER #{duration}ms ", "color: #{color}; font-size: 110%; "
+
+      # if duration > 200
+      #   console.log "%cSLOW FRAME #{duration}ms ", "color: red; font-size: 120%; "
+      #   console.dir(changes)
+
+      message = "%cFRAME #{duration}ms"
+      message += ' RENDER' if rendered
+      style = "font-size: 120%; "
+
+      style += switch
+        when duration > 1000 then 'color: red; '
+        when duration > 500  then 'color: orange; '
+        when duration > 200  then 'color: black; '
+        else                      'color: green; '
+
+      console.log(message, style)
     timeLastFrameEnded = now
 
   setTimeout(logStats)

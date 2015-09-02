@@ -86,8 +86,8 @@ Transfer = component 'Transfer',
           LinkToTransferMagnetLink(transfer)
           Space()
           LinkToDownloadTransfer(transfer)
-          Space()
-          DeleteButton onClick: -> console.log('78787878787878')
+          # Space()
+          # DeleteButton onClick: -> console.log('78787878787878')
           RemainingSpace {} #style: {flexGrow: 1, flexShrink: 2}
           Space()
           Block style: {width: '3em'},

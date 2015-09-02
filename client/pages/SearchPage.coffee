@@ -8,7 +8,6 @@ module.exports = component 'SearchPage',
 
   render: ->
     query = @props.s || ''
-    console.log('query', query)
     Layout null,
       Rows style: width: '100%',
         TorrentSeachForm
