@@ -146,23 +146,6 @@ File = component 'File',
   shouldComponentUpdate: (nextProps, nextState) ->
     a = @props.file
     b = nextProps.file
-
-
-    if @props.shim != nextProps.shim
-      console.log('File rerender [shim]')
-
-    if a.id != b.id
-      console.log('File rerender [id]')
-
-    if a.open != b.open
-      console.log('File rerender [open]')
-
-    if b.loading != b.loading
-      console.log('File rerender [loading]')
-
-    if b.needsLoading != b.needsLoading
-      console.log('File rerender [needsLoading]')
-
     return false if (
       @props.shim    == nextProps.shim  &&
       a.id           == b.id            &&

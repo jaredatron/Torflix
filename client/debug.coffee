@@ -34,7 +34,6 @@ getStats = ->
 
 
 logFrameData = ->
-  console.trace('xx')
   localStorage.logStateChanges = true
   prevStats = getStats()
   timeLastFrameEnded = Date.now()
