@@ -37,12 +37,10 @@ module.exports = (app) ->
 
   app.sub 'load file', (event, fileId) ->
     file = get(fileId)
-    console.log('load file', file)
     if !file? || (file.needsLoading && !file.loading)
       loadFile(fileId)
 
   app.sub 'reload file', (event, fileId) ->
-    console.log('reload file', fileId)
     update id: fileId, loading: true
     loadFile(fileId)
 

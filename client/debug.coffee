@@ -13,11 +13,14 @@ logEvent = (event, payload) ->
   console.log('Event', event, payload)
 
 logAllEvents = ->
+  localStorage.logAllEvents = true
   app.sub '*', logEvent
-logAllEvents()
 
 stopLoggingAllEvents = ->
+  localStorage.logAllEvents = false
   app.unsub '*', logEvent
+
+logAllEvents() if localStorage.logAllEvents
 
 
 warnBeforePageUnload = ->
@@ -29,13 +32,14 @@ warnBeforePageUnload = ->
 getStats = ->
   Object.assign({}, app.stats, app.store.stats)
 
-loggingStatChanges = false
+
 startLoggingStatChanges = ->
-  loggingStatChanges = true
+  console.trace('xx')
+  localStorage.logStateChanges = true
   prevStats = getStats()
   timeLastFrameEnded = Date.now()
   logStats = ->
-    return unless loggingStatChanges
+    return unless localStorage.logStateChanges
     now = Date.now()
     setTimeout(logStats)
     currStats = getStats()
@@ -60,7 +64,9 @@ startLoggingStatChanges = ->
   setTimeout(logStats)
 
 stopLoggingStatChanges = ->
-  loggingStatChanges = false
+  localStorage.logStateChanges = false
+
+startLoggingStatChanges() if localStorage.logStateChanges
 
 
 clearLocalStorage = ->
@@ -105,6 +111,3 @@ DEBUG.stopLoggingAllEvents = stopLoggingAllEvents
 global.DEBUG = DEBUG
 global.log  = console.log.bind(console)
 global.warn = console.warn.bind(console)
-
-
-startLoggingStatChanges()

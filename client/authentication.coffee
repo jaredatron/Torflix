@@ -15,7 +15,7 @@ module.exports = (app) ->
       loggedIn: 'loggedIn'
 
     render: ->
-      console.info('App render', @state)
+      # console.info('App render', @state)
       if @state.loggedIn
         MainComponent()
       else

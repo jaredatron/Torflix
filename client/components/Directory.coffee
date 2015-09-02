@@ -57,7 +57,6 @@ module.exports = component 'Directory',
 
 
   componentWillReceiveProps: (nextProps) ->
-    console.log('Directory componentWillReceiveProps', this)
     @reload(nextProps.file) if @props.file.id != nextProps.file.id
 
 
@@ -74,7 +73,6 @@ module.exports = component 'Directory',
 
   onToggleDirectory: (event, fileId) ->
     ids = @state.files.map (f) -> f.id
-    console.log('¨¨', event, fileId, ids.includes(fileId))
     @reload()
 
 
@@ -86,7 +84,6 @@ module.exports = component 'Directory',
     files = @getFiles(file)
     max = @state.max
     max = files.length if max > files.length
-    console.warn('reload', @state.max, max, files.length)
     @setState max: max, files: files
 
 
