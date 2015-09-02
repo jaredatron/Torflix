@@ -44,7 +44,7 @@ module.exports = component 'Directory',
 
   getInitialState: ->
     max: INITIAL_CHUNK_SIZE
-    files: @getFiles()
+    files: @getFiles(@props.file)
 
 
   ###
@@ -73,7 +73,7 @@ module.exports = component 'Directory',
 
   onToggleDirectory: (event, fileId) ->
     ids = @state.files.map (f) -> f.id
-    @reload()
+    @reload(@props.file)
 
 
   ###
@@ -84,11 +84,14 @@ module.exports = component 'Directory',
     files = @getFiles(file)
     max = @state.max
     max = files.length if max > files.length
+    max = INITIAL_CHUNK_SIZE if max < INITIAL_CHUNK_SIZE
+    console.log('Directory reload', file.name)
+    console.dir(max: @state.max, newMax: max, filesLength: @state.files.length, newFileLength: files.length)
     @setState max: max, files: files
 
 
   getFiles: (file)->
-    flattenFilesTree(@app, file || @props.file)
+    flattenFilesTree(@app, file)
 
   toggleDirectory: (file) ->
     @app.pub 'toggle directory', file.id
@@ -125,6 +128,7 @@ module.exports = component 'Directory',
     max = @state.max
     files = @state.files.map (file, index) ->
       File
+        key: file.id
         file: file
         shim: index+1>max
         toggleDirectory: @toggleDirectory
@@ -142,6 +146,23 @@ File = component 'File',
   shouldComponentUpdate: (nextProps, nextState) ->
     a = @props.file
     b = nextProps.file
+
+
+    if @props.shim != nextProps.shim
+      console.log('File rerender [shim]')
+
+    if a.id != b.id
+      console.log('File rerender [id]')
+
+    if a.open != b.open
+      console.log('File rerender [open]')
+
+    if b.loading != b.loading
+      console.log('File rerender [loading]')
+
+    if b.needsLoading != b.needsLoading
+      console.log('File rerender [needsLoading]')
+
     return false if (
       @props.shim    == nextProps.shim  &&
       a.id           == b.id            &&

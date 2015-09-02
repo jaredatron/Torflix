@@ -33,7 +33,7 @@ getStats = ->
   Object.assign({}, app.stats, app.store.stats)
 
 
-startLoggingStatChanges = ->
+logFrameData = ->
   console.trace('xx')
   localStorage.logStateChanges = true
   prevStats = getStats()
@@ -63,10 +63,10 @@ startLoggingStatChanges = ->
 
   setTimeout(logStats)
 
-stopLoggingStatChanges = ->
+stopLogginFrameData = ->
   localStorage.logStateChanges = false
 
-startLoggingStatChanges() if localStorage.logStateChanges
+logFrameData() if localStorage.logStateChanges
 
 
 clearLocalStorage = ->
@@ -105,6 +105,8 @@ DEBUG.clearLocalStorage    = clearLocalStorage
 DEBUG.warnBeforePageUnload = warnBeforePageUnload
 DEBUG.logAllEvents         = logAllEvents
 DEBUG.stopLoggingAllEvents = stopLoggingAllEvents
+DEBUG.logFrameData         = logFrameData
+DEBUG.stopLogginFrameData  = stopLogginFrameData
 
 # Globals
 
