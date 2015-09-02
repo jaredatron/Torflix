@@ -51,6 +51,10 @@ logFrameData = ->
       changes.numberOfDomNodes = document.body.querySelectorAll('*').length
       duration = now-timeLastFrameEnded
       args = ["FRAME: #{duration}ms", changes]
+
+      # TODO styled logs! :D
+      # console.log("%cThis will be formatted with large, blue text", "color: blue; font-size: x-large");
+
       switch
         when duration > 1000
           console.error(args...)
@@ -63,7 +67,7 @@ logFrameData = ->
   setTimeout(logStats)
 
 stopLogginFrameData = ->
-  localStorage.logStateChanges = false
+  delete localStorage.logStateChanges
 
 logFrameData() if localStorage.logStateChanges
 
