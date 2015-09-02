@@ -2,17 +2,22 @@ console.warn 'DEBUG object loaded'
 React = require 'react/addons'
 ReactElement = require 'react/lib/ReactElement'
 URI = require 'URIjs'
+
 app = require './app'
+
+
+app.stats.fileRerenders = 0
 
 
 logEvent = (event, payload) ->
   console.log('Event', event, payload)
 
 logAllEvents = ->
-  DEBUG.app.sub '*', logEvent
+  app.sub '*', logEvent
+logAllEvents()
 
 stopLoggingAllEvents = ->
-  DEBUG.app.unsub '*', logEvent
+  app.unsub '*', logEvent
 
 
 warnBeforePageUnload = ->
