@@ -1,8 +1,8 @@
 component = require 'reactatron/component'
-Link = require './Link'
+ButtonLink = require './ButtonLink'
 
 module.exports = component 'LoginButton',
   render: ->
-    Link
+    ButtonLink
       href: @app.putio.generateLoginURI()
       'Login via put.io'
