@@ -20,8 +20,8 @@ module.exports = (app) ->
       return
 
     switch
-      when @match '/'              then setLocation '/transfers'
-      when @match '/bookmarks'     then setLocation '/'
+      when @match '/'              then redirectTo '/transfers'
+      when @match '/bookmarks'     then redirectTo '/'
       when @match '/transfers'     then renderPage 'Transfers'
       when @match '/files'         then renderPage 'Files'
       when @match '/files/:fileId' then renderPage 'Files'

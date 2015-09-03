@@ -13,3 +13,9 @@ module.exports = (app) ->
 
   app.sub 'store:change:put_io_access_token', update
   app.unsub 'store:change:put_io_access_token', update
+  update()
+
+
+  if matches = location.hash.match(/^#access_token=(.*)$/)
+    app.set 'put_io_access_token': matches[1], loggedIn: true
+    app.clearHash()

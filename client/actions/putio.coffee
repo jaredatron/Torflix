@@ -2,10 +2,6 @@ Putio = require '../Putio'
 
 module.exports = (app) ->
 
-  if matches = location.hash.match(/^#access_token=(.*)$/)
-    app.set 'put_io_access_token': matches[1]
-    app.clearHash()
-
   app.putio = new Putio(app)
 
   update = ->
