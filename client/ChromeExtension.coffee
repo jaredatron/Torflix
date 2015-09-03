@@ -2,7 +2,7 @@ require 'stdlibjs/Function#defer'
 require 'stdlibjs/Function#delay'
 DOMEventMessageBus = require 'dom-event-message-bus'
 
-
+TIMEOUT =  1 * 1000 # 1 second
 
 messageBus = new DOMEventMessageBus
   name:         'CLIENT'
@@ -11,10 +11,13 @@ messageBus = new DOMEventMessageBus
   sendEvent:    'toChromeExtension'
   receiveEvent: 'fromChromeExtension'
 
-messageBus.onReceiveMessage = ({id, type, payload}) ->
-  switch type
+messageBus.onReceiveMessage = (message) ->
+  switch message.type
     when 'ready'
       onReady.defer()
+
+    when 'HTTPResponse'
+      HTTPResponse(message)
 
   return null
 
@@ -33,11 +36,12 @@ sendMessageAsync = (type, payload) ->
       timeout = ->
         error = 'Timedout talking to ChromeExtension'
         reject({error, type, payload})
-      timeoutId = timeout.delay(500)
+      timeoutId = timeout.delay(TIMEOUT)
 
       callback = (response) ->
         clearTimeout(timeoutId)
         resolve(response)
+
       queuedMessages.push [type, payload, callback]
 
 
@@ -51,124 +55,50 @@ resolveQueuedMessages = ->
 
 
 
+HTTPResponse = ({id, type, options}) ->
+  console.log('HTTPResponse', {id, type, options})
+
+
+
+
+HTTP_REQUEST_TIMEOUT = 4 * 1000 # 4 seconds
+requests = []
+lastRequestId = 0;
+HTTPRequest = (request) ->
+  request.id = lastRequestId++
+  requests.push(request)
+  return sendMessageAsync('HTTPRequest', request).then (callbackEvent) ->
+    new Promise (resolve, reject) ->
+      timeout = ->
+        error = "HTTPRequest #{request.id} timed out"
+        reject({error, request})
+      timeoutId = timeout.delay(HTTP_REQUEST_TIMEOUT)
+
+      messageBus.onNext callbackEvent, (response) ->
+        clearTimeout(timeoutId)
+        resolve(response)
 
 
 
 
 
 
+# sendMessageAsync('echo', 'A')
+#   .then (r) -> console.info('echo A', r)
+#   .catch (e) -> console.error(e)
 
-sendMessageAsync('echo', 'A').then (r) ->
-  console.info('echo???', r)
-sendMessageAsync('echo', 'B').then (r) ->
-  console.info('echo???', r)
+# sendMessageAsync('echo', 'B')
+#   .then (r) -> console.info('echo B', r)
+#   .catch (e) -> console.error(e)
+
+
+# request(url: 'https://www.google.com/search?q=ass')
+#   .then  (r) -> console.info('HTTPResponse?', r)
+#   .catch (e) -> console.error(e)
 
 module.exports = ChromeExtension =
   messageBus:     messageBus
   queuedMessages: queuedMessages
   sendMessage:    sendMessageAsync
-
-
-
-
-
-# # require 'stdlibjs/Promise'
-
-# EVENT_PREFIX  = 'TorflixChromeExtension'
-# SEND_EVENT    = "#{EVENT_PREFIX}:sendMessage"
-# RECEIVE_EVENT = "#{EVENT_PREFIX}:receiveMessage"
-
-# document.addEventListener RECEIVE_EVENT, (event) ->
-#   receiveMessage(event.detail)
-
-# dispatchEvent = (event, message) ->
-#   document.dispatchEvent(new CustomEvent(event, {detail:message}))
-
-# pendingSentMessages = []
-# sendMessage = (message) ->
-#   message.id = lastMessageId++
-#   dispatchEvent(SEND_EVENT, message)
-
-# receiveMessage = (message) ->
-#   # console.log('From ChromeExtension:', message)
-#   MessageHandlers[message.type](message)
-
-
-# MessageHandlers =
-
-#   ping: (message) ->
-#     sendMessage({type: 'pong'})
-
-#   pong: (message) ->
-#     console.log('ping to ToTorflixChromeExtension successful')
-
-#   loaded: (message) ->
-#     console.log("ToTorflixChromeExtension loaded at #{message.loadedAt}")
-
-#   receipt: (message) ->
-#     console.info('MESSAGE RECEIPT', message)
-
-
-
-#   requestResponse: (message) ->
-#     {response} = message
-#     {request} = response
-#     id = request.chromeExtensionRequestId
-#     callback = requestCallbacks[id]
-#     delete requestCallbacks[id]
-#     callback(response)
-
-
-
-
-
-
-
-
-#   # lastMessageId = Date.now()
-#   # sendMessageReturningPromise = (message) ->
-#   #   messge.id = lastMessageId++
-
-#   #   messageRecievedCallback = (event) ->
-#   #     console.log('MESSAGE RECIEVED')
-
-#   #   document.addEventListener FROM_EVENT,
-
-
-
-#   #   rv = document.dispatchEvent(new CustomEvent(TO_EVENT, {detail:message}))
-#   #   console.log('sendMessage rv:', rv)
-
-#   #   return new Promise (resolve, reject) ->
-
-
-
-
-
-
-
-
-
-
-
-# nextRequestId = -> nextRequestId.i++
-# nextRequestId.i = 0
-
-# lastRequestId = -1
-# requestCallbacks = {}
-# request = (request, callback) ->
-#   id = nextRequestId()
-#   request.chromeExtensionRequestId = lastRequestId
-#   requestCallbacks[id] = callback
-#   sendMessage
-#     type: 'request'
-#     request: request
-
-
-
-
-# module.exports =
-#   sendMessage: sendMessage
-#   request: request
-
+  HTTPRequest:    HTTPRequest
 
