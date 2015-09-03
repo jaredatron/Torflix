@@ -76,7 +76,7 @@ logFrameData = ->
 
       message = "%cFRAME #{duration}ms"
       message += ' RENDER' if rendered
-      style = "font-size: 120%; "
+      style = "font-size: 100%; "
 
       style += switch
         when duration > 1000 then 'color: red; '

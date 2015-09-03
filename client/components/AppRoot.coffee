@@ -7,6 +7,7 @@ module.exports = component 'AppRoot',
     route: 'route'
 
   render: ->
-    {page, path, params} = @state.route
-    @app.pages[page]({path, params})
+    {page, params} = @state.route
+    console.log('AppRoot#render', page, params)
+    @app.pages[page](params)
 
