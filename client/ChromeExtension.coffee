@@ -69,8 +69,8 @@ HTTPRequest = (request) ->
         clearTimeout(timeoutId)
         resolve(response)
 
-
-
+isReady = -> messageBus.isReady()
+onReady.defer() if isReady()
 
 
 
@@ -89,6 +89,7 @@ HTTPRequest = (request) ->
 
 module.exports = ChromeExtension =
   messageBus:     messageBus
+  isReady:        isReady
   queuedMessages: queuedMessages
   sendMessage:    sendMessageAsync
   HTTPRequest:    HTTPRequest

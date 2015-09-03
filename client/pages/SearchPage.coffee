@@ -7,7 +7,6 @@ TorrentSearchResults = require '../components/TorrentSearchResults'
 module.exports = component 'SearchPage',
 
   render: ->
-    log('SearchPage render', @props)
     query = @props.query
 
     if query?
