@@ -37,8 +37,8 @@ module.exports = (app) ->
 
   update = (event) ->
     newLocation = app.get('location')
-    console.log('ROUTING', event)
-    console.log('ROUTING from:', locationToString(prevLocation), 'to:', locationToString(newLocation))
+    # console.log('ROUTING', event)
+    # console.log('ROUTING from:', locationToString(prevLocation), 'to:', locationToString(newLocation))
     app.router.route(newLocation)
     prevLocation = newLocation
 
