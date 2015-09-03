@@ -6,9 +6,11 @@ module.exports = component 'TorrentSeachForm',
   onSearch: (query) ->
     if isMagnetLink(query)
       @app.pub 'download torrent', query
-      @app.setLocation @app.locationFor('/autoplay', link: query)
+      @app.setLocation path: '/autoplay', params: {link: query}
     else
-      @app.setLocation @app.locationFor('/search', s: query)
+      path = '/search'
+      path += "/#{encodeURIComponent(query)}" if query
+      @app.setLocation path: path
 
   render: ->
     SearchForm

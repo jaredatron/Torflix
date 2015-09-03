@@ -1,5 +1,6 @@
 component    = require 'reactatron/component'
 Router = require 'reactatron/SimpleRouter'
+locationToString = require 'reactatron/locationToString'
 
 module.exports = (app) ->
 
@@ -27,15 +28,16 @@ module.exports = (app) ->
       when @match '/files/:fileId' then renderPage 'Files'
       when @match '/video/:fileId' then renderPage 'Video'
       when @match '/search'        then renderPage 'Search'
+      when @match '/search/*query' then renderPage 'Search'
       when @match '/shows'         then renderPage 'Shows'
       when @match '/*path'         then renderPage 'NotFound'
 
 
   prevLocation = app.get('location')
 
-  update = ->
+  update = (event) ->
     newLocation = app.get('location')
-    console.log('ROUTING', {newLocation, prevLocation})
+    console.log('ROUTING from:', locationToString(prevLocation), 'to:', locationToString(newLocation))
     app.router.route(newLocation)
 
   app.sub ['store:change:location', 'store:change:loggedIn'], update

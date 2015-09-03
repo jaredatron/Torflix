@@ -10,7 +10,6 @@ app = new App
     Login:     require('./pages/LoginPage')
     Transfers: require('./pages/TransfersPage')
     Files:     require('./pages/FilesPage')
-    Files:     require('./pages/FilesPage')
     Video:     require('./pages/VideoPage')
     Search:    require('./pages/SearchPage')
     Shows:     require('./pages/ShowsPage')
@@ -22,6 +21,7 @@ require('./authentication')(app)
 require('./actions/putio')(app)
 require('./actions/transfers')(app)
 require('./actions/files')(app)
+require('./actions/search')(app)
 
 module.exports = app
 

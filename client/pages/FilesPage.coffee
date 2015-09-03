@@ -28,7 +28,6 @@ module.exports = component 'FilesPage',
   render: ->
     fileId = @props.fileId || 0
     file = @state.file
-    # console.log('FilesPage render', fileId, file)
     if !file?
       return Layout {},
         Block {}, 'Loading...'

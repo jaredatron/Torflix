@@ -32,7 +32,7 @@ module.exports = component 'TransfersList',
     # TestAnimator {}, child
 
   renderTransfers: ->
-    (@props.transfers || []).map (transfer, index) ->
+    (@props.transfers || []).sort(SORT).map (transfer, index) ->
       Transfer
         stripe: index % 2 == 1
         key: transfer.id
@@ -188,3 +188,13 @@ TestAnimator = component 'TestAnimator',
 
   render: ->
     @props.children[0]
+
+
+
+
+SORT = (a, b) ->
+  a = Date.parse(a.created_at)
+  b = Date.parse(b.created_at)
+  return -1 if a > b
+  return  1 if a < b
+  return  0 if a == b

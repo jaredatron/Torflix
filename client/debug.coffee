@@ -1,8 +1,5 @@
-console.warn 'DEBUG object loaded'
-React = require 'react/addons'
-ReactElement = require 'react/lib/ReactElement'
+React = require 'reactatron/React'
 URI = require 'URIjs'
-
 app = require './app'
 
 
@@ -17,7 +14,7 @@ logAllEvents = ->
   app.sub '*', logEvent
 
 stopLoggingAllEvents = ->
-  localStorage.logAllEvents = false
+  delete localStorage.logAllEvents
   app.unsub '*', logEvent
 
 logAllEvents() if localStorage.logAllEvents
@@ -105,37 +102,36 @@ reset = ->
 
 
 
-DEBUG = {};
+D = {};
 
-DEBUG.React = React
-DEBUG.URI = URI
-DEBUG.app = app
-DEBUG.ReactElement = require 'react/lib/ReactElement'
-# DEBUG.animator = require './animator'
-DEBUG.Style = require 'reactatron/Style'
-DEBUG.Box   = require 'reactatron/Box'
-DEBUG.Block = require 'reactatron/Block'
-DEBUG.Rows  = require 'reactatron/Rows'
+D.React = React
+D.URI = URI
+D.app = app
+# D.animator = require './animator'
+D.Style = require 'reactatron/Style'
+D.Box   = require 'reactatron/Box'
+D.Block = require 'reactatron/Block'
+D.Rows  = require 'reactatron/Rows'
 
-DEBUG.isElement                           = React.addons.TestUtils.isElement
-DEBUG.isElementOfType                     = React.addons.TestUtils.isElementOfType
-DEBUG.isDOMComponent                      = React.addons.TestUtils.isDOMComponent
-DEBUG.isDOMComponentElement               = React.addons.TestUtils.isDOMComponentElement
-DEBUG.isCompositeComponent                = React.addons.TestUtils.isCompositeComponent
-DEBUG.isCompositeComponentWithType        = React.addons.TestUtils.isCompositeComponentWithType
-DEBUG.isCompositeComponentElement         = React.addons.TestUtils.isCompositeComponentElement
-DEBUG.isCompositeComponentElementWithType = React.addons.TestUtils.isCompositeComponentElementWithType
+D.isElement                           = React.addons.TestUtils.isElement
+D.isElementOfType                     = React.addons.TestUtils.isElementOfType
+D.isDOMComponent                      = React.addons.TestUtils.isDOMComponent
+D.isDOMComponentElement               = React.addons.TestUtils.isDOMComponentElement
+D.isCompositeComponent                = React.addons.TestUtils.isCompositeComponent
+D.isCompositeComponentWithType        = React.addons.TestUtils.isCompositeComponentWithType
+D.isCompositeComponentElement         = React.addons.TestUtils.isCompositeComponentElement
+D.isCompositeComponentElementWithType = React.addons.TestUtils.isCompositeComponentElementWithType
 
-DEBUG.reset                = reset
-DEBUG.clearLocalStorage    = clearLocalStorage
-DEBUG.warnBeforePageUnload = warnBeforePageUnload
-DEBUG.logAllEvents         = logAllEvents
-DEBUG.stopLoggingAllEvents = stopLoggingAllEvents
-DEBUG.logFrameData         = logFrameData
-DEBUG.stopLogginFrameData  = stopLogginFrameData
+D.reset                = reset
+D.clearLocalStorage    = clearLocalStorage
+D.warnBeforePageUnload = warnBeforePageUnload
+D.logAllEvents         = logAllEvents
+D.stopLoggingAllEvents = stopLoggingAllEvents
+D.logFrameData         = logFrameData
+D.stopLogginFrameData  = stopLogginFrameData
 
 # Globals
 
-global.DEBUG = DEBUG
+global.D = D
 global.log  = console.log.bind(console)
 global.warn = console.warn.bind(console)

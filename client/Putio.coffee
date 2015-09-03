@@ -48,11 +48,38 @@ class Putio
   request: (method, path, params) ->
     request(method, @apiURI(path), params)
 
-  transfers: ->
-    @request('get', '/v2/transfers/list').then(pluck('transfers'))
+
+
+
+
 
   accountInfo: ->
     @request('get', '/v2/account/info').then(pluck('info'))
+
+
+  ###
+
+    Transfers
+
+  ###
+
+  transfers: ->
+    @request('get', '/v2/transfers/list').then(pluck('transfers'))
+
+
+  addTransfer: (magnetLink) ->
+    @request('post', '/v2/transfers/add', url: magnetLink).then (response) =>
+      response.transfer
+
+
+
+  ###
+
+  files
+
+  ###
+
+
 
   file: (id) ->
     throw new Error('id required') unless id?

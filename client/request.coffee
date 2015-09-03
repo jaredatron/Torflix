@@ -1,27 +1,47 @@
-$ = require('jquery')
+require 'stdlibjs/Object.assign'
 
-module.exports = (method, url, params, options={}) ->
+jQuery = require('jquery')
 
-  options = $.extend({}, options, {
+request = (method, url, params, options={}) ->
+
+  options = Object.assign({}, options, {
     method: method
     url: url
     data: params
   })
 
-  request = $.ajax(options)
+  r = jQuery.ajax(options)
 
   new Promise (resolve, reject) ->
-    request.done (result) ->
+    r.done (result) ->
       resolve(result)
-    request.error (xhr, textStatus, errorThrown) ->
+    r.error (xhr, textStatus, errorThrown) ->
+      detectAccessControlAllowOriginError(xhr)
       console.warn('Request failed', options, xhr, textStatus, errorThrown)
       error = new Error('Request failed: '+textStatus+' / '+errorThrown)
       error.xhr = xhr
       reject(error)
 
 
-module.exports.get = (path, params) ->
-  @('get', path, params)
+request.get = (path, params) ->
+  request('get', path, params)
 
-module.exports.post = (path, params) ->
-  @('post', path, params)
+request.post = (path, params) ->
+  request('post', path, params)
+
+
+detectAccessControlAllowOriginError = (xhr) ->
+  if xhr?.state?() == 'rejected'
+    console.warn("""
+      ~~~~~ WARNING ~~~~~
+
+      It's possible the Torflix chrome extensions is not installed
+
+      Get it here #{location.origin}/Torflix-chrome-extension.crx
+
+      ~~~~~ WARNING ~~~~~
+    """)
+
+
+
+module.exports = request

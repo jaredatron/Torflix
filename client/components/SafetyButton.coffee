@@ -1,6 +1,6 @@
 require 'stdlibjs/Array#last'
 
-React = require 'react'
+React = require 'reactatron/React'
 cloneWithProps = React.addons.cloneWithProps
 
 component = require 'reactatron/component'

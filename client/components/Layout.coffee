@@ -59,15 +59,6 @@ MainContent = Block.withStyle 'MainContent',
   flexShrink: 1
 
 
-Navbar = component 'Navbar',
-
-  defaultStyle:
-    backgroundColor: 'black'
-    color: 'white'
-    padding: '0.25em'
-
-  render: ->
-    Block @cloneProps(), 'Torflix'
 
 Sidebar = component 'Sidebar',
 
@@ -92,6 +83,7 @@ Sidebar = component 'Sidebar',
 SidebarLink = Link.withDefaultProps
   tabIndex: -1
   style:
+    fontWeight: 100
     backgroundColor: 'rgb(0, 59, 95)'
     padding: '0.5em'
     ':hover':
