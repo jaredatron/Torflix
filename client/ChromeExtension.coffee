@@ -1,38 +1,76 @@
-delay = require 'stdlibjs/delay'
+require 'stdlibjs/Function#defer'
+require 'stdlibjs/Function#delay'
 DOMEventMessageBus = require 'dom-event-message-bus'
 
 
 
 messageBus = new DOMEventMessageBus
   name:         'CLIENT'
+  color:        'purple'
   DOMNode:       document
   sendEvent:    'toChromeExtension'
   receiveEvent: 'fromChromeExtension'
 
-
 messageBus.onReceiveMessage = ({id, type, payload}) ->
   switch type
     when 'ready'
-      console.info 'TorflixChromeExtension is ready'
+      onReady.defer()
 
-    when 'ping'
-      messageBus.sendMessage 'pong', payload
-
-    when 'pong'
-      console.info 'Torflix received pong', payload
+  return null
 
 
-delay 1000, ->
-  messageBus.sendMessage('ping', {})
-    .then((response)->
-      debugger
-    )
-    .catch((response)->
-      debugger
-    )
+onReady = ->
+  messageBus.log('ChromeExtension ready')
+  resolveQueuedMessages()
 
 
-module.exports = messageBus
+queuedMessages = []
+sendMessageAsync = (type, payload) ->
+  new Promise (resolve, reject) =>
+    if messageBus.isReady()
+      resolve(messageBus.sendMessage(type, payload))
+    else
+      timeout = ->
+        error = 'Timedout talking to ChromeExtension'
+        reject({error, type, payload})
+      timeoutId = timeout.delay(500)
+
+      callback = (response) ->
+        clearTimeout(timeoutId)
+        resolve(response)
+      queuedMessages.push [type, payload, callback]
+
+
+resolveQueuedMessages = ->
+  console.info('queuedMessages', queuedMessages)
+  while queuedMessages.length
+    [type, payload, callback] = queuedMessages.shift()
+    callback(messageBus.sendMessage(type, payload))
+
+
+
+
+
+
+
+
+
+
+
+
+sendMessageAsync('echo', 'A').then (r) ->
+  console.info('echo???', r)
+sendMessageAsync('echo', 'B').then (r) ->
+  console.info('echo???', r)
+
+module.exports = ChromeExtension =
+  messageBus:     messageBus
+  queuedMessages: queuedMessages
+  sendMessage:    sendMessageAsync
+
+
+
+
 
 # # require 'stdlibjs/Promise'
 
