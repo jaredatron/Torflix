@@ -7,7 +7,7 @@ LoginButton = require '../components/LoginButton'
 module.exports = component 'LoginPage',
 
   addPutioAccessToken: ->
-    @app.set put_io_access_token: "LA0XFKMT"
+    @app.logout()
 
   render: ->
 
