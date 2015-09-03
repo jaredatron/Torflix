@@ -1,5 +1,7 @@
 require 'stdlibjs/Object.assign'
 
+ChromeExtension = require './ChromeExtension'
+
 jQuery = require('jquery')
 
 request = (method, url, params, options={}) ->
@@ -11,12 +13,16 @@ request = (method, url, params, options={}) ->
   })
 
   new Promise (resolve, reject) ->
-    ChromeExtension.request options, (response, request) ->
-      if response.status < 400
-        resolve(response.responseJSON || response.responseText)
-      else
-        console.warn('Request failed', options, response, request)
-        reject(response)
+    ChromeExtension.HTTPRequest(options)
+      .catch (error) ->
+        debugger
+        reject(error)
+      .then (response) ->
+        if response.status < 400
+          resolve(response.responseJSON || response.responseText)
+        else
+          console.warn('Request failed', options, response, request)
+          reject(response)
     # request = jQuery.ajax(options)
 
     # request.done (result) ->
