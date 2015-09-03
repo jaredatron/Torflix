@@ -32,6 +32,7 @@ module.exports = component 'FilesPage',
       return Layout {},
         Block {}, 'Loading...'
 
+    console.info('file', fileId, file)
 
     title = file.id == 0 && 'All Files' || file.name
     Layout {},
@@ -41,11 +42,10 @@ module.exports = component 'FilesPage',
           RemainingSpace {}
           ReloadButton fileId: file.id
 
-        # File.DirectoryContents key: file.id, file: file
         if file.isDirectory
           Directory file: file
         else
-          Block {}, "hey look a file show page :D #{file.id}"
+          File file: file
 
 
 
@@ -60,3 +60,16 @@ ReloadButton = component 'ReloadButton', (props) ->
     @app.pub 'reload file', props.fileId
 
   Button props, 'reload'
+
+
+
+
+File = component 'File',
+  render: ->
+    file = @props.file
+    Rows {},
+      Object.keys(file).sort().map (key) ->
+        Columns key:key,
+          Block {style:{flexBasis:'200px'}}, key
+          Block {}, JSON.stringify(file[key])
+

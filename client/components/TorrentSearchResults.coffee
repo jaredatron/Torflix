@@ -1,4 +1,5 @@
 component      = require 'reactatron/component'
+Box          = require 'reactatron/Box'
 Block          = require 'reactatron/Block'
 RemainingSpace = require 'reactatron/RemainingSpace'
 withStyle      = require 'reactatron/withStyle'
@@ -31,10 +32,8 @@ module.exports = component 'TorrentSearchResults',
       when !search?
         Block {}
       when search.results
-        Rows {},
-          Block {}, "Found: #{search.results.length}"
-          Rows {}, search.results.map (result, index) ->
-            Result(key:index, result: result)
+        Rows {}, search.results.map (result, index) ->
+          Result(key:index, result: result)
       else
         Block {}, "searching for #{@props.query}: #{JSON.stringify(search)}"
 
@@ -58,23 +57,24 @@ Result = component 'Result',
       RemainingSpace {}
       Column width: '40px', Rating(result: result)
       Column width: '80px', result.date
-      Column width: '20px', result.seeders
-      Column width: '20px', result.leachers
+      Column width: '40px', result.seeders
+      Column width: '40px', result.leachers
       Column width: '60px', result.size
 
 Column = component (props) ->
   props.extendStyle
     minWidth:  props.width
     flexBasis: props.width
+    textAlign: 'right'
   props.style.marginLeft ||= '0.5em'
   delete props.width
-  Block(props)
+  Box(props)
 
 ResultRow = Columns.withStyle 'ResultRow',
   minHeight: '24px'
   whiteSpace: 'nowrap'
   padding: '0.25em 0.5em'
-  borderBottom: '1px solid black'
+  borderBottom: '1px solid #DFEBFF'
   alignItems: 'center'
   lineHeight: '1.4'
   ':hover':
@@ -100,8 +100,10 @@ Rating = (props) ->
 Badge = span.withStyle 'Badge',
   display: 'inline'
   padding: '0 0.5em'
-  backgroundColor: 'orange'
+  backgroundColor: '#DFEBFF'
   borderRadius: '8px'
+  fontSize: '90%'
+  fontWeight: 'bold'
 
 
 Age = (props) ->

@@ -8,7 +8,7 @@ module.exports = component 'TorrentSeachForm',
       @app.pub 'download torrent', query
       @app.setLocation path: '/autoplay', params: {link: query}
     else
-      path = "/search/#{encode(query)}" if query
+      path = "/search/#{encode(query)}"
       @app.setLocation path: path
 
   render: ->

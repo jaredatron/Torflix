@@ -81,12 +81,11 @@ module.exports = component 'Directory',
   ###
 
   reload: (file) ->
+    return unless @isMounted()
     files = @getFiles(file)
     max = @state.max
     max = files.length if max > files.length
     max = INITIAL_CHUNK_SIZE if max < INITIAL_CHUNK_SIZE
-    console.log('Directory reload', file.name)
-    console.dir(max: @state.max, newMax: max, filesLength: @state.files.length, newFileLength: files.length)
     @setState max: max, files: files
 
 
@@ -97,7 +96,7 @@ module.exports = component 'Directory',
     @app.pub 'toggle directory', file.id
 
   increaseMax: ->
-    return unless @isMounted
+    return unless @isMounted()
     @setState max: @state.max + RENDER_CHUNK_SIZE
 
   grow: ->

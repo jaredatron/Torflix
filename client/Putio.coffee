@@ -94,7 +94,7 @@ class Putio
 
   file: (id) ->
     throw new Error('id required') unless id?
-    @request('get', "/files/#{id}").then(pluck('file'))
+    @request('get', "/v2/files/#{id}").then(pluck('file')).then(@amendFile)
 
   directoryContents: (id) ->
     amendFile = @amendFile

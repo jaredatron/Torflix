@@ -16,5 +16,6 @@ module.exports = (app) ->
     app.set 'put_io_access_token': matches[1], loggedIn: true
     app.clearHash()
 
+  app.sub 'start', update
   app.sub 'store:change:put_io_access_token', update
-  update()
+

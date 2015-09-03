@@ -95,6 +95,8 @@ Transfer = component 'Transfer',
 
             LinkToTransferFiles(transfer)
           Space()
+          Block {}, transfer.status
+          Space()
           LinkToTransferMagnetLink(transfer)
           Space()
           LinkToDownloadTransfer(transfer)
@@ -107,11 +109,7 @@ Transfer = component 'Transfer',
           Block style: {width: '3em'},
             FileSize size: transfer.size, style: SublteText.style
 
-        progress
-          value: transfer.percent_done
-          max: 100
-          style:
-            width: '100%'
+        TransferProgress(transfer)
         SublteText
           style:
             overflow: 'hidden'
@@ -120,6 +118,14 @@ Transfer = component 'Transfer',
           transfer.status_message
       DeleteTransferButton onClick: @deleteTransfer
 
+
+TransferProgress = (transfer) ->
+  # return null if transfer.status == 'COMPLETED'
+  progress
+    value: transfer.percent_done
+    max: 100
+    style:
+      width: '100%'
 
 
 DeleteTransferButton = component 'DeleteTransferButton', (props) ->
@@ -145,13 +151,18 @@ DeleteTransferButton = component 'DeleteTransferButton', (props) ->
 
 
 LinkToTransferFiles = (transfer) ->
-  Link
-    path: "/files/#{transfer.file_id}",
-    style:
-      textOverflow: 'ellipsis'
-      whiteSpace: 'nowrap'
-      overflow: 'hidden'
-    transfer.name
+  style =
+    textOverflow: 'ellipsis'
+    whiteSpace: 'nowrap'
+    overflow: 'hidden'
+  switch transfer.status
+    when 'COMPLETED', 'SEEDING'
+      Link
+        style: style
+        path: "/files/#{transfer.file_id}",
+        transfer.name
+    else
+      Block(style:style, transfer.name)
 
 LinkToTransferMagnetLink = (transfer) ->
   Link href: transfer.magneturi,

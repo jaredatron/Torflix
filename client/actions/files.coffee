@@ -24,9 +24,16 @@ module.exports = (app) ->
     file.needsLoading = file.isDirectory && !file.fileIds
 
 
-  loadFile = (fileId) ->
-    update id: fileId, loading: true
-    app.putio.directoryContents(fileId).then ({parent, files}) ->
+  loadFile = (file) ->
+    return loadDirectoryContents(file) if file.isDirectory || file.id == 0
+    file.loading = true
+    update(file)
+    app.putio.file(file.id).then (file) ->
+      file.loading = false
+      update(file)
+
+  loadDirectoryContents = ({id}) ->
+    app.putio.directoryContents(id).then ({parent, files}) ->
       parent.needsLoading = false
       files.unshift parent
       for file in files
@@ -36,13 +43,12 @@ module.exports = (app) ->
 # actions
 
   app.sub 'load file', (event, fileId) ->
-    file = get(fileId)
-    if !file? || (file.needsLoading && !file.loading)
-      loadFile(fileId)
+    file = get(fileId) || {id: fileId, needsLoading: true}
+    if file.needsLoading && !file.loading
+      loadFile(file)
 
   app.sub 'reload file', (event, fileId) ->
-    update id: fileId, loading: true
-    loadFile(fileId)
+    loadFile id: fileId
 
   app.sub 'toggle directory', (event, fileId) ->
     file = get(fileId)
