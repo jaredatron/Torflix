@@ -13,7 +13,12 @@ request = (method, url, params, options={}) ->
   })
 
   new Promise (resolve, reject) ->
-    ChromeExtension.HTTPRequest(options)
+    requestPromise = if requestIsCrossDomain(options)
+      requestViaChromeExtension(options)
+    else
+      requestViaXMLHTTPRequest(options)
+
+    requestPromise
       .catch (error) ->
         debugger
         reject(error)
@@ -23,21 +28,33 @@ request = (method, url, params, options={}) ->
         else
           console.warn('Request failed', options, response, request)
           reject(response)
-    # request = jQuery.ajax(options)
 
-    # request.done (result) ->
-    #   resolve(result)
 
-    # request.error (xhr, textStatus, errorThrown) ->
-    #   if xhr?.state?() == 'rejected'
-    #     warnAboutChromeExtension()
-    #     retry()
-    #   else
-    #     console.warn('Request failed', options, xhr, textStatus, errorThrown)
-    #     error = new Error('Request failed: '+textStatus+' / '+errorThrown)
-    #     error.xhr = xhr
-    #     reject(error)
+ALLOWED_DOMAINS = [
+  location.host
+  'https://put.io'
+  'https://api.put.io'
+]
 
+requestIsCrossDomain = (options) ->
+  url = options.url
+  return true if url.indexOf('://') == -1 # relative path
+  domain = options.url.match(/^[^\/]+:\/\/([^\/]+)/)[0]
+  !ALLOWED_DOMAINS.includes(domain)
+
+requestViaChromeExtension = (options) ->
+  ChromeExtension.HTTPRequest(options)
+
+
+requestViaXMLHTTPRequest = (options) ->
+  new Promise (resolve, reject) ->
+    jQuery.ajax(options).complete (response, textStatus) ->
+      resolve
+        request:      options
+        status:       response.status
+        textStatus:   textStatus
+        responseText: response.responseText
+        responseJSON: response.responseJSON
 
 request.get = (path, params) ->
   request('get', path, params)
@@ -47,14 +64,3 @@ request.post = (path, params) ->
 
 
 module.exports = request
-
-warnAboutChromeExtension = ->
-  console.warn("""
-    ~~~~~ WARNING ~~~~~
-
-    It's possible the Torflix chrome extensions is not installed
-
-    Get it here #{location.origin}/Torflix-chrome-extension.crx
-
-    ~~~~~ WARNING ~~~~~
-  """)

@@ -16,9 +16,6 @@ messageBus.onReceiveMessage = (message) ->
     when 'ready'
       onReady.defer()
 
-    when 'HTTPResponse'
-      HTTPResponse(message)
-
   return null
 
 
@@ -46,17 +43,11 @@ sendMessageAsync = (type, payload) ->
 
 
 resolveQueuedMessages = ->
-  console.info('queuedMessages', queuedMessages)
   while queuedMessages.length
     [type, payload, callback] = queuedMessages.shift()
     callback(messageBus.sendMessage(type, payload))
 
 
-
-
-
-HTTPResponse = ({id, type, options}) ->
-  console.log('HTTPResponse', {id, type, options})
 
 
 

@@ -1,7 +1,7 @@
 module.exports = (app) ->
 
   log = (message) ->
-    console.log("%cTransfers: #{message}", 'font-size: 120%; color: red; ')
+    # console.log("%cTransfers: #{message}", 'font-size: 120%; color: red; ')
 
   get = ( ) -> app.get('transfers')
   set = (t) -> app.set(transfers: t)
