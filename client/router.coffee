@@ -32,7 +32,17 @@ module.exports = (app) ->
 
 
   prevLocation = app.get('location')
-  app.sub 'store:change:location', ->
+
+  update = ->
     newLocation = app.get('location')
     console.log('ROUTING', {newLocation, prevLocation})
     app.router.route(newLocation)
+
+  events = ['store:change:location', 'store:change:loggedIn']
+
+  app.sub 'start', ->
+    update()
+    app.sub events, update
+
+  app.sub 'stop', ->
+    app.unsub events, update
