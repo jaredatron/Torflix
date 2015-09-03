@@ -3,8 +3,8 @@ module.exports = (app) ->
   log = (message) ->
     console.log("%cTransfers: #{message}", 'font-size: 120%; color: red; ')
 
-  get = -> app.get('transfers')
-  set = (transfers) -> app.set('transfers', transfers)
+  get = ( ) -> app.get('transfers')
+  set = (t) -> app.set(transfers: t)
 
 
   loadAccountInfo = ->
@@ -28,9 +28,13 @@ module.exports = (app) ->
     console.log('would load transfer', id)
 
 
-  deleteTransfer = (event, info) ->
-    return unless info.id?
-    log("deleting transfer #{info.id}")
+  deleteTransfer = (event, id) ->
+    log("deleting transfer #{id}")
+
+    updateTransfer(id, status: 'DELETING')
+
+    app.putio.deleteTransfer(id).then ->
+      removeTransfer(id)
 
 
 
@@ -42,6 +46,26 @@ module.exports = (app) ->
       app.set transfers: transfers
 
 
+  TRANSFER_POLL_DELAY = 1000 * 5
+  pollingForTransfers = false
+  startPollingForTransfers = ->
+    return if pollingForTransfers
+    pollingForTransfers = true
+    scheduleLoad = ->
+      setTimeout(load, TRANSFER_POLL_DELAY)
+    load = =>
+      return if !pollingForTransfers
+      if document.visibilityState == "visible"
+        reloadTransfers().then(scheduleLoad)
+      else
+        scheduleLoad()
+
+    scheduleLoad()
+
+
+  stopPollingForTransfers = ->
+    pollingForTransfers = false
+
 
 
   app.sub 'load accountInfo', loadAccountInfo
@@ -49,8 +73,16 @@ module.exports = (app) ->
   app.sub 'load transfer',    loadTansfer
   app.sub 'delete transfer',  deleteTransfer
   app.sub 'add transfer',     addTransfer
+  app.sub 'start polling for transfers', startPollingForTransfers
+  app.sub 'stop polling for transfers',  stopPollingForTransfers
 
 
+
+  updateTransfer = (id, props) ->
+    transfers = get()
+    transfer = findTransfer(transfers, id)
+    Object.assign(transfer, props)
+    set(transfers)
 
 
   withoutId = (id) ->
@@ -58,17 +90,16 @@ module.exports = (app) ->
 
 
 
-  withoutTransfer = -> (transfers, id) ->
+  withoutTransfer = (transfers, id) ->
     transfers.filter (transfer) ->
       transfer.id != id
 
-  findTransfer = -> (transfers, id) ->
+  findTransfer = (transfers, id) ->
     transfers.find (transfer) ->
       transfer.id == id
 
 
   removeTransfer = (transfers, id) ->
-
     transfers = get()
-    transfers = withoutTransfer(transfers, info.id)
+    transfers = withoutTransfer(transfers, id)
     set transfers

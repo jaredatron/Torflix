@@ -8,8 +8,7 @@ module.exports = component 'TorrentSeachForm',
       @app.pub 'download torrent', query
       @app.setLocation path: '/autoplay', params: {link: query}
     else
-      path = '/search'
-      path += "/#{encodeURIComponent(query)}" if query
+      path = "/search/#{encode(query)}" if query
       @app.setLocation path: path
 
   render: ->
@@ -23,3 +22,7 @@ module.exports = component 'TorrentSeachForm',
 
 isMagnetLink = (value) ->
   value.match(/^magnet:/)
+
+
+encode = (part) ->
+  encodeURIComponent(part).replace('%20','+')

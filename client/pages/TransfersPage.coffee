@@ -24,7 +24,11 @@ module.exports = component 'TransfersPage',
     @setState filter: filter
 
   componentDidMount: ->
+    @app.pub 'start polling for transfers'
     @reloadTransfers() if !@state.transfers
+
+  componentWillUnmount: ->
+    @app.pub 'stop polling for transfers'
 
   reloadTransfers: ->
     @setState transfers: null
@@ -36,9 +40,6 @@ module.exports = component 'TransfersPage',
       transfersList = TransfersList transfers: transfers
     else
       LoadingBox {}, 'Loading...'
-
-
-
 
     Layout null,
       Rows style: {overflowY: 'scroll'},

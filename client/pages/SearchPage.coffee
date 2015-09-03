@@ -8,13 +8,18 @@ module.exports = component 'SearchPage',
 
   render: ->
     log('SearchPage render', @props)
-    query = @props.query || ''
+    query = @props.query
+
+    if query?
+      results = TorrentSearchResults query: query
+
     Layout null,
       Rows style: {width: '100%', overflowY: 'scroll'},
         TorrentSeachForm
           style: margin: '1em'
           defaultValue: query
-        TorrentSearchResults query: query
+        results
+
 
 
 

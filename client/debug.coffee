@@ -82,6 +82,8 @@ logFrameData = ->
         else                      'color: green; '
 
       console.log(message, style)
+      console.log(changes)
+
     timeLastFrameEnded = now
 
   setTimeout(logStats)
@@ -108,6 +110,7 @@ D.React = React
 D.URI = URI
 D.app = app
 # D.animator = require './animator'
+D.$ = require 'jquery'
 D.Style = require 'reactatron/Style'
 D.Box   = require 'reactatron/Box'
 D.Block = require 'reactatron/Block'
@@ -135,3 +138,6 @@ D.stopLogginFrameData  = stopLogginFrameData
 global.D = D
 global.log  = console.log.bind(console)
 global.warn = console.warn.bind(console)
+
+global.ChromeExtension = require './ChromeExtension'
+global.request = require './request'

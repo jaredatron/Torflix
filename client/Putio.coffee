@@ -72,6 +72,17 @@ class Putio
       response.transfer
 
 
+  deleteTransfer: (id) ->
+    @request('post', '/v2/transfers/cancel', transfer_ids: id)
+
+    # # @putio.account.info.load()
+
+    # if transfer? && transfer.file_id
+    #   delete_file_promise = @putio.files.delete(transfer.file_id)
+    #   Promise.all([delete_transfer_promise,delete_file_promise])
+    # else
+    #   delete_transfer_promise
+
 
   ###
 

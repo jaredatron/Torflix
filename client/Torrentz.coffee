@@ -74,6 +74,7 @@ Scraper = class
 
 
 
+
 SCRAPERS = {}
 define_scraper = (name, parser) ->
   SCRAPERS[name] = new Scraper(parser)

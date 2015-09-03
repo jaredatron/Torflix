@@ -11,7 +11,7 @@ module.exports = (app) ->
   app.router = new Router ->
 
     redirectTo = (path, params=@params) ->
-      app.setLocation {path, params}
+      app.setLocation {path, params}, true
 
     renderPage = (name, params=@params) =>
       app.renderPage(name, params)
@@ -39,5 +39,6 @@ module.exports = (app) ->
     newLocation = app.get('location')
     console.log('ROUTING from:', locationToString(prevLocation), 'to:', locationToString(newLocation))
     app.router.route(newLocation)
+    prevLocation = newLocation
 
   app.sub ['store:change:location', 'store:change:loggedIn'], update

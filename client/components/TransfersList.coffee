@@ -33,10 +33,7 @@ module.exports = component 'TransfersList',
 
   renderTransfers: ->
     (@props.transfers || []).sort(SORT).map (transfer, index) ->
-      Transfer
-        stripe: index % 2 == 1
-        key: transfer.id
-        transfer: transfer
+      Transfer key: transfer.id, transfer: transfer
 
   render: ->
     transfers = @renderTransfers()
@@ -54,7 +51,7 @@ module.exports = component 'TransfersList',
 Transfer = component 'Transfer',
 
   deleteTransfer: ->
-    @app.pub 'delete transfer', @props.transfer
+    @app.pub 'delete transfer', @props.transfer.id
 
   defaultStyle:
     padding: '0.5em 0.5em'
@@ -63,12 +60,27 @@ Transfer = component 'Transfer',
     ':hover':
       backgroundColor: '#DFEBFF'
 
+  shouldComponentUpdate: (nextProps, nextState) ->
+    a = @props.transfer
+    b = nextProps.transfer
+    # console.log('????', a,b)
+
+    return false if (
+      a.id     != b.id     ||
+      a.status != b.status
+    )
+    true
+
   render: ->
     transfer = @props.transfer
+
+    opacity = transfer.status == 'DELETING' && 0.2 || 1
+
 
     Columns @cloneProps(),
       Rows
         style:
+          opacity: opacity
           marginRight: '0.5em'
           flexGrow: 1
           flexShrink: 1
@@ -86,6 +98,8 @@ Transfer = component 'Transfer',
           LinkToTransferMagnetLink(transfer)
           Space()
           LinkToDownloadTransfer(transfer)
+          # Space()
+          # Block {}, "STATSUS: #{transfer.status}"
           # Space()
           # DeleteButton onClick: -> console.log('78787878787878')
           RemainingSpace {} #style: {flexGrow: 1, flexShrink: 2}
