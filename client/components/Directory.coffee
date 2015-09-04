@@ -44,6 +44,7 @@ module.exports = component 'Directory',
     toggleDirectory: @toggleDirectory
 
   getInitialState: ->
+    selectedFileId: null
     max: INITIAL_CHUNK_SIZE
     files: @getFiles(@props.file)
 
@@ -69,13 +70,21 @@ module.exports = component 'Directory',
     @app.unsub 'file changed', @onFileChange
 
   ###
-    Custom Events
+    Events
   ###
 
   onFileChange: (event, data) ->
     fileId = data.id
     if @state.files.pluck('id').includes(fileId)
       @reload(@props.file)
+
+  onFileFocus: (file) ->
+    if @state.selectedFileId != file.id
+      @setState selectedFileId: file.id
+
+  onFileBlur: (file) ->
+    if @state.selectedFileId == file.id
+      @setState selectedFileId: null
 
   ###
     Actions
@@ -126,14 +135,23 @@ module.exports = component 'Directory',
 
 
     max = @state.max
+    selectedFileId = @state.selectedFileId
+    onFileFocus = @onFileFocus
+    onFileBlur = @onFileBlur
     files = @state.files.map (file, index) ->
       File
         key: file.id
         file: file
+        selected: file.id == selectedFileId
         shim: index+1>max
-        toggleDirectory: @toggleDirectory
+        onFocus: onFileFocus.bind(null, file)
+        onBlur: onFileBlur.bind(null, file)
 
-    Rows @cloneProps(), files
+    props = @extendProps
+      file: undefined
+      onKeyDown: @onKeyDown
+
+    Rows props, files
 
 
 
@@ -147,14 +165,35 @@ File = component 'File',
     a = @props.file
     b = nextProps.file
     return false if (
-      @props.shim    == nextProps.shim  &&
-      a.id           == b.id            &&
-      a.open         == b.open          &&
-      a.loading      == b.loading       &&
-      a.needsLoading == b.needsLoading
+      @props.selected == nextProps.selected  &&
+      @props.shim     == nextProps.shim  &&
+      a.id            == b.id            &&
+      a.open          == b.open          &&
+      a.loading       == b.loading       &&
+      a.depth         == b.depth       &&
+      a.needsLoading  == b.needsLoading
     )
     @app.stats.fileRerenders++
     true
+
+  onKeyDown: (event) ->
+    file = @props.file
+    switch event.keyCode
+      when 38 # up
+        event.preventDefault()
+        @getDOMNode().previousElementSibling.getElementsByTagName('a')[0].focus()
+      when 40 # down
+        event.preventDefault()
+        @getDOMNode().nextElementSibling.getElementsByTagName('a')[0].focus()
+
+    if file.isDirectory
+      switch event.keyCode
+        when 39 # right
+          event.preventDefault()
+          @app.pub('open directory', file) if !file.open
+        when 37 # left
+          event.preventDefault()
+          @app.pub('close directory', file) if file.open
 
   deleteFile: ->
     @app.pub 'delete file', @props.file
@@ -163,8 +202,13 @@ File = component 'File',
     return FileRow() if @props.shim
     {file} = @props
     props = @extendProps
+      onKeyDown: @onKeyDown
       style:
         marginLeft: "#{file.depth}em"
+
+    if @props.selected
+      props.style.backgroundColor= 'red'
+
     FileRow props,
 
       Block style:{ flexShrink: 1, overflow:'hidden' },

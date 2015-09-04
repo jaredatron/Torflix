@@ -94,8 +94,8 @@ Transfer = component 'Transfer',
               whiteSpace: 'nowrap'
 
             LinkToTransferFiles(transfer)
-          Space()
-          Block {}, transfer.status
+          # Space()
+          # Block {}, transfer.status
           Space()
           LinkToTransferMagnetLink(transfer)
           Space()

@@ -66,6 +66,15 @@ module.exports = (app) ->
       loadDirectoryContents(id: file.parent_id).then ->
         del(file)
 
+  openDirectory = (file) ->
+    throw "file #{file.id} is not a directory" if !file.isDirectory
+    update file, open: true
+    loadDirectoryContents(file) if !file.fileIds
+
+  closeDirectory = (file) ->
+    throw "file #{file.id} is not a directory" if !file.isDirectory
+    update file, open: false
+
 # actions
 
   app.sub 'load file', (event, file) ->
@@ -76,14 +85,24 @@ module.exports = (app) ->
   app.sub 'reload file', (event, file) ->
     loadFile(file)
 
+  app.sub 'open directory', (event, file) ->
+    openDirectory(file)
+
+  app.sub 'close directory', (event, file) ->
+    closeDirectory(file)
+
   app.sub 'toggle directory', (event, file) ->
     file = get(file)
-    return unless file? && file.isDirectory
-    console.log('toggleing directory', file.id, !!file.open)
-    open = (if file.open then undefined else true)
-    update file, open: open
-    if open && !file.fileIds
-      loadDirectoryContents(file)
+    if file.open
+      closeDirectory(file)
+    else
+      openDirectory(file)
+    # return unless file? && file.isDirectory
+    # console.log('toggleing directory', file.id, !!file.open)
+    # open = (if file.open then undefined else true)
+    # update file, open: open
+    # if open && !file.fileIds
+    #   loadDirectoryContents(file)
 
 
   app.sub 'delete file', (event, file) ->
