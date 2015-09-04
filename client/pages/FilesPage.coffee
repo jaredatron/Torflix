@@ -33,8 +33,6 @@ module.exports = component 'FilesPage',
       return Layout {},
         Block {}, 'Loading...'
 
-    console.info('file', fileId, file)
-
     title = file.id == 0 && 'All Files' || file.name
     Layout {},
       Rows style: {overflowY: 'scroll'},

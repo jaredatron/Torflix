@@ -1,4 +1,5 @@
 require 'stdlibjs/Array#first'
+require 'stdlibjs/Array#pluck'
 toArray = require 'stdlibjs/toArray'
 
 component = require 'reactatron/component'
@@ -52,7 +53,7 @@ module.exports = component 'Directory',
   ###
 
   componentDidMount: ->
-    @app.sub 'toggle directory', @onToggleDirectory
+    @app.sub 'file changed', @onFileChange
     @grow()
 
 
@@ -65,16 +66,16 @@ module.exports = component 'Directory',
 
 
   componentWillUnmount: ->
-    @app.unsub 'toggle directory', @onToggleDirectory
+    @app.unsub 'file changed', @onFileChange
 
   ###
     Custom Events
   ###
 
-  onToggleDirectory: (event, fileId) ->
-    ids = @state.files.map (f) -> f.id
-    @reload(@props.file)
-
+  onFileChange: (event, data) ->
+    fileId = data.id
+    if @state.files.pluck('id').includes(fileId)
+      @reload(@props.file)
 
   ###
     Actions
@@ -104,7 +105,7 @@ module.exports = component 'Directory',
 
   isLoading: ->
     {file} = @props
-    !file || file.loading || file.needsLoading
+    !file || (!file.fileIds && (file.loading || file.needsLoading))
 
   isEmpty: ->
     @props.file.fileIds.length == 0
@@ -119,7 +120,6 @@ module.exports = component 'Directory',
   ###
 
   render: ->
-    console.info('Directory render', @props)
     {file} = @props
     if @isLoading() then return Block @cloneProps(), 'Loading...'
     if @isEmpty()   then return Block @cloneProps(), 'empty'
@@ -150,14 +150,16 @@ File = component 'File',
       @props.shim    == nextProps.shim  &&
       a.id           == b.id            &&
       a.open         == b.open          &&
-      b.loading      == b.loading       &&
-      b.needsLoading == b.needsLoading
+      a.loading      == b.loading       &&
+      a.needsLoading == b.needsLoading
     )
     @app.stats.fileRerenders++
     true
 
+  deleteFile: ->
+    @app.pub 'delete file', @props.file
+
   render: ->
-    console.info('File render', @props)
     return FileRow() if @props.shim
     {file} = @props
     props = @extendProps
@@ -185,7 +187,7 @@ File = component 'File',
         FileSize size: file.size, tabIndex: -1
 
       withStyle minWidth: '2em', flexBasis: '2em', marginLeft: '0.5em',
-        DeleteFileButton file: file, tabIndex: -1
+        DeleteFileButton file: file, tabIndex: -1, onClick: @deleteFile
 
 
 
@@ -259,8 +261,6 @@ LinkToFileOnPutio = (props) ->
 
 
 DeleteFileButton = (props) ->
-  props.onClick = (event) ->
-    console.log('would delete', props.file)
   DeleteButton(props)
 
 

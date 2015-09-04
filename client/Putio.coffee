@@ -100,7 +100,7 @@ class Putio
     amendFile = @amendFile
     @request('get', '/v2/files/list', parent_id: id).then ({parent, files}) ->
       parent.fileIds = files.map(pluckId)
-      files.concat([parent]).forEach(amendFile)
+      [parent].concat(files).forEach(amendFile)
       {parent, files}
 
   deleteFile: (id) ->

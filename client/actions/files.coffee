@@ -1,3 +1,7 @@
+require 'stdlibjs/Array#unique'
+require 'stdlibjs/Array#isEmpty'
+
+
 module.exports = (app) ->
 
   STREAM_AUTH_TOKEN = 'WE NEED TO GET THIS FROM THE API???'
@@ -5,48 +9,62 @@ module.exports = (app) ->
 
   get = (file) -> app.get "files/#{file.id}"
   set = (file) -> app.set "files/#{file.id}": file
-  del = (file) -> app.del "files/#{file.id}"
 
-  extend = (updates) ->
-    file = get(updates.id)
-    file = if file?
-      Object.assign(file, updates)
-    else
-      updates
-
-  update = (updates) ->
-    file = extend(updates)
+  update = ({id}, changes) ->
+    original = get({id})
+    file = Object.assign({}, original || {id: id}, changes)
     amendFile(file)
+    diff = diffObjects(original, file)
+
+    if Object.keys(diff).isEmpty()
+      # console.trace('not updating file, its the same')
+      debugger
+      return
     set(file)
 
+    app.pub 'file changed',
+      changeType: if original then 'UPDATE' else 'CREATED'
+      id: file.id
+      from: original
+      to: file
+      diff: diff
+
+  del = (file) ->
+    app.del "files/#{file.id}"
+    app.pub 'file changed',
+      changeType: 'DELETE'
+      id: file.id,
+      from: file,
+      to: undefined
 
   amendFile = (file) ->
     file.loadedAt = Date.now()
     file.needsLoading = file.isDirectory && !file.fileIds
+    file.isDirectory = true if file.id == 0
 
 
   loadFile = (file) ->
+    file = get(file) || file
     return loadDirectoryContents(file) if file.isDirectory || file.id == 0
-    file.loading = true
-    update(file)
+    update(file, loading: true)
     app.putio.file(file.id).then (file) ->
-      file.loading = false
-      update(file)
+      update(file, loading: false)
 
-  loadDirectoryContents = ({id}) ->
-    app.putio.directoryContents(id).then ({parent, files}) ->
-      parent.needsLoading = false
-      files.unshift parent
-      for file in files
-        file.loading = false
-        update(file)
+  loadDirectoryContents = (file) ->
+    update(file, loading: true)
+    app.putio.directoryContents(file.id).then ({parent, files}) ->
+      parent.loading = false
+      update(parent, parent)
+      for childFile in files
+        childFile.loading = false
+        update(childFile, childFile)
+      {parent, files}
 
   deleteFile = (file) ->
-    file.isBeingDeleted = true
-    update(file)
-    app.putio.deleteFile(file.id).then (response) ->
-      debugger
-      del(file)
+    update file, isBeingDeleted: true
+    app.putio.deleteFile(file.id).then ->
+      loadDirectoryContents(id: file.parent_id).then ->
+        del(file)
 
 # actions
 
@@ -61,12 +79,37 @@ module.exports = (app) ->
   app.sub 'toggle directory', (event, file) ->
     file = get(file)
     return unless file? && file.isDirectory
-    if file.open
-      delete file.open
-    else
-      file.open = true
-      loadFile(file) if file.needsLoading
-    set(file)
+    console.log('toggleing directory', file.id, !!file.open)
+    open = (if file.open then undefined else true)
+    update file, open: open
+    if open && !file.fileIds
+      loadDirectoryContents(file)
+
 
   app.sub 'delete file', (event, file) ->
-    console.warn('DELEITNG FILE', file)
+    deleteFile(file)
+
+
+
+diffObjects = (a,b) ->
+  a = Object(a)
+  b = Object(b)
+
+  keys = Object.keys(a).concat(Object.keys(b)).unique()
+
+  diff = {}
+  for key in keys
+    aValue = a[key]
+    bValue = b[key]
+    continue if aValue == bValue
+    diff[key] = [aValue, bValue]
+
+  diff
+
+
+
+
+
+
+
+
