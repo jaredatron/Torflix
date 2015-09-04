@@ -19,11 +19,12 @@ module.exports = component 'FilesPage',
     file: "files/#{props.fileId || 0}"
 
   componentDidMount: ->
-    @app.pub('load file', @props.fileId || 0)
+    id = @props.fileId || 0
+    @app.pub('load file', {id})
 
   componentWillReceiveProps: (nextProps) ->
     nextFileId = nextProps.fileId || 0
-    @app.pub('load file', nextFileId) if @props.fileId != nextFileId
+    @app.pub('load file', id: nextFileId) if @props.fileId != nextFileId
 
   render: ->
     fileId = @props.fileId || 0
@@ -40,7 +41,7 @@ module.exports = component 'FilesPage',
         Columns style: {padding:'0.5em'},
           Header {}, title
           RemainingSpace {}
-          ReloadButton fileId: file.id
+          ReloadButton file: file
 
         if file.isDirectory
           Directory file: file
@@ -57,7 +58,7 @@ Header = Block.withStyle 'Header',
 
 ReloadButton = component 'ReloadButton', (props) ->
   props.onClick = =>
-    @app.pub 'reload file', props.fileId
+    @app.pub 'reload file', props.file
 
   Button props, 'reload'
 

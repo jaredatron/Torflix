@@ -103,10 +103,11 @@ class Putio
       files.concat([parent]).forEach(amendFile)
       {parent, files}
 
-  #   @account = {}
-  #   @account.info = new AccountInfo(this)
-  #   @transfers    = new Transfers(this)
-  #   @files        = new Files(this)
+  deleteFile: (id) ->
+    throw new Error("File ID required: #{id}") unless id
+    @request('post', '/v2/files/delete', file_ids: id).then (response) =>
+      response
+
 
 
   IS_VIDEO_REGEXP = /\.(mkv|mp4|avi)$/

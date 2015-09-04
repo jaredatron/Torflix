@@ -3,8 +3,9 @@ module.exports = (app) ->
   STREAM_AUTH_TOKEN = 'WE NEED TO GET THIS FROM THE API???'
   OAUTH_TOKEN = ''
 
-  get = (fileId) -> app.get "files/#{fileId}"
-  set = (file)   -> app.set "files/#{file.id}": file
+  get = (file) -> app.get "files/#{file.id}"
+  set = (file) -> app.set "files/#{file.id}": file
+  del = (file) -> app.del "files/#{file.id}"
 
   extend = (updates) ->
     file = get(updates.id)
@@ -40,26 +41,32 @@ module.exports = (app) ->
         file.loading = false
         update(file)
 
+  deleteFile = (file) ->
+    file.isBeingDeleted = true
+    update(file)
+    app.putio.deleteFile(file.id).then (response) ->
+      debugger
+      del(file)
+
 # actions
 
-  app.sub 'load file', (event, fileId) ->
-    file = get(fileId) || {id: fileId, needsLoading: true}
+  app.sub 'load file', (event, file) ->
+    file = get(file) || {id: file.id, needsLoading: true}
     if file.needsLoading && !file.loading
       loadFile(file)
 
-  app.sub 'reload file', (event, fileId) ->
-    loadFile id: fileId
+  app.sub 'reload file', (event, file) ->
+    loadFile(file)
 
-  app.sub 'toggle directory', (event, fileId) ->
-    file = get(fileId)
-    return if !file? || !file.isDirectory
+  app.sub 'toggle directory', (event, file) ->
+    file = get(file)
+    return unless file? && file.isDirectory
     if file.open
       delete file.open
     else
       file.open = true
-      loadFile(file.id) if file.needsLoading
+      loadFile(file) if file.needsLoading
     set(file)
 
-
-
-
+  app.sub 'delete file', (event, file) ->
+    console.warn('DELEITNG FILE', file)

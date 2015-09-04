@@ -93,7 +93,7 @@ module.exports = component 'Directory',
     flattenFilesTree(@app, file)
 
   toggleDirectory: (file) ->
-    @app.pub 'toggle directory', file.id
+    @app.pub 'toggle directory', file
 
   increaseMax: ->
     return unless @isMounted()
@@ -119,6 +119,7 @@ module.exports = component 'Directory',
   ###
 
   render: ->
+    console.info('Directory render', @props)
     {file} = @props
     if @isLoading() then return Block @cloneProps(), 'Loading...'
     if @isEmpty()   then return Block @cloneProps(), 'empty'
@@ -156,6 +157,7 @@ File = component 'File',
     true
 
   render: ->
+    console.info('File render', @props)
     return FileRow() if @props.shim
     {file} = @props
     props = @extendProps
@@ -193,8 +195,8 @@ FileRow = Columns.withStyle 'FileRow',
   padding: '0.25em 0.5em'
   ':hover':
     backgroundColor: '#DFEBFF'
-  ':active':
-    backgroundColor: '#DFEBFF'
+  # ':active':
+  #   backgroundColor: '#DFEBFF'
 
 FileLink = (props) ->
   switch

@@ -42,6 +42,7 @@ module.exports = component 'DeleteButton',
 
   render: ->
     props = @extendProps
+      tabIndex: undefined
       onClick: undefined
       onBlur: @onBlur
       onFocus: @onFocus
@@ -49,12 +50,12 @@ module.exports = component 'DeleteButton',
         flexDirection: 'row-reverse'
     if @state.confirming
       Columns props,
-        Button glyph: 'ban',     onClick: @abort
+        Button glyph: 'ban',     onClick: @abort, tabIndex: @props.tabIndex
         Space()
-        Button glyph: 'trash-o', onClick: @delete, red: true
+        Button glyph: 'trash-o', onClick: @delete, red: true, tabIndex: @props.tabIndex
     else
       Columns props,
-        Button glyph: 'trash-o', onClick: @confirmDelete
+        Button glyph: 'trash-o', onClick: @confirmDelete, tabIndex: @props.tabIndex
 
 Button = component (props) ->
   if props.red
