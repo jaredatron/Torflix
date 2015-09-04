@@ -258,9 +258,9 @@ LinkToFileOnPutio = (props) ->
 
 DeleteFileButton = (props) ->
   props.onClick = (event) ->
-    event.preventDefault() if event?
     console.log('would delete', props.file)
   DeleteButton(props)
+
 
 
 

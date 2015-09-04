@@ -1,5 +1,6 @@
 component    = require 'reactatron/component'
-Style        = require 'reactatron/Style'
+Columns      = require 'reactatron/Columns'
+Space        = require 'reactatron/Space'
 SafetyButton = require './SafetyButton'
 Icon         = require './Icon'
 Link         = require './Link'
@@ -9,36 +10,67 @@ module.exports = component 'DeleteButton',
   propTypes:
     onClick: component.PropTypes.func
 
-  defaultStyle:
-    flexDirection: 'row-reverse'
+  getInitialState: ->
+    confirming: false
 
   deleteFile: (event) ->
     event.preventDefault() if event?
     console.log('would delete', @props.file)
 
-  render: ->
-    SafetyButton @extendProps
-      defaultButton:
-        Button glyph: 'trash-o'
-      abortButton:
-        Button glyph: 'ban'
-      confirmButton:
-        Button glyph: 'trash-o',
-          onClick: @props.onClick
-          style:
-            color: 'red'
-            marginRight: '0.5em'
+  confirmDelete: ->
+    @setState confirming: true
 
+  delete: (event) ->
+    @setState confirming: false
+    @props.onClick(event)
+
+  abort:  ->
+    @setState confirming: false
+
+  onBlur: ->
+    @scheduleAbort()
+
+  scheduleAbort: ->
+    @abortTimeout ||= setTimeout(@abort)
+    null
+
+  onFocus: ->
+    clearTimeout(@abortTimeout)
+    delete @abortTimeout
+    null
+
+
+  render: ->
+    props = @extendProps
+      onClick: undefined
+      onBlur: @onBlur
+      onFocus: @onFocus
+      style:
+        flexDirection: 'row-reverse'
+    if @state.confirming
+      Columns props,
+        Button glyph: 'ban',     onClick: @abort
+        Space()
+        Button glyph: 'trash-o', onClick: @delete, red: true
+    else
+      Columns props,
+        Button glyph: 'trash-o', onClick: @confirmDelete
 
 Button = component (props) ->
-  props.extendStyle
-    opacity: 0.2
-    ':hover':
-      opacity: 0.76
-      color:' purple'
-    ':focus':
-      opacity: 1
-      color:' orange'
+  if props.red
+    props.extendStyle
+      color: 'rgba(255,0,0,0.5)'
+      ':hover':
+        color: 'rgba(255,0,0,1)'
+      ':focus':
+        color: 'rgba(255,0,0,1)'
+  else
+    props.extendStyle
+      color: 'rgba(0,0,0,0.5)'
+      ':hover':
+        color: 'rgba(0,0,0,1)'
+      ':focus':
+        color: 'rgba(0,0,0,1)'
 
   Link(props, Icon(glyph:props.glyph))
 
