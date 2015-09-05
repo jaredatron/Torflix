@@ -116,14 +116,15 @@ D.Box   = require 'reactatron/Box'
 D.Block = require 'reactatron/Block'
 D.Rows  = require 'reactatron/Rows'
 
-D.isElement                           = React.addons.TestUtils.isElement
-D.isElementOfType                     = React.addons.TestUtils.isElementOfType
-D.isDOMComponent                      = React.addons.TestUtils.isDOMComponent
-D.isDOMComponentElement               = React.addons.TestUtils.isDOMComponentElement
-D.isCompositeComponent                = React.addons.TestUtils.isCompositeComponent
-D.isCompositeComponentWithType        = React.addons.TestUtils.isCompositeComponentWithType
-D.isCompositeComponentElement         = React.addons.TestUtils.isCompositeComponentElement
-D.isCompositeComponentElementWithType = React.addons.TestUtils.isCompositeComponentElementWithType
+if React.addons.TestUtils
+  D.isElement                           = React.addons.TestUtils.isElement
+  D.isElementOfType                     = React.addons.TestUtils.isElementOfType
+  D.isDOMComponent                      = React.addons.TestUtils.isDOMComponent
+  D.isDOMComponentElement               = React.addons.TestUtils.isDOMComponentElement
+  D.isCompositeComponent                = React.addons.TestUtils.isCompositeComponent
+  D.isCompositeComponentWithType        = React.addons.TestUtils.isCompositeComponentWithType
+  D.isCompositeComponentElement         = React.addons.TestUtils.isCompositeComponentElement
+  D.isCompositeComponentElementWithType = React.addons.TestUtils.isCompositeComponentElementWithType
 
 D.reset                = reset
 D.clearLocalStorage    = clearLocalStorage
