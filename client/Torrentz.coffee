@@ -89,8 +89,8 @@ define_scraper 'kat.cr', (dom) ->
 define_scraper 'torrenthound.com', (dom) ->
   dom.find('[title="Magnet download"]').attr('href')
 
-define_scraper 'monova.org', ->
-  find('#download-magnet').attr('href')
+define_scraper 'monova.org', (dom) ->
+  dom.find('#download-magnet').attr('href')
 
 define_scraper 'torrentreactor.com', (dom) ->
   dom.find('#download-magnet').attr('href')
