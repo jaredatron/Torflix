@@ -1,5 +1,3 @@
-var ENV = require('./ENV')
-
-Object.keys(ENV).forEach(function (key) {
-  process.env[key] = process.env[key] || ENV[key];
-});
+if (process.env.NODE_ENV !== 'production'){
+  require('dotenv').load();
+}

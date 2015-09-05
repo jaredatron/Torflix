@@ -1,12 +1,14 @@
+require('./environment');
 var Webpack = require('webpack');
 var path = require('path');
 var nodeModulesPath = path.resolve(__dirname, 'node_modules');
 var assetsPath = path.resolve(__dirname, 'public', 'assets');
 var clientPath = path.resolve(__dirname, 'client');
 
-var ENV = require('./ENV')
-for (var key in ENV){
-  ENV[key] = JSON.stringify(ENV[key])
+
+var processEnv = {};
+for (var key in process.env){
+  processEnv[key] = JSON.stringify(process.env[key]);
 }
 
 module.exports = {
@@ -37,7 +39,7 @@ module.exports = {
 
   plugins: [
     new Webpack.DefinePlugin({
-      "process.env": ENV
+      "process.env": processEnv
     }),
   ]
 };
