@@ -41,7 +41,7 @@ module.exports = component 'Layout',
       key: 'MainContent'
       withStyle StyleAbsolute, @props.children
 
-    Layer @props,
+    Layer @cloneProps(),
       MainContentWrapper
         style:
           flexDirection: if horizontalSize >= 1 then 'row' else 'column'

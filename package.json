@@ -3,7 +3,8 @@
   "version": "0.0.2",
   "description": "Torflix",
   "scripts": {
-    "start": "node web_server.js"
+    "start": "bin/webserver",
+    "postinstall": "bin/postinstall"
   },
   "dependencies": {
     "URIjs": "^1.16.0",
