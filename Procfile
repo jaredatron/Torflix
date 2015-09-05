@@ -1,1 +1,1 @@
-web: bundle exec rails server --port=$PORT
+web: ./bin/webserver
