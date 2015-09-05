@@ -1,6 +1,6 @@
 {
   "name": "Torflix",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Torflix",
   "scripts": {
     "start": "node web_server.js"
@@ -17,9 +17,9 @@
     "http-proxy": "^1.11.1",
     "jquery": "^2.1.4",
     "react": "^0.13.3",
-    "reactatron": "0.0.x",
+    "reactatron": "0.0.3",
     "request": "^2.61.0",
-    "stdlibjs": "0.0.x",
+    "shouldhave": "0.0.3",
     "webpack": "^1.11.0"
   },
   "devDependencies": {

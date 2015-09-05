@@ -1,5 +1,5 @@
-require 'stdlibjs/Array#unique'
-require 'stdlibjs/Array#isEmpty'
+require 'shouldhave/Array#unique'
+require 'shouldhave/Array#isEmpty'
 
 
 module.exports = (app) ->

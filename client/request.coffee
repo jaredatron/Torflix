@@ -1,4 +1,4 @@
-require 'stdlibjs/Object.assign'
+require 'shouldhave/Object.assign'
 
 ChromeExtension = require './ChromeExtension'
 

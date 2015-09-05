@@ -1,4 +1,4 @@
-require 'stdlibjs/Array#last'
+require 'shouldhave/Array#last'
 
 React = require 'reactatron/React'
 cloneWithProps = React.addons.cloneWithProps

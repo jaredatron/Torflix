@@ -1,4 +1,4 @@
-toArray = require 'stdlibjs/toArray'
+toArray = require 'shouldhave/toArray'
 component = require 'reactatron/component'
 Link = require './Link'
 

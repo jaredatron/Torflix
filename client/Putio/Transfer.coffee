@@ -1,4 +1,4 @@
-require 'stdlibjs/Object.assign'
+require 'shouldhave/Object.assign'
 EventEmitter = require 'eventemitter3'
 
 module.exports = class Transfer

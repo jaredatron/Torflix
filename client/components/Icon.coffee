@@ -1,4 +1,4 @@
-isNumber = require 'stdlibjs/isNumber'
+isNumber = require 'shouldhave/isNumber'
 
 component = require 'reactatron/component'
 

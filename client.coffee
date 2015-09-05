@@ -1,5 +1,5 @@
-require 'stdlibjs/Object.assign'
-require 'stdlibjs/Array#find'
+require 'shouldhave/Object.assign'
+require 'shouldhave/Array#find'
 require './client/debug'
 
 app = require './client/app'

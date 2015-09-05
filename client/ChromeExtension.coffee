@@ -1,5 +1,5 @@
-require 'stdlibjs/Function#defer'
-require 'stdlibjs/Function#delay'
+require 'shouldhave/Function#defer'
+require 'shouldhave/Function#delay'
 DOMEventMessageBus = require 'dom-event-message-bus'
 
 TIMEOUT =  1 * 1000 # 1 second

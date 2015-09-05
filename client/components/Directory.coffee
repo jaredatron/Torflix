@@ -1,6 +1,6 @@
-require 'stdlibjs/Array#first'
-require 'stdlibjs/Array#pluck'
-toArray = require 'stdlibjs/toArray'
+require 'shouldhave/Array#first'
+require 'shouldhave/Array#pluck'
+toArray = require 'shouldhave/toArray'
 
 component = require 'reactatron/component'
 
