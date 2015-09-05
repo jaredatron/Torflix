@@ -19,15 +19,13 @@ request = (method, url, params, options={}) ->
       requestViaXMLHTTPRequest(options)
 
     requestPromise
-      .catch (error) ->
-        debugger
-        reject(error)
       .then (response) ->
         if response.status < 400
           resolve(response.responseJSON || response.responseText)
         else
           console.warn('Request failed', options, response, request)
           reject(response)
+      .catch(reject)
 
 
 ALLOWED_DOMAINS = [
