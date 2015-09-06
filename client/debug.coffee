@@ -143,5 +143,4 @@ global.warn = console.warn.bind(console)
 global.logger = (prefix) ->
   console.log.bind(console, prefix)
 
-global.ChromeExtension = require './ChromeExtension'
 global.request = require './request'

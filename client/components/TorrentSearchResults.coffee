@@ -3,9 +3,11 @@ Box          = require 'reactatron/Box'
 Block          = require 'reactatron/Block'
 RemainingSpace = require 'reactatron/RemainingSpace'
 withStyle      = require 'reactatron/withStyle'
+Space      = require 'reactatron/Space'
 {span}         = require 'reactatron/DOM'
 
 Link = require './Link'
+LinkToChromeExtension = require './LinkToChromeExtension'
 
 module.exports = component 'TorrentSearchResults',
 
@@ -28,21 +30,37 @@ module.exports = component 'TorrentSearchResults',
 
   render: ->
     search = @state.search
-    if search && search.results
-      return Rows {}, search.results.map (result, index) ->
-        Result(key:index, result: result)
+    switch
+      when search && search.error
+        CenterBlock {}, @renderErrorMessage()
 
-    Block
-      grow: 1
-      style:
-        alignItems: 'center'
-        justifyContent: 'center'
-        flexWrap: 'nowrap'
-        fontSize: '150%'
-        dontWeight: 'bold'
-      Block {}, "searching for #{@props.query}..."
+      when search && search.results
+        Rows {}, search.results.map (result, index) ->
+          Result(key:index, result: result)
 
+      else
+        CenterBlock {},
+          Block {}, "searching for #{@props.query}..."
 
+  renderErrorMessage: ->
+    error = @state.search.error
+    switch error.status
+      when 0
+        Block {},
+          "Unable to make cross-doman request. Please install or fix"
+          Space()
+          LinkToChromeExtension style:{color:'blue'}, "the chrome extension"
+          "."
+      else
+        Block {}, "Search failed: status: #{error.status} #{error.statusText}"
+
+CenterBlock = Block.withStyle 'CenterBlock',
+  flexGrow: 1
+  alignItems: 'center'
+  justifyContent: 'center'
+  flexWrap: 'nowrap'
+  fontSize: '150%'
+  dontWeight: 'bold'
 
 
 Result = component 'Result',

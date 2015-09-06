@@ -24,9 +24,15 @@ module.exports = (app) ->
     # app.store.expire "#{storeKey}": search
 
 
-    Torrent.search(query).then (results) ->
-      search.results = results
-      app.set "#{storeKey}": search
+    Torrent.search(query)
+      .then (results) ->
+        search.results = results
+        app.set "#{storeKey}": search
+      .catch (error) ->
+        search.error =
+          status: error.status
+          statusText: error.statusText
+        app.set "#{storeKey}": search
 
 
 

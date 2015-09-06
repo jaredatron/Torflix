@@ -11,6 +11,7 @@ Link      = require 'reactatron/Link'
 withStyle = require 'reactatron/withStyle'
 RemainingSpace = require 'reactatron/RemainingSpace'
 
+LinkToChromeExtension = require './LinkToChromeExtension'
 
 StyleAbsolute = new Style
   position: 'absolute'
@@ -77,9 +78,8 @@ Sidebar = component 'Sidebar',
       # SidebarLink path: '/bookmarks', params: {}, 'Bookmarks'
       SidebarLink onClick: @logout,   'Logout'
       RemainingSpace()
-      Link
+      LinkToChromeExtension
         tabIndex: -1
-        href: 'https://github.com/deadlyicon/Torflix-chrome-extension'
         style: {fontSize: '60%', opacity: 0.5, padding: '1em 0.25em'}
         'Chrome Extension'
 
