@@ -36,9 +36,15 @@ module.exports = (app) ->
   prevLocation = app.get('location')
 
   update = (event) ->
-    newLocation = app.get('location')
-    # console.log('ROUTING', event)
-    # console.log('ROUTING from:', locationToString(prevLocation), 'to:', locationToString(newLocation))
+    # newLocation = app.get('location')
+    # # console.log('ROUTING', event)
+    # # console.log('ROUTING from:', locationToString(prevLocation), 'to:', locationToString(newLocation))
+    # app.router.route(newLocation)
+
+    # trying to fix weird Safari bug
+    newLocation =
+      path: app.location.path
+      params: app.location.params
     app.router.route(newLocation)
     prevLocation = newLocation
 

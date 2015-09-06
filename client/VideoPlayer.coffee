@@ -1,7 +1,7 @@
 VideoJS = require './vendor/video'
 
 module.exports = class VideoPlayer
-  constructor: ({@app, @config, DOMNode}) ->
+  constructor: ({@app, @config, DOMNode, @noError}) ->
     Object.bindAll(this)
     @config ||= {}
     player = this

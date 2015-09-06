@@ -1,6 +1,7 @@
-Stylesheet = require 'reactatron/Stylesheet'
+# Stylesheet = require 'reactatron/Stylesheet'
+injectStylesheet = require 'reactatron/injectStylesheet'
 
-rule = """
+styles = """
 @font-face {
   font-family: 'FontAwesome';
   src: url('/fonts/fontawesome-webfont.eot?v=4.4.0');
@@ -12,10 +13,10 @@ rule = """
 
 
 module.exports =
-  rule: rule
+  styles: styles
 
   load: ->
-    new Stylesheet(document).appendRule(rule)
+    @stylesheet = injectStylesheet(document, styles)
 
   glyphMap:
     "glass": 61440
