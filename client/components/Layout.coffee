@@ -9,6 +9,7 @@ Columns   = require 'reactatron/Columns'
 Text      = require 'reactatron/Text'
 Link      = require 'reactatron/Link'
 withStyle = require 'reactatron/withStyle'
+RemainingSpace = require 'reactatron/RemainingSpace'
 
 
 StyleAbsolute = new Style
@@ -71,13 +72,15 @@ Sidebar = component 'Sidebar',
     Rows @cloneProps(),
       SidebarLink path: '/transfers', params: {}, 'Transfers'
       SidebarLink path: '/search',    params: {}, 'Search'
-      SidebarLink path: '/shows',     params: {}, 'Shows'
+      # SidebarLink path: '/shows',     params: {}, 'Shows'
       SidebarLink path: '/files',     params: {}, 'Files'
-      SidebarLink path: '/bookmarks', params: {}, 'Bookmarks'
+      # SidebarLink path: '/bookmarks', params: {}, 'Bookmarks'
       SidebarLink onClick: @logout,   'Logout'
-      SidebarLink
+      RemainingSpace()
+      Link
+        tabIndex: -1
         href: 'https://github.com/deadlyicon/Torflix-chrome-extension'
-        style: {fontSize: '80%'}
+        style: {fontSize: '60%', opacity: 0.5, padding: '1em 0.25em'}
         'Chrome Extension'
 
 
