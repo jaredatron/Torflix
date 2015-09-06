@@ -76,21 +76,17 @@ Sidebar = component 'Sidebar',
       # SidebarLink path: '/shows',     params: {}, 'Shows'
       SidebarLink path: '/files',     params: {}, 'Files'
       # SidebarLink path: '/bookmarks', params: {}, 'Bookmarks'
-      SidebarLink onClick: @logout,   'Logout'
       RemainingSpace()
-      LinkToChromeExtension
-        tabIndex: -1
-        style: {fontSize: '60%', opacity: 0.5, padding: '1em 0.25em'}
-        'Chrome Extension'
+      SidebarLink tabIndex: -1, onClick: @logout,   'Logout'
+      LinkToChromeExtension tabIndex: -1, style: SidebarLink.style,'Chrome Extension'
 
 
-SidebarLink = Link.withDefaultProps
-  style:
-    outline: 'none'
-    fontWeight: 100
-    backgroundColor: 'rgb(0, 59, 95)'
-    padding: '0.5em'
-    ':hover':
-      backgroundColor: 'rgb(0, 73, 117)'
-    ':focus':
-      backgroundColor: 'rgb(0, 73, 117)'
+SidebarLink = Link.withStyle 'SidebarLink',
+  outline: 'none'
+  fontWeight: 100
+  backgroundColor: 'rgb(0, 59, 95)'
+  padding: '0.5em'
+  ':hover':
+    backgroundColor: 'rgb(0, 73, 117)'
+  ':focus':
+    backgroundColor: 'rgb(0, 73, 117)'

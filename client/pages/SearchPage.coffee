@@ -21,7 +21,6 @@ module.exports = component 'SearchPage',
     slice(@getDOMNode().querySelectorAll('input[type=text],a[href]'))
 
   onKeyDown: (event) ->
-    console.log('--->', event.keyCode)
     searchInput = @searchInput()
 
     switch event.keyCode
