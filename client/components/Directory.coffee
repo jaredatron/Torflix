@@ -167,7 +167,7 @@ filterFiles = (files, filter) ->
   filters = filter.toLowerCase().split(/\s+/)
   files.filter (file) ->
     filters.every (filter) ->
-      file.name.toLowerCase().includes(filter)
+      file? && file.name? && file.name.toLowerCase().includes(filter)
 
 
 
