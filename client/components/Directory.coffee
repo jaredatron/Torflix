@@ -120,7 +120,7 @@ module.exports = component 'Directory',
     !file || (!file.fileIds && (file.loading || file.needsLoading))
 
   isEmpty: ->
-    @props.file.fileIds.length == 0
+    @props.file.fileIds?.length == 0
 
   needsToGrow: ->
     !@isLoading() && @state.files.length > @state.max
@@ -184,10 +184,10 @@ File = component 'File',
     switch event.keyCode
       when 38 # up
         event.preventDefault()
-        @getDOMNode().previousElementSibling.getElementsByTagName('a')[0].focus()
+        @getDOMNode().previousElementSibling?.getElementsByTagName('a')[0].focus()
       when 40 # down
         event.preventDefault()
-        @getDOMNode().nextElementSibling.getElementsByTagName('a')[0].focus()
+        @getDOMNode().nextElementSibling?.getElementsByTagName('a')[0].focus()
 
     if file.isDirectory
       switch event.keyCode
@@ -210,13 +210,14 @@ File = component 'File',
         marginLeft: "#{file.depth}em"
 
     if @props.selected
-      props.style.backgroundColor= 'red'
+      props.style.backgroundColor = '#DFEBFF'
 
     FileRow props,
 
       Block style:{ flexShrink: 1, overflow:'hidden' },
         FileLink
           file: file
+          className: 'Directory-FileLink'
           style:
             overflow:'hidden'
             width: '100%'

@@ -41,7 +41,6 @@ module.exports = component 'TransfersPage',
     slice(@getDOMNode().querySelectorAll('.transfers-page-filter-form input, .transfer-list-member-main-link'))
 
   onKeyDown: (event) ->
-    console.log('--->', event.keyCode)
     switch event.keyCode
       when 38 # up
         event.preventDefault()

@@ -24,22 +24,30 @@ module.exports = (app) ->
 
   updateAfterLoading = (file) ->
     file.loading = false
+    file.loaded = true
     update(file.id, file)
 
 
   loadFile = (id, file) ->
     file ||= get(id)
-    reloadFile(id, file) if !file?
+    reloadFile(id, file) unless file && file.loaded
+
+  loadDirectory = (id, file) ->
+    file ||= get(id)
+    reloadFile(id, file) unless file && file.loaded && file.directoryContentsLoaded
 
   reloadFile = (id, file) ->
     file ||= get(id) || {id:id}
     file.loading = true
     set(id, file)
-    if file.isDirectory || file.id == 0
+    promise = if file.isDirectory || file.id == 0
       app.putio.directoryContents(id).then ({parent, files}) ->
         [parent].concat(files).forEach(updateAfterLoading)
     else
       app.putio.file(id).then(updateAfterLoading)
+    promise.catch (error) ->
+      if (error && error.status == 404)
+        updateAfterLoading(id: id, notFound: true)
 
   deleteFile = (id, file) ->
     file ||= get(id)
@@ -82,6 +90,8 @@ module.exports = (app) ->
   app.sub 'load file',        (event, id) -> loadFile(id)
   app.sub 'reload file',      (event, id) -> reloadFile(id)
   app.sub 'delete file',      (event, id) -> deleteFile(id)
+
+  app.sub 'load directory',   (event, id) -> loadDirectory(id)
   app.sub 'open directory',   (event, id) -> openDirectory(id)
   app.sub 'close directory',  (event, id) -> closeDirectory(id)
   app.sub 'toggle directory', (event, id) -> toggleDirectory(id)
