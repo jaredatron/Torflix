@@ -75,6 +75,10 @@ Sidebar = component 'Sidebar',
       SidebarLink path: '/files',     params: {}, 'Files'
       SidebarLink path: '/bookmarks', params: {}, 'Bookmarks'
       SidebarLink onClick: @logout,   'Logout'
+      SidebarLink
+        href: 'https://github.com/deadlyicon/Torflix-chrome-extension'
+        style: {fontSize: '80%'}
+        'Chrome Extension'
 
 
 SidebarLink = Link.withDefaultProps
