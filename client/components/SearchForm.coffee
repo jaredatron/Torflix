@@ -15,6 +15,7 @@ module.exports = component 'SearchForm',
 
   propTypes:
     onSearch:       component.PropTypes.func
+    onChange:       component.PropTypes.func
     value:          component.PropTypes.string
     defaultValue:   component.PropTypes.string
     collectionName: component.PropTypes.string
@@ -34,11 +35,10 @@ module.exports = component 'SearchForm',
 
   onSubmit: (event) ->
     event.preventDefault()
-    @props.onSearch @getValue()
+    @props.onSearch?(@getValue())
 
   onChange: (event) ->
-    if @props.onChange
-      @props.onChange @getValue()
+    @props.onChange?(@getValue())
 
   render: ->
     Form
@@ -50,6 +50,7 @@ module.exports = component 'SearchForm',
         defaultValue: @props.defaultValue || ''
         value: @props.value
         onChange: @onChange
+        onKeyDown: @props.onKeyDown
         placeholder: @props.placeholder || @placeholder()
         autofocus: @props.autofocus
         beforeInput:

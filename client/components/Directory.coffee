@@ -38,7 +38,8 @@ INITIAL_CHUNK_SIZE = RENDER_CHUNK_SIZE
 module.exports = component 'Directory',
 
   propTypes:
-    file: component.PropTypes.object.isRequired
+    file:   component.PropTypes.object.isRequired
+    filter: component.PropTypes.string
 
   childContextTypes:
     toggleDirectory: component.PropTypes.func
@@ -141,7 +142,8 @@ module.exports = component 'Directory',
     selectedFileId = @state.selectedFileId
     onFileFocus = @onFileFocus
     onFileBlur = @onFileBlur
-    files = @state.files.map (file, index) ->
+
+    files = filterFiles(@state.files, @props.filter).map (file, index) ->
       File
         key: file.id
         file: file
@@ -158,6 +160,14 @@ module.exports = component 'Directory',
 
 
 
+
+
+filterFiles = (files, filter) ->
+  return files if !filter? || filter == ''
+  filters = filter.toLowerCase().split(/\s+/)
+  files.filter (file) ->
+    filters.every (filter) ->
+      file.name.toLowerCase().includes(filter)
 
 
 

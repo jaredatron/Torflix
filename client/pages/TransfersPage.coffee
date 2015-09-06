@@ -61,7 +61,7 @@ module.exports = component 'TransfersPage',
 
   render: ->
     transfersList = if @state.transfers?
-      transfers = filter(@state.transfers, @state.filter)
+      transfers = filterTransfers(@state.transfers, @state.filter)
       transfersList = TransfersList transfers: transfers
     else
       LoadingBox {}, 'Loading...'
@@ -98,8 +98,9 @@ FilterForm = component 'FilterForm',
 
 
 
-filter = (transfers, filter) ->
+filterTransfers = (transfers, filter) ->
   return transfers if !filter? || filter == ''
-  filter = filter.toLowerCase()
+  filters = filter.toLowerCase().split(/\s+/)
   transfers.filter (transfer) ->
-    transfer.name.toLowerCase().includes(filter)
+    filters.every (filter) ->
+      transfer.name.toLowerCase().includes(filter)

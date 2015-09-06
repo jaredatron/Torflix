@@ -16,33 +16,55 @@ module.exports = component 'FilesPage',
   propTypes:
     fileId: component.PropTypes.string
 
-  getFileId: ->
-
   dataBindings: (props) ->
     file: "files/#{props.fileId || 0}"
+
+  getInitialState: ->
+    filter: ''
 
   componentDidMount: ->
     fileId = @props.fileId || 0
     @reset(fileId)
-    @focusFirstFile()
+    @focusFilterInput()
 
   componentWillReceiveProps: (nextProps) ->
     nextFileId = nextProps.fileId || 0
-    @reset(nextFileId) if @props.fileId != nextFileId
+    if @props.fileId != nextFileId
+      @setFilter('')
+      @reset(nextFileId)
+
+  componentDidUpdate: ->
+    @focusFilterInput()
+
+
+
+
+  setFilter: (filter) ->
+    @setState filter: filter
 
   reset: (fileId) ->
     @app.pub('load directory', fileId)
 
-  componentDidUpdate: ->
-    @focusFirstFile()
+  focusFilterInput: ->
+    @getDOMNode().querySelector('.files-page-filter-form input')?.focus()
 
   focusFirstFile: ->
     @getDOMNode().querySelector('a.Directory-FileLink')?.focus()
 
+  onKeyDown: (event) ->
+    switch event.keyCode
+      when 191 # /
+        @focusFilterInput()
+
+  onFilterKeyDown: (event) ->
+    switch event.keyCode
+      when 40 # down
+        event.preventDefault()
+        @focusFirstFile()
+
   render: ->
     fileId = @props.fileId || 0
     file = @state.file || {id: fileId}
-
 
 
     switch
@@ -53,8 +75,13 @@ module.exports = component 'FilesPage',
         button = ButtonLink path: '/files', 'back'
       when file.isDirectory
         title = file.name
-        content = Directory file: file
+        content = Directory file: file, filter: @state.filter
         button = ReloadButton file: file
+        filterForm = FilterForm
+          onChange: @setFilter
+          onKeyDown: @onFilterKeyDown
+          style:
+            margin: '0 1em 1em 1em'
       else
         title = file.name
         content = File file: file
@@ -71,9 +98,22 @@ module.exports = component 'FilesPage',
           Header {}, title
           RemainingSpace {}
           button
+        filterForm
         content
 
 
+
+FilterForm = component 'FilterForm',
+
+  render: ->
+    SearchForm
+      ref: 'form'
+      style:           @props.style
+      defaultValue:    @props.defaultValue
+      collectionName: 'transfers'
+      onChange:        @props.onChange
+      onKeyDown:       @props.onKeyDown
+      className:      'files-page-filter-form'
 
 
 Header = Block.withStyle 'Header',
