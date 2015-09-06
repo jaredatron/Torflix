@@ -15,6 +15,7 @@ Icon       = require './Icon'
 FileSize   = require './FileSize'
 SafetyButton   = require './SafetyButton'
 DeleteButton   = require './DeleteButton'
+LinkToFileOnPutio   = require './LinkToFileOnPutio'
 
 {progress} = require 'reactatron/DOM'
 
@@ -104,6 +105,8 @@ Transfer = component 'Transfer',
           # Space()
           # Block {}, transfer.status
           Space()
+          LinkToTransferFilesOnPutio(transfer)
+          Space()
           LinkToTransferMagnetLink(transfer)
           Space()
           LinkToDownloadTransfer(transfer)
@@ -170,6 +173,9 @@ LinkToTransferFiles = (transfer) ->
         transfer.name
     else
       Block(style:style, transfer.name)
+
+LinkToTransferFilesOnPutio = (transfer) ->
+  LinkToFileOnPutio file: {id: transfer.file_id }
 
 LinkToTransferMagnetLink = (transfer) ->
   Link href: transfer.magneturi, tabIndex: -1,

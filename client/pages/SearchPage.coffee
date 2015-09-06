@@ -1,3 +1,4 @@
+slice = require 'shouldhave/slice'
 component = require 'reactatron/component'
 Rows = require 'reactatron/Rows'
 Layout = require '../components/Layout'
@@ -16,29 +17,32 @@ module.exports = component 'SearchPage',
   searchInput: ->
     @refs.SeachForm.getDOMNode().querySelector('input')
 
+  getFocusableElements: ->
+    slice(@getDOMNode().querySelectorAll('input[type=text],a[href]'))
 
   onKeyDown: (event) ->
     console.log('--->', event.keyCode)
     searchInput = @searchInput()
-    return if event.target == searchInput
 
     switch event.keyCode
       when 38 # up
         event.preventDefault()
-        # elements = @getFocusableElements()
-        # index = elements.indexOf(event.target) - 1
-        # index = 0 if index < 0
-        # elements[index]?.focus()
+        if event.target != searchInput
+          elements = @getFocusableElements()
+          index = elements.indexOf(event.target) - 1
+          index = 0 if index < 0
+          elements[index]?.focus()
       when 40 # down
         event.preventDefault()
-        # elements = @getFocusableElements()
-        # index = elements.indexOf(event.target) + 1
-        # index = 0 if index >= elements.size
-        # elements[index]?.focus()
+        elements = @getFocusableElements()
+        index = elements.indexOf(event.target) + 1
+        index = 0 if index >= elements.size
+        elements[index]?.focus()
       when 191 # /
         event.preventDefault()
-        searchInput.select()
-        searchInput.focus()
+        if event.target != searchInput
+          searchInput.select()
+          searchInput.focus()
 
 
   render: ->

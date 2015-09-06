@@ -86,6 +86,8 @@ ResultRow = Columns.withStyle 'ResultRow',
     backgroundColor: '#DFEBFF'
   ':active':
     backgroundColor: '#DFEBFF'
+  ':focus':
+    backgroundColor: '#DFEBFF'
 
 
 

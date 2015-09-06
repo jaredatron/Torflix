@@ -97,10 +97,9 @@ class Putio
     @request('get', "/v2/files/#{id}").then(pluck('file')).then(@amendFile)
 
   directoryContents: (id) ->
-    amendFile = @amendFile
-    @request('get', '/v2/files/list', parent_id: id).then ({parent, files}) ->
+    @request('get', '/v2/files/list', parent_id: id).then ({parent, files}) =>
       parent.fileIds = files.map(pluckId)
-      [parent].concat(files).forEach(amendFile)
+      [parent].concat(files).forEach(@amendFile)
       {parent, files}
 
   deleteFile: (id) ->
@@ -108,14 +107,22 @@ class Putio
     @request('post', '/v2/files/delete', file_ids: id).then (response) =>
       response
 
-
-
   IS_VIDEO_REGEXP = /\.(mkv|mp4|avi)$/
-
   amendFile: (file) ->
-    file.isVideo       = IS_VIDEO_REGEXP.test(file.name)
-    file.isDirectory   = "application/x-directory" == file.content_type
+    file.loadedAt    = Date.now()
+
+    if file.id == 0
+      file.name = 'All Files'
+      file.isDirectory = true
+    else
+      file.isDirectory = "application/x-directory" == file.content_type
+
+    file.isVideo = IS_VIDEO_REGEXP.test(file.name)
     file.putioUrl = @URI "/file/#{file.id}"
+
+    if file.isDirectory
+      file.directoryContentsLoaded = !!file.fileIds
+
     if file.isVideo
       file.downloadUrl   = @apiURI "/v2/files/#{file.id}/download"
       file.mp4StreamUrl  = @apiURI "/v2/files/#{file.id}/mp4/stream"

@@ -20,31 +20,36 @@ module.exports = component 'FilesPage',
 
   componentDidMount: ->
     id = @props.fileId || 0
-    @app.pub('load file', {id})
+    @app.pub('load file', id)
 
   componentWillReceiveProps: (nextProps) ->
     nextFileId = nextProps.fileId || 0
-    @app.pub('load file', id: nextFileId) if @props.fileId != nextFileId
+    @app.pub('load file', nextFileId) if @props.fileId != nextFileId
 
   render: ->
     fileId = @props.fileId || 0
-    file = @state.file
-    if !file?
-      return Layout {},
+    file = @state.file || {id: fileId}
+
+
+    if !file? || !file.loaded
+      Layout {},
         Block {}, 'Loading...'
 
-    title = file.id == 0 && 'All Files' || file.name
+    title = file.name
+
+    content = if file.isDirectory
+      Directory file: file
+    else
+      File file: file
+
+
     Layout {},
       Rows style: {overflowY: 'scroll'},
         Columns style: {padding:'0.5em'},
           Header {}, title
           RemainingSpace {}
           ReloadButton file: file
-
-        if file.isDirectory
-          Directory file: file
-        else
-          File file: file
+        content
 
 
 
@@ -56,7 +61,7 @@ Header = Block.withStyle 'Header',
 
 ReloadButton = component 'ReloadButton', (props) ->
   props.onClick = =>
-    @app.pub 'reload file', props.file
+    @app.pub 'reload file', props.file.id
 
   Button props, 'reload'
 
@@ -66,7 +71,7 @@ ReloadButton = component 'ReloadButton', (props) ->
 File = component 'File',
   render: ->
     file = @props.file
-    Rows {},
+    Rows @cloneProps(),
       Object.keys(file).sort().map (key) ->
         Columns key:key,
           Block {style:{flexBasis:'200px'}}, key

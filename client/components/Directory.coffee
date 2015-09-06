@@ -27,6 +27,9 @@ DeleteButton = require './DeleteButton'
 
 
 IconLink = require './IconLink'
+LinkToFileOnPutio = require './LinkToFileOnPutio'
+
+
 
 
 RENDER_CHUNK_SIZE = 10
@@ -103,7 +106,7 @@ module.exports = component 'Directory',
     flattenFilesTree(@app, file)
 
   toggleDirectory: (file) ->
-    @app.pub 'toggle directory', file
+    @app.pub 'toggle directory', file.id
 
   increaseMax: ->
     return unless @isMounted()
@@ -190,13 +193,13 @@ File = component 'File',
       switch event.keyCode
         when 39 # right
           event.preventDefault()
-          @app.pub('open directory', file) if !file.open
+          @app.pub('open directory', file.id) if !file.open
         when 37 # left
           event.preventDefault()
-          @app.pub('close directory', file) if file.open
+          @app.pub('close directory', file.id) if file.open
 
   deleteFile: ->
-    @app.pub 'delete file', @props.file
+    @app.pub 'delete file', @props.file.id
 
   render: ->
     return FileRow() if @props.shim
@@ -292,16 +295,6 @@ DownloadFileLink = (props, children...) ->
   props.href  ||= "https://put.io/v2/files/#{props.file.id}/download"
   # props.target ||= '_blank'
   IconLink(props, children...)
-
-
-LinkToFileOnPutio = (props) ->
-  props.href = if props.file.isVideo
-    "https://put.io/file/#{props.file.id}"
-  else
-    "https://put.io/your-files/#{props.file.id}"
-  props.glyph ||= 'circle'
-  props.title ||= 'open at put.io'
-  IconLink(props)
 
 
 DeleteFileButton = (props) ->
