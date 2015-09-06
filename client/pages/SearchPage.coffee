@@ -7,7 +7,39 @@ TorrentSearchResults = require '../components/TorrentSearchResults'
 module.exports = component 'SearchPage',
 
   componentDidMount: ->
-    @getDOMNode().querySelector('input[type=text]').focus()
+    searchInput = @searchInput()
+    searchInput.select()
+    searchInput.focus()
+
+
+
+  searchInput: ->
+    @refs.SeachForm.getDOMNode().querySelector('input')
+
+
+  onKeyDown: (event) ->
+    console.log('--->', event.keyCode)
+    searchInput = @searchInput()
+    return if event.target == searchInput
+
+    switch event.keyCode
+      when 38 # up
+        event.preventDefault()
+        # elements = @getFocusableElements()
+        # index = elements.indexOf(event.target) - 1
+        # index = 0 if index < 0
+        # elements[index]?.focus()
+      when 40 # down
+        event.preventDefault()
+        # elements = @getFocusableElements()
+        # index = elements.indexOf(event.target) + 1
+        # index = 0 if index >= elements.size
+        # elements[index]?.focus()
+      when 191 # /
+        event.preventDefault()
+        searchInput.select()
+        searchInput.focus()
+
 
   render: ->
     query = @props.query
@@ -16,8 +48,11 @@ module.exports = component 'SearchPage',
       results = TorrentSearchResults query: query
 
     Layout null,
-      Rows style: {width: '100%', overflowY: 'scroll'},
+      Rows
+        style: {width: '100%', overflowY: 'scroll'}
+        onKeyDown: @onKeyDown
         TorrentSeachForm
+          ref: 'SeachForm'
           style: margin: '1em'
           defaultValue: query
         results

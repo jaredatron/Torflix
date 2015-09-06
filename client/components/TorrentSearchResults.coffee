@@ -16,7 +16,7 @@ module.exports = component 'TorrentSearchResults',
     search: "search/#{props.query}"
 
   requestSearch: (query) ->
-    @app.pub('search for torrents', query)
+    @app.pub('search for torrents', query) unless @state.search
 
   componentDidMount: ->
     @requestSearch(@props.query)
@@ -28,14 +28,19 @@ module.exports = component 'TorrentSearchResults',
 
   render: ->
     search = @state.search
-    switch
-      when !search?
-        Block {}
-      when search.results
-        Rows {}, search.results.map (result, index) ->
-          Result(key:index, result: result)
-      else
-        Block {}, "searching for #{@props.query}: #{JSON.stringify(search)}"
+    if search && search.results
+      return Rows {}, search.results.map (result, index) ->
+        Result(key:index, result: result)
+
+    Block
+      grow: 1
+      style:
+        alignItems: 'center'
+        justifyContent: 'center'
+        flexWrap: 'nowrap'
+        fontSize: '150%'
+        dontWeight: 'bold'
+      Block {}, "searching for #{@props.query}..."
 
 
 

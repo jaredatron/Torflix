@@ -40,7 +40,6 @@ module.exports = component 'TransfersPage',
   getFocusableElements: ->
     slice(@getDOMNode().querySelectorAll('.transfers-page-filter-form input, .transfer-list-member-main-link'))
 
-
   onKeyDown: (event) ->
     console.log('--->', event.keyCode)
     switch event.keyCode
