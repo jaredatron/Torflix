@@ -72,6 +72,8 @@ Transfer = component 'Transfer',
         padding: '0.5em 0.5em'
         alignItems: 'center'
         borderTop: '1px solid rgb(235,235,235)'
+        ':focus':
+          backgroundColor: '#DFEBFF'
 
     if transfer.status == 'DELETING'
       props.extendStyle
@@ -133,24 +135,24 @@ TransferProgress = (transfer) ->
 
 
 DeleteTransferButton = component 'DeleteTransferButton', (props) ->
-  SafetyButton
+  SafetyButton {},
+    Button
+      tabIndex: -1
+      Icon(glyph: 'trash-o')
 
-    defaultButton:
-      Button {}, Icon(glyph: 'trash-o')
+    Button
+      tabIndex: -1
+      onClick: props.onClick
+      style:
+        borderRadius: '4px 0 0 4px'
+      Icon glyph: 'check'
 
-    confirmButton:
-      Button
-        onClick: props.onClick
-        style:
-          borderRadius: '4px 0 0 4px'
-        Icon glyph: 'check'
-
-    abortButton:
-      Button
-        style:
-          borderWidth: '1px 1px 1px 0'
-          borderRadius: '0 4px 4px 0'
-        Icon glyph: 'times'
+    Button
+      tabIndex: -1
+      style:
+        borderWidth: '1px 1px 1px 0'
+        borderRadius: '0 4px 4px 0'
+      Icon glyph: 'times'
 
 
 
@@ -169,14 +171,14 @@ LinkToTransferFiles = (transfer) ->
       Block(style:style, transfer.name)
 
 LinkToTransferMagnetLink = (transfer) ->
-  Link href: transfer.magneturi,
+  Link href: transfer.magneturi, tabIndex: -1,
     Icon glyph: 'link'
 
 LinkToDownloadTransfer = (transfer) ->
   onClick = (event) ->
     event.preventDefault()
     console.log('would download', transfer)
-  Link onClick: onClick, Icon(glyph: 'download')
+  Link onClick: onClick, tabIndex: -1, Icon(glyph: 'download')
 
 
 

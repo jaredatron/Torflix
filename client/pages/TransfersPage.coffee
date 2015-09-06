@@ -24,6 +24,7 @@ module.exports = component 'TransfersPage',
     @setState filter: filter
 
   componentDidMount: ->
+    @getDOMNode().querySelector('input[type=text]').focus()
     @app.pub 'start polling for transfers'
     @reloadTransfers() if !@state.transfers
 

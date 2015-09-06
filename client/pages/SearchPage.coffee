@@ -6,6 +6,9 @@ TorrentSearchResults = require '../components/TorrentSearchResults'
 
 module.exports = component 'SearchPage',
 
+  componentDidMount: ->
+    @getDOMNode().querySelector('input[type=text]').focus()
+
   render: ->
     query = @props.query
 

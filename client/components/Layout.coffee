@@ -8,11 +8,8 @@ Rows      = require 'reactatron/Rows'
 Columns   = require 'reactatron/Columns'
 Text      = require 'reactatron/Text'
 Link      = require 'reactatron/Link'
-
-{div} = require 'reactatron/DOM'
-
-
 withStyle = require 'reactatron/withStyle'
+
 
 StyleAbsolute = new Style
   position: 'absolute'
@@ -81,8 +78,8 @@ Sidebar = component 'Sidebar',
 
 
 SidebarLink = Link.withDefaultProps
-  tabIndex: -1
   style:
+    outline: 'none'
     fontWeight: 100
     backgroundColor: 'rgb(0, 59, 95)'
     padding: '0.5em'
