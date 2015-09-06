@@ -53,13 +53,6 @@ Transfer = component 'Transfer',
   deleteTransfer: ->
     @app.pub 'delete transfer', @props.transfer.id
 
-  defaultStyle:
-    padding: '0.5em 0.5em'
-    alignItems: 'center'
-    borderTop: '1px solid rgb(235,235,235)'
-    ':hover':
-      backgroundColor: '#DFEBFF'
-
   shouldComponentUpdate: (nextProps, nextState) ->
     a = @props.transfer
     b = nextProps.transfer
@@ -74,17 +67,29 @@ Transfer = component 'Transfer',
   render: ->
     transfer = @props.transfer
 
-    opacity = transfer.status == 'DELETING' && 0.2 || 1
+    props = @extendProps
+      style:
+        padding: '0.5em 0.5em'
+        alignItems: 'center'
+        borderTop: '1px solid rgb(235,235,235)'
+
+    if transfer.status == 'DELETING'
+      props.extendStyle
+        opacity: 0.2
+    else
+      props.extendStyle
+        ':hover':
+          backgroundColor: '#DFEBFF'
 
 
-    Columns @cloneProps(),
+    Columns props,
       Rows
         style:
-          opacity: opacity
           marginRight: '0.5em'
           flexGrow: 1
           flexShrink: 1
           overflow: 'hidden'
+          opacity: 1
         Columns {},
           Block
             style:
@@ -117,7 +122,6 @@ Transfer = component 'Transfer',
             whiteSpace: 'nowrap'
           transfer.status_message
       DeleteTransferButton onClick: @deleteTransfer
-
 
 TransferProgress = (transfer) ->
   # return null if transfer.status == 'COMPLETED'
