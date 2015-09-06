@@ -110,10 +110,6 @@ Transfer = component 'Transfer',
           LinkToTransferMagnetLink(transfer)
           Space()
           LinkToDownloadTransfer(transfer)
-          # Space()
-          # Block {}, "STATSUS: #{transfer.status}"
-          # Space()
-          # DeleteButton onClick: -> console.log('78787878787878')
           RemainingSpace {} #style: {flexGrow: 1, flexShrink: 2}
           Space()
           Block style: {width: '3em'},
@@ -128,6 +124,11 @@ Transfer = component 'Transfer',
           transfer.status_message
       DeleteTransferButton onClick: @deleteTransfer
 
+
+
+
+
+
 TransferProgress = (transfer) ->
   # return null if transfer.status == 'COMPLETED'
   progress
@@ -138,24 +139,25 @@ TransferProgress = (transfer) ->
 
 
 DeleteTransferButton = component 'DeleteTransferButton', (props) ->
-  SafetyButton {},
-    Button
-      tabIndex: -1
-      Icon(glyph: 'trash-o')
-
-    Button
-      tabIndex: -1
-      onClick: props.onClick
-      style:
-        borderRadius: '4px 0 0 4px'
-      Icon glyph: 'check'
-
-    Button
-      tabIndex: -1
-      style:
-        borderWidth: '1px 1px 1px 0'
-        borderRadius: '0 4px 4px 0'
-      Icon glyph: 'times'
+  SafetyButton
+    defaultButton:
+      Button
+        tabIndex: -1
+        Icon(glyph: 'trash-o')
+    confirmButton:
+      Button
+        tabIndex: -1
+        onClick: props.onClick
+        style:
+          borderRadius: '4px 0 0 4px'
+        Icon glyph: 'check'
+    abortButton:
+      Button
+        tabIndex: -1
+        style:
+          borderWidth: '1px 1px 1px 0'
+          borderRadius: '0 4px 4px 0'
+        Icon glyph: 'times'
 
 
 
