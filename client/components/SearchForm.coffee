@@ -43,6 +43,7 @@ module.exports = component 'SearchForm',
   render: ->
     Form
       style: @props.style
+      className: @props.className
       onSubmit: @onSubmit
       TextInput
         ref: 'input'

@@ -164,6 +164,7 @@ LinkToTransferFiles = (transfer) ->
   switch transfer.status
     when 'COMPLETED', 'SEEDING'
       Link
+        className: 'transfer-list-member-main-link'
         style: style
         path: "/files/#{transfer.file_id}",
         transfer.name

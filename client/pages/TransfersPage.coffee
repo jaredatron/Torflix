@@ -1,3 +1,5 @@
+slice = require 'shouldhave/slice'
+
 component = require 'reactatron/component'
 Box       = require 'reactatron/Box'
 Rows      = require 'reactatron/Rows'
@@ -35,6 +37,30 @@ module.exports = component 'TransfersPage',
     @setState transfers: null
     @app.pub 'reload transfers'
 
+  getFocusableElements: ->
+    slice(@getDOMNode().querySelectorAll('.transfers-page-filter-form input, .transfer-list-member-main-link'))
+
+
+  onKeyDown: (event) ->
+    console.log('--->', event.keyCode)
+    switch event.keyCode
+      when 38 # up
+        event.preventDefault()
+        elements = @getFocusableElements()
+        index = elements.indexOf(event.target) - 1
+        index = 0 if index < 0
+        elements[index]?.focus()
+      when 40 # down
+        event.preventDefault()
+        elements = @getFocusableElements()
+        index = elements.indexOf(event.target) + 1
+        index = 0 if index >= elements.size
+        elements[index]?.focus()
+      when 191 # /
+        event.preventDefault()
+        @getFocusableElements()[0].focus()
+
+
   render: ->
     transfersList = if @state.transfers?
       transfers = filter(@state.transfers, @state.filter)
@@ -43,7 +69,7 @@ module.exports = component 'TransfersPage',
       LoadingBox {}, 'Loading...'
 
     Layout null,
-      Rows style: {overflowY: 'scroll'},
+      Rows style: {overflowY: 'scroll'}, onKeyDown: @onKeyDown,
         Columns style: {margin: '0.5em'},
           FilterForm
             onChange: @setFilter
@@ -70,6 +96,7 @@ FilterForm = component 'FilterForm',
       defaultValue:    @props.defaultValue
       collectionName: 'transfers'
       onChange:        @props.onChange
+      className:      'transfers-page-filter-form'
 
 
 
