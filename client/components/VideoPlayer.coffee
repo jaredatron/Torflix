@@ -16,15 +16,25 @@ module.exports = component 'VideoPlayer',
     node = @getDOMNode()
     node.addEventListener('dblclick', @onDblclick)
     node.ownerDocument.addEventListener('keydown', @onKeydown)
-    @player = new VideoPlayer
-      app:     @app
-      DOMNode: @getDOMNode().getElementsByTagName('video')[0]
+    @setupPlayer()
+
+  componentDidUpdate: ->
+    @setupPlayer()
 
   componentWillUnmount: ->
     @player.saveCurrentTime()
     node = @getDOMNode()
     node.removeEventListener('dblclick', @onDblclick)
     node.ownerDocument.removeEventListener('keydown', @onKeydown)
+
+  setupPlayer: ->
+    @player = new VideoPlayer
+      app:     @app
+      DOMNode: @getDOMNode().getElementsByTagName('video')[0]
+      noError: => @forceUpdate()
+    console.log('setupPlayer', @player)
+
+
 
   onDblclick: (event) ->
     event.preventDefault()
@@ -53,6 +63,7 @@ module.exports = component 'VideoPlayer',
 
 
   render: ->
+    console.info('VideoPlayer render')
     React.createElement 'div', dangerouslySetInnerHTML: {__html: videoHTML(@props.file)}
 
 

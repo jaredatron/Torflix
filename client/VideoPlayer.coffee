@@ -13,6 +13,12 @@ module.exports = class VideoPlayer
   ready: (player) ->
     @player = player
     @player.on 'timeupdate', @saveCurrentTime
+    @player.on 'error', @noError
+
+    # loadedalldata
+    # loadeddata
+    # loadedmetadata
+    # loadstart
 
     @player.currentTime @app.get("VideoPlayer/#{@player.currentSrc()}") || 0
     @player.play()
