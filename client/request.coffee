@@ -13,7 +13,7 @@ request = (method, url, params, options={}) ->
   })
 
   new Promise (resolve, reject) ->
-    requestPromise = if requestIsCrossDomain(options)
+    requestPromise = if false # requestIsCrossDomain(options)
       requestViaChromeExtension(options)
     else
       requestViaXMLHTTPRequest(options)
