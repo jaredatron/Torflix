@@ -18,9 +18,9 @@
     "http-proxy": "^1.11.1",
     "jquery": "^2.1.4",
     "react": "^0.13.3",
-    "reactatron": "deadlyicon/reactatron#master",
+    "reactatron": "deadlyicon/reactatron#644d7c940169f9795149421b0bb03141cb037b61",
     "request": "^2.61.0",
-    "shouldhave": "deadlyicon/shouldhave.js#master",
+    "shouldhave": "deadlyicon/shouldhave.js#9b824be78ad008e5a779453ded38facea18d9696",
     "webpack": "^1.11.0"
   },
   "devDependencies": {
