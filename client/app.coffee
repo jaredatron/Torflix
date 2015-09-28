@@ -1,3 +1,33 @@
+WEBKIT_THINGS = [
+  'boxSizing'
+  'alignItems'
+  'alignContent'
+  'flexDirection'
+  'flexWrap'
+  'flexGrow'
+  'flexShrink'
+  'justifyContent'
+]
+Style = require('reactatron/Style')
+Style.prototype._compute = Style.prototype.compute
+Style.prototype.compute = (state) ->
+  style = @_compute(this, state)
+  for key, value of style
+    switch
+      when key == 'display' && value == 'flex'
+        style.display = '-webkit-flex'
+      when key == 'display' && value == 'inline-flex'
+        style.display = '-webkit-inline-flex'
+
+      when WEBKIT_THINGS.includes(key)
+        webkitKey = 'Webkit'+key[0].toUpperCase()+key.slice(1)
+        style[webkitKey] ||= style[key]
+
+  style
+
+
+
+
 require('./FontAwesome').load()
 
 App = require('reactatron/App')
