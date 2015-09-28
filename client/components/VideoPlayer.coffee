@@ -81,10 +81,10 @@ videoHTML = (file) ->
       height: '100%'
       width: '100%'
     React.createElement 'source',
-      src: "https://put.io/v2/files/#{file.id}/stream"
+      src: file.streamUrl
       type: file.content_type
     React.createElement 'source',
-      src: "https://put.io/v2/files/#{file.id}/mp4/stream"
+      src: file.mp4StreamUrl
       type: 'video/mp4'
     # track
     #   kind: "captions"

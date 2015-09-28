@@ -2,6 +2,7 @@ component = require 'reactatron/component'
 Layer = require 'reactatron/Layer'
 Layout = require '../components/Layout'
 VideoPlayer = require '../components/VideoPlayer'
+{span} = require 'reactatron/DOM'
 
 module.exports = component 'VideoPage',
 
@@ -14,4 +15,4 @@ module.exports = component 'VideoPage',
       Layer {},
         VideoPlayer file: @state.file
     else
-      Layout null, 'loading...'
+      Layout null, span()
