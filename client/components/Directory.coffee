@@ -303,7 +303,7 @@ DirectoryToggleLink = component 'DirectoryToggleLink',
 DownloadFileLink = (props, children...) ->
   props.glyph ||= 'download'
   props.title ||= 'download'
-  props.href  ||= "https://put.io/v2/files/#{props.file.id}/download"
+  props.href  ||= props.file.downloadUrl
   # props.target ||= '_blank'
   IconLink(props, children...)
 
